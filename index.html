@@ -223,7 +223,7 @@
       border-radius: 12px;
       padding: 12px;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .summary-row {
@@ -273,7 +273,7 @@
         <div class="brand-badge">EG</div>
         <div>
           <h1>ElsGlobal × Meta Earth</h1>
-          <p>Web3 PPOB & Digital Checkout Demo (HARBOR 2026)</p>
+          <p>Web3 PPOB &amp; Digital Checkout Demo (HARBOR 2026)</p>
         </div>
       </div>
 
@@ -289,31 +289,31 @@
         <h2>1. Kasir Digital ElsGlobal</h2>
 
         <div class="field">
-          <label for="customerId">Nomor HP / ID Pelanggan PLN</label>
-          <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau 56123456789" />
+          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor DANA</label>
+          <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau ID Pelanggan" />
         </div>
 
         <div class="field">
-          <label>Pilih Produk Digital</label>
+          <label>Pilih Produk Digital (Demo Harga Rp100.000 • Kurs Demo Rp180.000 / MEC)</label>
           <div class="products" id="productList">
-            <button type="button" class="product-item active" data-name="Pulsa Reguler Rp10.000" data-idr="11.500" data-token="2.5" onclick="selectProduct(this)">
-              <span class="product-name">Pulsa Rp10.000</span>
-              <span class="product-price">≈ 2.5 tMEC</span>
+            <button type="button" class="product-item active" data-name="Pulsa Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+              <span class="product-name">Pulsa Rp100.000</span>
+              <span class="product-price">≈ 0.5556 MEC</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Token Listrik PLN Rp20.000" data-idr="21.500" data-token="5.0" onclick="selectProduct(this)">
-              <span class="product-name">Token PLN Rp20.000</span>
-              <span class="product-price">≈ 5.0 tMEC</span>
+            <button type="button" class="product-item" data-name="Token Listrik PLN Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+              <span class="product-name">Token PLN Rp100.000</span>
+              <span class="product-price">≈ 0.5556 MEC</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Paket Data Harian 3GB" data-idr="18.000" data-token="4.2" onclick="selectProduct(this)">
-              <span class="product-name">Paket Data 3GB</span>
-              <span class="product-price">≈ 4.2 tMEC</span>
+            <button type="button" class="product-item" data-name="Data 100GB 30 Hari" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+              <span class="product-name">Data 100GB 30 Hari</span>
+              <span class="product-price">≈ 0.5556 MEC</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Voucher Game / Top-Up" data-idr="25.000" data-token="6.0" onclick="selectProduct(this)">
-              <span class="product-name">Voucher Digital</span>
-              <span class="product-price">≈ 6.0 tMEC</span>
+            <button type="button" class="product-item" data-name="E-Wallet DANA Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+              <span class="product-name">E-Wallet DANA Rp100.000</span>
+              <span class="product-price">≈ 0.5556 MEC</span>
             </button>
           </div>
         </div>
@@ -321,15 +321,19 @@
         <div class="summary-box">
           <div class="summary-row">
             <span>Produk Dipilih:</span>
-            <strong id="sumProduct">Pulsa Reguler Rp10.000</strong>
+            <strong id="sumProduct">Pulsa Rp100.000</strong>
           </div>
           <div class="summary-row">
-            <span>Estimasi Nilai Rupiah:</span>
-            <span id="sumIdr">Rp11.500</span>
+            <span>Harga Demo Rupiah:</span>
+            <span id="sumIdr">Rp100.000</span>
           </div>
           <div class="summary-row">
-            <span>Tagihan Web3:</span>
-            <strong id="sumToken" style="color: var(--accent);">2.5 tMEC</strong>
+            <span>Kurs Demo MEC:</span>
+            <span id="sumRate">Rp180.000 / MEC</span>
+          </div>
+          <div class="summary-row">
+            <span>Tagihan Penukaran MEC:</span>
+            <strong id="sumToken" style="color: var(--accent);">0.5556 MEC</strong>
           </div>
         </div>
 
@@ -340,15 +344,20 @@
         <div id="receiptBox" class="receipt"></div>
       </div>
 
-      <!-- KOLOM PENGATURAN JARINGAN TESTNET -->
+      <!-- KOLOM PENGATURAN JARINGAN & KURS DEMO -->
       <div class="card">
-        <h2>2. Konfigurasi Jaringan Testnet</h2>
+        <h2>2. Pengaturan Demo &amp; Jaringan</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Isi data jaringan uji coba resmi Meta Earth (dari <strong>mec.me</strong>) di bawah ini. Jika dikosongkan, tombol tetap bisa diuji dalam mode simulasi demo.
+          Kurs acuan demo diatur ke <strong>Rp180.000 / MEC</strong> agar tagihan <strong>Rp100.000</strong> bernilai <strong>0.5556 MEC</strong>. Anda juga bisa menyesuaikan kurs demo di bawah ini.
         </p>
 
         <div class="field">
-          <label for="rpcUrl">RPC URL</label>
+          <label for="mecRate">Kurs Demo MEC (Rupiah per 1 MEC)</label>
+          <input id="mecRate" type="number" value="180000" min="1" step="1000" />
+        </div>
+
+        <div class="field">
+          <label for="rpcUrl">RPC URL (Opsional)</label>
           <input id="rpcUrl" type="text" placeholder="https://..." />
         </div>
 
@@ -358,8 +367,8 @@
         </div>
 
         <div class="field">
-          <label for="symbol">Simbol Koin Uji Coba</label>
-          <input id="symbol" type="text" value="tMEC" placeholder="Contoh: tMEC" />
+          <label for="symbol">Simbol Koin</label>
+          <input id="symbol" type="text" value="MEC" placeholder="Contoh: MEC" />
         </div>
 
         <div class="field">
@@ -370,36 +379,48 @@
           </select>
         </div>
 
-        <span class="tag-demo">Mode Aman: Tidak menyentuh saldo asli / produksi</span>
+        <span class="tag-demo">Mode Aman Demo: Tidak menyentuh saldo asli / produksi</span>
       </div>
     </div>
   </div>
 
   <script>
     let selectedProduct = {
-      name: "Pulsa Reguler Rp10.000",
-      idr: "Rp11.500",
-      token: "2.5",
-      symbol: "tMEC"
+      name: "Pulsa Rp100.000",
+      idrNumber: 100000,
+      idrFormatted: "Rp100.000"
     };
 
     let connectedAccount = null;
 
     function getTokenSymbol() {
       const customSymbol = document.getElementById("symbol").value.trim();
-      return customSymbol || "tMEC";
+      return customSymbol || "MEC";
+    }
+
+    function getMecRate() {
+      const rateVal = Number(document.getElementById("mecRate").value);
+      return rateVal > 0 ? rateVal : 180000;
+    }
+
+    function formatIdr(num) {
+      return "Rp" + Number(num).toLocaleString("id-ID");
+    }
+
+    function calculateMec(idrNumber, rate) {
+      const exact = idrNumber / rate;
+      return Number(exact.toFixed(4)).toString();
     }
 
     function selectProduct(el) {
       document.querySelectorAll(".product-item").forEach(btn => btn.classList.remove("active"));
       el.classList.add("active");
 
-      const sym = getTokenSymbol();
+      const idrNum = Number(el.dataset.idr.replace(/\./g, "")) || 100000;
       selectedProduct = {
         name: el.dataset.name,
-        idr: "Rp" + el.dataset.idr,
-        token: el.dataset.token,
-        symbol: sym
+        idrNumber: idrNum,
+        idrFormatted: formatIdr(idrNum)
       };
 
       updateSummary();
@@ -407,19 +428,26 @@
 
     function updateSummary() {
       const sym = getTokenSymbol();
+      const rate = getMecRate();
+      const tokenAmount = calculateMec(selectedProduct.idrNumber, rate);
+
       document.getElementById("sumProduct").textContent = selectedProduct.name;
-      document.getElementById("sumIdr").textContent = selectedProduct.idr;
-      document.getElementById("sumToken").textContent = `${selectedProduct.token} ${sym}`;
+      document.getElementById("sumIdr").textContent = selectedProduct.idrFormatted;
+      document.getElementById("sumRate").textContent = `${formatIdr(rate)} / ${sym}`;
+      document.getElementById("sumToken").textContent = `${tokenAmount} ${sym}`;
 
       document.querySelectorAll(".product-item").forEach(btn => {
         const priceEl = btn.querySelector(".product-price");
+        const btnIdr = Number(btn.dataset.idr.replace(/\./g, "")) || 100000;
+        const btnMec = calculateMec(btnIdr, rate);
         if (priceEl) {
-          priceEl.textContent = `≈ ${btn.dataset.token} ${sym}`;
+          priceEl.textContent = `≈ ${btnMec} ${sym}`;
         }
       });
     }
 
     document.getElementById("symbol").addEventListener("input", updateSummary);
+    document.getElementById("mecRate").addEventListener("input", updateSummary);
 
     async function connectWallet() {
       const mode = document.getElementById("modeSelect").value;
@@ -475,6 +503,8 @@
       const customerId = document.getElementById("customerId").value.trim() || "085200000000";
       const mode = document.getElementById("modeSelect").value;
       const sym = getTokenSymbol();
+      const rate = getMecRate();
+      const tokenAmount = calculateMec(selectedProduct.idrNumber, rate);
 
       if (!connectedAccount) {
         await connectWallet();
@@ -505,10 +535,12 @@
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
       receiptBox.innerHTML = `
-        <strong style="color: #86efac;">✓ Pembayaran Berhasil Diproses</strong><br/>
+        <strong style="color: #86efac;">✓ Pembayaran Berhasil Diproses (Demo)</strong><br/>
         <span>Tujuan: <strong>${customerId}</strong></span><br/>
         <span>Produk: <strong>${selectedProduct.name}</strong></span><br/>
-        <span>Nominal: <strong>${selectedProduct.token} ${sym}</strong></span><br/>
+        <span>Harga Demo: <strong>${selectedProduct.idrFormatted}</strong></span><br/>
+        <span>Kurs Demo: <strong>${formatIdr(rate)} / ${sym}</strong></span><br/>
+        <span>Nominal Penukaran: <strong>${tokenAmount} ${sym}</strong></span><br/>
         <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
       `;
