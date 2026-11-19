@@ -348,7 +348,7 @@
       <div class="card">
         <h2>2. Pengaturan Demo &amp; Jaringan</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Kurs acuan demo diatur ke <strong>Rp180.000 / MEC</strong> agar tagihan <strong>Rp100.000</strong> bernilai <strong>0.5556 MEC</strong>. Anda juga bisa menyesuaikan kurs demo di bawah ini.
+          Parameter jaringan mengacu pada dokumentasi <strong>docs.mec.me</strong> (Testnet RPC &amp; Chain ID <code>mechain_400-1</code>), dengan kurs demo <strong>Rp180.000 / MEC</strong>[cite: 11].
         </p>
 
         <div class="field">
@@ -357,13 +357,18 @@
         </div>
 
         <div class="field">
-          <label for="rpcUrl">RPC URL (Opsional)</label>
-          <input id="rpcUrl" type="text" placeholder="https://..." />
+          <label for="rpcUrl">RPC URL (Meta Earth Testnet)</label>
+          <input id="rpcUrl" type="text" value="https://beta-hub-26657.explorer-testnet.me" placeholder="https://..." />
         </div>
 
         <div class="field">
-          <label for="chainId">Chain ID (angka atau hex)</label>
-          <input id="chainId" type="text" placeholder="Contoh: 5151 atau 0x141f" />
+          <label for="chainId">Chain ID (Testnet / EVM Hex)</label>
+          <input id="chainId" type="text" value="mechain_400-1" placeholder="Contoh: mechain_400-1 atau 0x141f" />
+        </div>
+
+        <div class="field">
+          <label for="explorerUrl">Block Explorer (Opsional)</label>
+          <input id="explorerUrl" type="text" value="https://www.explorer-testnet.me/" placeholder="https://explorer..." />
         </div>
 
         <div class="field">
@@ -449,6 +454,17 @@
     document.getElementById("symbol").addEventListener("input", updateSummary);
     document.getElementById("mecRate").addEventListener("input", updateSummary);
 
+    function toEvmHexChainId(rawChainId) {
+      if (!rawChainId) return null;
+      if (rawChainId.startsWith("0x") || rawChainId.startsWith("0X")) {
+        return rawChainId.toLowerCase();
+      }
+      if (/^\d+$/.test(rawChainId)) {
+        return "0x" + Number(rawChainId).toString(16);
+      }
+      return null;
+    }
+
     async function connectWallet() {
       const mode = document.getElementById("modeSelect").value;
       const statusEl = document.getElementById("walletStatus");
@@ -470,25 +486,27 @@
 
           const rpcUrl = document.getElementById("rpcUrl").value.trim();
           const rawChainId = document.getElementById("chainId").value.trim();
+          const explorerUrl = document.getElementById("explorerUrl").value.trim();
           const sym = getTokenSymbol();
+          const hexChainId = toEvmHexChainId(rawChainId);
 
-          if (rpcUrl && rawChainId) {
-            const hexChainId = rawChainId.startsWith("0x")
-              ? rawChainId
-              : "0x" + Number(rawChainId).toString(16);
-
+          if (rpcUrl && hexChainId) {
             try {
+              const chainParams = {
+                chainId: hexChainId,
+                chainName: "Meta Earth Network",
+                nativeCurrency: { name: sym, symbol: sym, decimals: 18 },
+                rpcUrls: [rpcUrl]
+              };
+              if (explorerUrl) {
+                chainParams.blockExplorerUrls = [explorerUrl];
+              }
               await window.ethereum.request({
                 method: "wallet_addEthereumChain",
-                params: [{
-                  chainId: hexChainId,
-                  chainName: "Meta Earth Testnet",
-                  nativeCurrency: { name: sym, symbol: sym, decimals: 18 },
-                  rpcUrls: [rpcUrl]
-                }]
+                params: [chainParams]
               });
             } catch (chainErr) {
-              console.warn("Penambahan jaringan dilewati:", chainErr);
+              console.warn("Penambahan jaringan EVM dilewati:", chainErr);
             }
           }
         }
@@ -504,6 +522,7 @@
       const mode = document.getElementById("modeSelect").value;
       const sym = getTokenSymbol();
       const rate = getMecRate();
+      const chainIdVal = document.getElementById("chainId").value.trim() || "mechain_400-1";
       const tokenAmount = calculateMec(selectedProduct.idrNumber, rate);
 
       if (!connectedAccount) {
@@ -541,6 +560,7 @@
         <span>Harga Demo: <strong>${selectedProduct.idrFormatted}</strong></span><br/>
         <span>Kurs Demo: <strong>${formatIdr(rate)} / ${sym}</strong></span><br/>
         <span>Nominal Penukaran: <strong>${tokenAmount} ${sym}</strong></span><br/>
+        <span>Jaringan / Chain ID: <strong>${chainIdVal}</strong></span><br/>
         <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
       `;
