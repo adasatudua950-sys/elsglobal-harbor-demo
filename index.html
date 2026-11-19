@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElsGlobal Web3 Checkout Demo — Meta Earth Hackathon</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a30;
+      --card-2: #182340;
+      --accent: #00d2a8;
+      --accent-2: #4f7cff;
+      --text: #f3f6fc;
+      --muted: #9aa7c7;
+      --border: rgba(255, 255, 255, 0.1);
+      --success: #22c55e;
+      --warning: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top right, rgba(79, 124, 255, 0.16), transparent 40%),
+                  radial-gradient(circle at bottom left, rgba(0, 210, 168, 0.14), transparent 40%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #07101c;
+      font-size: 18px;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .brand p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .wallet-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .status-pill.connected {
+      color: #86efac;
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.12);
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      padding: 9px 14px;
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #06101b;
+      font-size: 15px;
+      font-weight: 800;
+      margin-top: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card h2 {
+      font-size: 15px;
+      margin-bottom: 14px;
+      color: #e2e8f0;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .product-item {
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: left;
+      color: var(--text);
+    }
+
+    .product-item.active {
+      border-color: var(--accent);
+      background: rgba(0, 210, 168, 0.12);
+    }
+
+    .product-name {
+      font-size: 13px;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .summary-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .receipt {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      display: none;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .receipt.show {
+      display: block;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 10px;
+    }
+
+    .tag-demo {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #fde68a;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-badge">EG</div>
+        <div>
+          <h1>ElsGlobal × Meta Earth</h1>
+          <p>Web3 PPOB & Digital Checkout Demo (HARBOR 2026)</p>
+        </div>
+      </div>
+
+      <div class="wallet-box">
+        <span id="walletStatus" class="status-pill">Wallet Belum Terhubung</span>
+        <button id="connectBtn" class="btn-secondary" onclick="connectWallet()">Hubungkan Wallet</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- KOLOM KASIR PPOB -->
+      <div class="card">
+        <h2>1. Kasir Digital ElsGlobal</h2>
+
+        <div class="field">
+          <label for="customerId">Nomor HP / ID Pelanggan PLN</label>
+          <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau 56123456789" />
+        </div>
+
+        <div class="field">
+          <label>Pilih Produk Digital</label>
+          <div class="products" id="productList">
+            <button type="button" class="product-item active" data-name="Pulsa Reguler Rp10.000" data-idr="11.500" data-token="2.5" onclick="selectProduct(this)">
+              <span class="product-name">Pulsa Rp10.000</span>
+              <span class="product-price">≈ 2.5 tMEC</span>
+            </button>
+
+            <button type="button" class="product-item" data-name="Token Listrik PLN Rp20.000" data-idr="21.500" data-token="5.0" onclick="selectProduct(this)">
+              <span class="product-name">Token PLN Rp20.000</span>
+              <span class="product-price">≈ 5.0 tMEC</span>
+            </button>
+
+            <button type="button" class="product-item" data-name="Paket Data Harian 3GB" data-idr="18.000" data-token="4.2" onclick="selectProduct(this)">
+              <span class="product-name">Paket Data 3GB</span>
+              <span class="product-price">≈ 4.2 tMEC</span>
+            </button>
+
+            <button type="button" class="product-item" data-name="Voucher Game / Top-Up" data-idr="25.000" data-token="6.0" onclick="selectProduct(this)">
+              <span class="product-name">Voucher Digital</span>
+              <span class="product-price">≈ 6.0 tMEC</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-row">
+            <span>Produk Dipilih:</span>
+            <strong id="sumProduct">Pulsa Reguler Rp10.000</strong>
+          </div>
+          <div class="summary-row">
+            <span>Estimasi Nilai Rupiah:</span>
+            <span id="sumIdr">Rp11.500</span>
+          </div>
+          <div class="summary-row">
+            <span>Tagihan Web3:</span>
+            <strong id="sumToken" style="color: var(--accent);">2.5 tMEC</strong>
+          </div>
+        </div>
+
+        <button id="payBtn" class="btn-primary" onclick="processPayment()">
+          Bayar Sekarang via Meta Earth
+        </button>
+
+        <div id="receiptBox" class="receipt"></div>
+      </div>
+
+      <!-- KOLOM PENGATURAN JARINGAN TESTNET -->
+      <div class="card">
+        <h2>2. Konfigurasi Jaringan Testnet</h2>
+        <p class="note" style="margin-top: 0; margin-bottom: 12px;">
+          Isi data jaringan uji coba resmi Meta Earth (dari <strong>mec.me</strong>) di bawah ini. Jika dikosongkan, tombol tetap bisa diuji dalam mode simulasi demo.
+        </p>
+
+        <div class="field">
+          <label for="rpcUrl">RPC URL</label>
+          <input id="rpcUrl" type="text" placeholder="https://..." />
+        </div>
+
+        <div class="field">
+          <label for="chainId">Chain ID (angka atau hex)</label>
+          <input id="chainId" type="text" placeholder="Contoh: 5151 atau 0x141f" />
+        </div>
+
+        <div class="field">
+          <label for="symbol">Simbol Koin Uji Coba</label>
+          <input id="symbol" type="text" value="tMEC" placeholder="Contoh: tMEC" />
+        </div>
+
+        <div class="field">
+          <label for="modeSelect">Mode Eksekusi Demo</label>
+          <select id="modeSelect">
+            <option value="auto">Otomatis (Coba Wallet Web3, Fallback Simulasi)</option>
+            <option value="simulation">Simulasi Saja (Aman untuk Presentasi Cepat)</option>
+          </select>
+        </div>
+
+        <span class="tag-demo">Mode Aman: Tidak menyentuh saldo asli / produksi</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedProduct = {
+      name: "Pulsa Reguler Rp10.000",
+      idr: "Rp11.500",
+      token: "2.5",
+      symbol: "tMEC"
+    };
+
+    let connectedAccount = null;
+
+    function getTokenSymbol() {
+      const customSymbol = document.getElementById("symbol").value.trim();
+      return customSymbol || "tMEC";
+    }
+
+    function selectProduct(el) {
+      document.querySelectorAll(".product-item").forEach(btn => btn.classList.remove("active"));
+      el.classList.add("active");
+
+      const sym = getTokenSymbol();
+      selectedProduct = {
+        name: el.dataset.name,
+        idr: "Rp" + el.dataset.idr,
+        token: el.dataset.token,
+        symbol: sym
+      };
+
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const sym = getTokenSymbol();
+      document.getElementById("sumProduct").textContent = selectedProduct.name;
+      document.getElementById("sumIdr").textContent = selectedProduct.idr;
+      document.getElementById("sumToken").textContent = `${selectedProduct.token} ${sym}`;
+
+      document.querySelectorAll(".product-item").forEach(btn => {
+        const priceEl = btn.querySelector(".product-price");
+        if (priceEl) {
+          priceEl.textContent = `≈ ${btn.dataset.token} ${sym}`;
+        }
+      });
+    }
+
+    document.getElementById("symbol").addEventListener("input", updateSummary);
+
+    async function connectWallet() {
+      const mode = document.getElementById("modeSelect").value;
+      const statusEl = document.getElementById("walletStatus");
+
+      if (mode === "simulation" || !window.ethereum) {
+        connectedAccount = "0xElsGlobalDemo71A9...48C2";
+        statusEl.textContent = `Demo Wallet: ${connectedAccount}`;
+        statusEl.classList.add("connected");
+        return;
+      }
+
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        if (accounts && accounts.length > 0) {
+          connectedAccount = accounts[0];
+          const shortAddr = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
+          statusEl.textContent = `Terhubung: ${shortAddr}`;
+          statusEl.classList.add("connected");
+
+          const rpcUrl = document.getElementById("rpcUrl").value.trim();
+          const rawChainId = document.getElementById("chainId").value.trim();
+          const sym = getTokenSymbol();
+
+          if (rpcUrl && rawChainId) {
+            const hexChainId = rawChainId.startsWith("0x")
+              ? rawChainId
+              : "0x" + Number(rawChainId).toString(16);
+
+            try {
+              await window.ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [{
+                  chainId: hexChainId,
+                  chainName: "Meta Earth Testnet",
+                  nativeCurrency: { name: sym, symbol: sym, decimals: 18 },
+                  rpcUrls: [rpcUrl]
+                }]
+              });
+            } catch (chainErr) {
+              console.warn("Penambahan jaringan dilewati:", chainErr);
+            }
+          }
+        }
+      } catch (err) {
+        connectedAccount = "0xElsGlobalDemo71A9...48C2";
+        statusEl.textContent = `Simulasi Wallet Aktif`;
+        statusEl.classList.add("connected");
+      }
+    }
+
+    async function processPayment() {
+      const customerId = document.getElementById("customerId").value.trim() || "085200000000";
+      const mode = document.getElementById("modeSelect").value;
+      const sym = getTokenSymbol();
+
+      if (!connectedAccount) {
+        await connectWallet();
+      }
+
+      let txHash = "0x" + Array.from({ length: 16 }, () =>
+        Math.floor(Math.random() * 16).toString(16)
+      ).join("") + "...demo";
+
+      if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
+        try {
+          const amountWeiHex = "0x0";
+          const sentHash = await window.ethereum.request({
+            method: "eth_sendTransaction",
+            params: [{
+              from: connectedAccount,
+              to: connectedAccount,
+              value: amountWeiHex
+            }]
+          });
+          if (sentHash) txHash = sentHash;
+        } catch (txErr) {
+          console.warn("Transaksi wallet dibatalkan/simulasi dipakai:", txErr);
+        }
+      }
+
+      const tokenCode = Math.floor(10000000000000000000 + Math.random() * 89999999999999999999).toString();
+      const receiptBox = document.getElementById("receiptBox");
+      receiptBox.classList.add("show");
+      receiptBox.innerHTML = `
+        <strong style="color: #86efac;">✓ Pembayaran Berhasil Diproses</strong><br/>
+        <span>Tujuan: <strong>${customerId}</strong></span><br/>
+        <span>Produk: <strong>${selectedProduct.name}</strong></span><br/>
+        <span>Nominal: <strong>${selectedProduct.token} ${sym}</strong></span><br/>
+        <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
+        <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
+      `;
+    }
+  </script>
+</body>
+</html>
