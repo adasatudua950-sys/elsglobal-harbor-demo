@@ -59,15 +59,20 @@
     }
 
     .brand-badge {
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-      color: #07101c;
-      font-size: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(79, 124, 255, 0.45);
+      background: #07101c;
+      flex-shrink: 0;
+    }
+
+    .brand-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .brand h1 {
@@ -296,7 +301,9 @@
   <div class="container">
     <div class="topbar">
       <div class="brand">
-        <div class="brand-badge">EG</div>
+        <div class="brand-badge">
+          <img src="./logo-els.jpg" alt="Logo ELS" />
+        </div>
         <div>
           <h1>ElsGlobal × Meta Earth</h1>
           <p>Web3 PPOB &amp; Digital Checkout • HARBOR Hackathon 2026 (Prototype)</p>
@@ -455,8 +462,8 @@
   <script>
     // Patokan awal: 20 November 2026 = $9.87, naik +$0.01 per hari
     const BASE_DATE_UTC = Date.UTC(2026, 10, 20);
-    const FALLBACK_USD_IDR = 16500;
-    const CACHE_KEY = "elsglobal_usd_idr_cache_v1";
+    const FALLBACK_USD_IDR = 18261;
+    const CACHE_KEY = "elsglobal_usd_idr_cache_v2";
 
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
