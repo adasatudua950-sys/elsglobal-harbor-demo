@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElsGlobal Web3 Checkout Demo — Meta Earth Hackathon</title>
+  <title>ElsGlobal Web3 Checkout — Meta Earth Hackathon</title>
   <style>
     :root {
       --bg: #0b1020;
@@ -35,7 +35,7 @@
     }
 
     .container {
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
@@ -134,11 +134,11 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.25fr 0.75fr;
       gap: 18px;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 720px) {
       .grid {
         grid-template-columns: 1fr;
       }
@@ -190,6 +190,12 @@
       margin-bottom: 14px;
     }
 
+    @media (max-width: 480px) {
+      .products {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .product-item {
       border: 1px solid var(--border);
       background: var(--card-2);
@@ -208,13 +214,21 @@
       font-size: 13px;
       font-weight: 700;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
+    }
+
+    .product-sub {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 5px;
     }
 
     .product-price {
       font-size: 12px;
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
+      display: block;
     }
 
     .summary-box {
@@ -223,7 +237,7 @@
       border-radius: 12px;
       padding: 12px;
       font-size: 13px;
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
     .summary-row {
@@ -240,7 +254,7 @@
       border: 1px solid rgba(34, 197, 94, 0.35);
       display: none;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .receipt.show {
@@ -254,15 +268,27 @@
       margin-top: 10px;
     }
 
-    .tag-demo {
+    .live-badge {
+      display: inline-block;
+      font-size: 11px;
+      color: #99f6e4;
+      background: rgba(0, 210, 168, 0.12);
+      border: 1px solid rgba(0, 210, 168, 0.35);
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-left: 6px;
+    }
+
+    .tag-poc {
       display: inline-block;
       margin-top: 10px;
       font-size: 11px;
       color: #fde68a;
       background: rgba(245, 158, 11, 0.14);
       border: 1px solid rgba(245, 158, 11, 0.35);
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 8px;
+      line-height: 1.45;
     }
   </style>
 </head>
@@ -273,7 +299,7 @@
         <div class="brand-badge">EG</div>
         <div>
           <h1>ElsGlobal × Meta Earth</h1>
-          <p>Web3 PPOB &amp; Digital Checkout Demo (HARBOR 2026)</p>
+          <p>Web3 PPOB &amp; Digital Checkout • HARBOR Hackathon 2026 (Prototype)</p>
         </div>
       </div>
 
@@ -286,34 +312,38 @@
     <div class="grid">
       <!-- KOLOM KASIR PPOB -->
       <div class="card">
-        <h2>1. Kasir Digital ElsGlobal</h2>
+        <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
         <div class="field">
-          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor DANA</label>
-          <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau ID Pelanggan" />
+          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</label>
+          <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau ID Pelanggan PLN" />
         </div>
 
         <div class="field">
-          <label>Pilih Produk Digital (Demo Harga Rp100.000 • Kurs Demo Rp180.000 / MEC)</label>
+          <label>Pilih Produk Digital (Harga Tagihan Aktual + Buffer Aman)</label>
           <div class="products" id="productList">
-            <button type="button" class="product-item active" data-name="Pulsa Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+            <button type="button" class="product-item active" data-name="Pulsa Rp100.000" data-nominal="Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">Pulsa Rp100.000</span>
-              <span class="product-price">≈ 0.5556 MEC</span>
+              <span class="product-sub">Tagihan: Rp101.500</span>
+              <span class="product-price" id="price-0">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Token Listrik PLN Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-name="Token Listrik PLN Rp100.000" data-nominal="Token Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">Token PLN Rp100.000</span>
-              <span class="product-price">≈ 0.5556 MEC</span>
+              <span class="product-sub">Harga Pusat: Rp101.500</span>
+              <span class="product-price" id="price-1">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Data 100GB 30 Hari" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-name="Data 100GB 30 Hari" data-nominal="Paket Data 100GB" data-idr="102000" onclick="selectProduct(this)">
               <span class="product-name">Data 100GB 30 Hari</span>
-              <span class="product-price">≈ 0.5556 MEC</span>
+              <span class="product-sub">Tagihan: Rp102.000</span>
+              <span class="product-price" id="price-2">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="E-Wallet DANA Rp100.000" data-idr="100.000" data-token="0.5556" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-name="E-Wallet DANA Rp100.000" data-nominal="Saldo DANA Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">E-Wallet DANA Rp100.000</span>
-              <span class="product-price">≈ 0.5556 MEC</span>
+              <span class="product-sub">Tagihan: Rp101.500</span>
+              <span class="product-price" id="price-3">Menghitung...</span>
             </button>
           </div>
         </div>
@@ -324,36 +354,67 @@
             <strong id="sumProduct">Pulsa Rp100.000</strong>
           </div>
           <div class="summary-row">
-            <span>Harga Demo Rupiah:</span>
-            <span id="sumIdr">Rp100.000</span>
+            <span>Harga Tagihan Produk:</span>
+            <span id="sumBaseIdr">Rp101.500</span>
           </div>
           <div class="summary-row">
-            <span>Kurs Demo MEC:</span>
-            <span id="sumRate">Rp180.000 / MEC</span>
+            <span>Buffer Pengaman (<span id="sumBufferLabel">3%</span>):</span>
+            <span id="sumBufferIdr">Rp3.045</span>
+          </div>
+          <div class="summary-row">
+            <span>Total Tagihan Efektif (IDR):</span>
+            <strong id="sumEffectiveIdr">Rp104.545</strong>
+          </div>
+          <div class="summary-row">
+            <span>Harga MEC Hari Ini (<span id="sumMecDate">-</span>):</span>
+            <span id="sumMecUsd">$9.87</span>
+          </div>
+          <div class="summary-row">
+            <span>Kurs USD–IDR Acuan:</span>
+            <span id="sumUsdIdr">Memuat...</span>
+          </div>
+          <div class="summary-row">
+            <span>Estimasi Nilai 1 MEC:</span>
+            <span id="sumMecIdr">-</span>
           </div>
           <div class="summary-row">
             <span>Tagihan Penukaran MEC:</span>
-            <strong id="sumToken" style="color: var(--accent);">0.5556 MEC</strong>
+            <strong id="sumToken" style="color: var(--accent);">-</strong>
           </div>
         </div>
 
         <button id="payBtn" class="btn-primary" onclick="processPayment()">
-          Bayar Sekarang via Meta Earth
+          Proses Checkout MEC
         </button>
 
         <div id="receiptBox" class="receipt"></div>
       </div>
 
-      <!-- KOLOM PENGATURAN JARINGAN & KURS DEMO -->
+      <!-- KOLOM PENGATURAN JARINGAN & KURS -->
       <div class="card">
-        <h2>2. Pengaturan Demo &amp; Jaringan</h2>
+        <h2>2. Parameter Kurs &amp; Jaringan</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Parameter jaringan mengacu pada dokumentasi <strong>docs.mec.me</strong> (Testnet RPC &amp; Chain ID <code>mechain_400-1</code>), dengan kurs demo <strong>Rp180.000 / MEC</strong>.
+          Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal, sedangkan harga <strong>MEC</strong> mengikuti jadwal kenaikan harian bertahap (+$0,01/hari sejak 20 Nov 2026 = $9,87) pada jaringan <strong>Meta Earth</strong>.
         </p>
 
         <div class="field">
-          <label for="mecRate">Kurs Demo MEC (Rupiah per 1 MEC)</label>
-          <input id="mecRate" type="number" value="180000" min="1" step="1000" />
+          <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC)</label>
+          <input id="mecBaseUsd" type="number" value="9.87" min="0.01" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="mecDailyStep">Kenaikan Harian MEC (USD / hari)</label>
+          <input id="mecDailyStep" type="number" value="0.01" min="0" step="0.01" />
+        </div>
+
+        <div class="field">
+          <label for="usdIdrOverride">Kurs USD–IDR (Otomatis / Override Manual)</label>
+          <input id="usdIdrOverride" type="number" value="" min="1" step="10" placeholder="Otomatis dari API (isi untuk override)" />
+        </div>
+
+        <div class="field">
+          <label for="bufferPercent">Buffer Pengaman Harga (%)</label>
+          <input id="bufferPercent" type="number" value="3" min="0" max="50" step="0.5" />
         </div>
 
         <div class="field">
@@ -377,23 +438,32 @@
         </div>
 
         <div class="field">
-          <label for="modeSelect">Mode Eksekusi Demo</label>
+          <label for="modeSelect">Mode Eksekusi Prototipe</label>
           <select id="modeSelect">
-            <option value="auto">Otomatis (Coba Wallet Web3, Fallback Simulasi)</option>
-            <option value="simulation">Simulasi Saja (Aman untuk Presentasi Cepat)</option>
+            <option value="auto">Otomatis (Wallet Web3 / Fallback Uji Coba)</option>
+            <option value="simulation">Uji Coba Alur (Presentasi &amp; Evaluasi Hackathon)</option>
           </select>
         </div>
 
-        <span class="tag-demo">Mode Aman Demo: Tidak menyentuh saldo asli / produksi</span>
+        <div class="tag-poc">
+          Catatan Prototipe HARBOR Hackathon: Halaman ini memperagakan alur konversi &amp; checkout Web3 PPOB dengan harga produk realistis untuk keperluan demonstrasi hackathon.
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Patokan awal: 20 November 2026 = $9.87, naik +$0.01 per hari
+    const BASE_DATE_UTC = Date.UTC(2026, 10, 20);
+    const FALLBACK_USD_IDR = 16500;
+    const CACHE_KEY = "elsglobal_usd_idr_cache_v1";
+
+    let liveUsdIdr = null;
+    let usdIdrSourceLabel = "Cadangan";
+
     let selectedProduct = {
       name: "Pulsa Rp100.000",
-      idrNumber: 100000,
-      idrFormatted: "Rp100.000"
+      baseIdr: 101500
     };
 
     let connectedAccount = null;
@@ -403,29 +473,56 @@
       return customSymbol || "MEC";
     }
 
-    function getMecRate() {
-      const rateVal = Number(document.getElementById("mecRate").value);
-      return rateVal > 0 ? rateVal : 180000;
+    function getBufferRate() {
+      const val = Number(document.getElementById("bufferPercent").value);
+      return Number.isFinite(val) && val >= 0 ? val / 100 : 0.03;
+    }
+
+    function getMecUsdPrice() {
+      const baseUsd = Number(document.getElementById("mecBaseUsd").value);
+      const stepUsd = Number(document.getElementById("mecDailyStep").value);
+      const safeBase = Number.isFinite(baseUsd) && baseUsd > 0 ? baseUsd : 9.87;
+      const safeStep = Number.isFinite(stepUsd) && stepUsd >= 0 ? stepUsd : 0.01;
+
+      const now = new Date();
+      const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      const dayDiff = Math.max(0, Math.floor((todayUtc - BASE_DATE_UTC) / (1000 * 60 * 60 * 24)));
+      return Number((safeBase + dayDiff * safeStep).toFixed(4));
+    }
+
+    function getActiveUsdIdr() {
+      const overrideVal = Number(document.getElementById("usdIdrOverride").value);
+      if (Number.isFinite(overrideVal) && overrideVal > 0) {
+        return { rate: overrideVal, source: "Manual" };
+      }
+      if (typeof liveUsdIdr === "number" && liveUsdIdr > 0) {
+        return { rate: liveUsdIdr, source: usdIdrSourceLabel };
+      }
+      return { rate: FALLBACK_USD_IDR, source: "Fallback" };
     }
 
     function formatIdr(num) {
-      return "Rp" + Number(num).toLocaleString("id-ID");
+      return "Rp" + Math.round(Number(num)).toLocaleString("id-ID");
     }
 
-    function calculateMec(idrNumber, rate) {
-      const exact = idrNumber / rate;
-      return Number(exact.toFixed(4)).toString();
+    function calculateMecFromIdr(baseIdr, mecIdrRate, bufferRate) {
+      const effectiveIdr = baseIdr * (1 + bufferRate);
+      const mecAmount = effectiveIdr / mecIdrRate;
+      return {
+        effectiveIdr: Math.round(effectiveIdr),
+        bufferIdr: Math.round(baseIdr * bufferRate),
+        mecAmount: Number(mecAmount.toFixed(4)).toString()
+      };
     }
 
     function selectProduct(el) {
       document.querySelectorAll(".product-item").forEach(btn => btn.classList.remove("active"));
       el.classList.add("active");
 
-      const idrNum = Number(el.dataset.idr.replace(/\./g, "")) || 100000;
+      const baseIdr = Number(el.dataset.idr) || 101500;
       selectedProduct = {
         name: el.dataset.name,
-        idrNumber: idrNum,
-        idrFormatted: formatIdr(idrNum)
+        baseIdr
       };
 
       updateSummary();
@@ -433,26 +530,85 @@
 
     function updateSummary() {
       const sym = getTokenSymbol();
-      const rate = getMecRate();
-      const tokenAmount = calculateMec(selectedProduct.idrNumber, rate);
+      const bufferRate = getBufferRate();
+      const mecUsd = getMecUsdPrice();
+      const { rate: usdIdr, source } = getActiveUsdIdr();
+      const mecIdrRate = mecUsd * usdIdr;
 
+      const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
+
+      document.getElementById("rateSourceBadge").textContent = `USD-IDR: ${source}`;
       document.getElementById("sumProduct").textContent = selectedProduct.name;
-      document.getElementById("sumIdr").textContent = selectedProduct.idrFormatted;
-      document.getElementById("sumRate").textContent = `${formatIdr(rate)} / ${sym}`;
-      document.getElementById("sumToken").textContent = `${tokenAmount} ${sym}`;
+      document.getElementById("sumBaseIdr").textContent = formatIdr(selectedProduct.baseIdr);
+      document.getElementById("sumBufferLabel").textContent = `${(bufferRate * 100).toFixed(1).replace(/\.0$/, "")}%`;
+      document.getElementById("sumBufferIdr").textContent = formatIdr(calc.bufferIdr);
+      document.getElementById("sumEffectiveIdr").textContent = formatIdr(calc.effectiveIdr);
+      document.getElementById("sumMecDate").textContent = new Date().toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+      document.getElementById("sumMecUsd").textContent = `$${mecUsd.toFixed(2)}`;
+      document.getElementById("sumUsdIdr").textContent = `${formatIdr(usdIdr)} (${source})`;
+      document.getElementById("sumMecIdr").textContent = `≈ ${formatIdr(mecIdrRate)} / ${sym}`;
+      document.getElementById("sumToken").textContent = `${calc.mecAmount} ${sym}`;
 
-      document.querySelectorAll(".product-item").forEach(btn => {
-        const priceEl = btn.querySelector(".product-price");
-        const btnIdr = Number(btn.dataset.idr.replace(/\./g, "")) || 100000;
-        const btnMec = calculateMec(btnIdr, rate);
+      document.querySelectorAll(".product-item").forEach((btn, idx) => {
+        const priceEl = document.getElementById(`price-${idx}`);
+        const btnBaseIdr = Number(btn.dataset.idr) || 101500;
+        const btnCalc = calculateMecFromIdr(btnBaseIdr, mecIdrRate, bufferRate);
         if (priceEl) {
-          priceEl.textContent = `≈ ${btnMec} ${sym}`;
+          priceEl.textContent = `≈ ${btnCalc.mecAmount} ${sym} (${formatIdr(btnCalc.effectiveIdr)})`;
         }
       });
     }
 
-    document.getElementById("symbol").addEventListener("input", updateSummary);
-    document.getElementById("mecRate").addEventListener("input", updateSummary);
+    async function fetchLiveUsdToIdr() {
+      try {
+        const rawCache = localStorage.getItem(CACHE_KEY);
+        if (rawCache) {
+          const parsed = JSON.parse(rawCache);
+          if (parsed && typeof parsed.rate === "number" && parsed.rate > 0) {
+            liveUsdIdr = parsed.rate;
+            usdIdrSourceLabel = "Cache";
+            updateSummary();
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch("https://open.er-api.com/v6/latest/USD", { signal: controller.signal });
+        clearTimeout(timer);
+
+        if (res.ok) {
+          const data = await res.json();
+          const rate = data?.rates?.IDR;
+          if (typeof rate === "number" && rate > 1000) {
+            liveUsdIdr = rate;
+            usdIdrSourceLabel = "Live API";
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify({ rate, updatedAt: Date.now() }));
+            } catch (e) {}
+            updateSummary();
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Fetch kurs USD-IDR menggunakan cache/fallback:", err);
+      }
+
+      if (!liveUsdIdr) {
+        liveUsdIdr = FALLBACK_USD_IDR;
+        usdIdrSourceLabel = "Fallback";
+      }
+      updateSummary();
+    }
+
+    ["symbol", "mecBaseUsd", "mecDailyStep", "usdIdrOverride", "bufferPercent"].forEach(id => {
+      document.getElementById(id).addEventListener("input", updateSummary);
+    });
 
     function toEvmHexChainId(rawChainId) {
       if (!rawChainId) return null;
@@ -470,8 +626,8 @@
       const statusEl = document.getElementById("walletStatus");
 
       if (mode === "simulation" || !window.ethereum) {
-        connectedAccount = "0xElsGlobalDemo71A9...48C2";
-        statusEl.textContent = `Demo Wallet: ${connectedAccount}`;
+        connectedAccount = "0xElsGlobalPoC71A9...48C2";
+        statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
         statusEl.classList.add("connected");
         return;
       }
@@ -511,8 +667,8 @@
           }
         }
       } catch (err) {
-        connectedAccount = "0xElsGlobalDemo71A9...48C2";
-        statusEl.textContent = `Simulasi Wallet Aktif`;
+        connectedAccount = "0xElsGlobalPoC71A9...48C2";
+        statusEl.textContent = "Wallet Uji Coba Aktif";
         statusEl.classList.add("connected");
       }
     }
@@ -521,9 +677,13 @@
       const customerId = document.getElementById("customerId").value.trim() || "085200000000";
       const mode = document.getElementById("modeSelect").value;
       const sym = getTokenSymbol();
-      const rate = getMecRate();
+      const bufferRate = getBufferRate();
+      const mecUsd = getMecUsdPrice();
+      const { rate: usdIdr, source } = getActiveUsdIdr();
+      const mecIdrRate = mecUsd * usdIdr;
       const chainIdVal = document.getElementById("chainId").value.trim() || "mechain_400-1";
-      const tokenAmount = calculateMec(selectedProduct.idrNumber, rate);
+
+      const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
       if (!connectedAccount) {
         await connectWallet();
@@ -531,22 +691,21 @@
 
       let txHash = "0x" + Array.from({ length: 16 }, () =>
         Math.floor(Math.random() * 16).toString(16)
-      ).join("") + "...demo";
+      ).join("") + "...poc";
 
       if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
         try {
-          const amountWeiHex = "0x0";
           const sentHash = await window.ethereum.request({
             method: "eth_sendTransaction",
             params: [{
               from: connectedAccount,
               to: connectedAccount,
-              value: amountWeiHex
+              value: "0x0"
             }]
           });
           if (sentHash) txHash = sentHash;
         } catch (txErr) {
-          console.warn("Transaksi wallet dibatalkan/simulasi dipakai:", txErr);
+          console.warn("Transaksi wallet dibatalkan/fallback dipakai:", txErr);
         }
       }
 
@@ -554,17 +713,22 @@
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
       receiptBox.innerHTML = `
-        <strong style="color: #86efac;">✓ Pembayaran Berhasil Diproses (Demo)</strong><br/>
+        <strong style="color: #86efac;">✓ Pesanan &amp; Konversi Berhasil Tercatat (Prototype)</strong><br/>
         <span>Tujuan: <strong>${customerId}</strong></span><br/>
         <span>Produk: <strong>${selectedProduct.name}</strong></span><br/>
-        <span>Harga Demo: <strong>${selectedProduct.idrFormatted}</strong></span><br/>
-        <span>Kurs Demo: <strong>${formatIdr(rate)} / ${sym}</strong></span><br/>
-        <span>Nominal Penukaran: <strong>${tokenAmount} ${sym}</strong></span><br/>
+        <span>Harga Tagihan: <strong>${formatIdr(selectedProduct.baseIdr)}</strong></span><br/>
+        <span>Total Efektif (termasuk buffer): <strong>${formatIdr(calc.effectiveIdr)}</strong></span><br/>
+        <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${source})</span><br/>
+        <span>Nominal Penukaran: <strong>${calc.mecAmount} ${sym}</strong></span><br/>
         <span>Jaringan / Chain ID: <strong>${chainIdVal}</strong></span><br/>
         <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
       `;
     }
+
+    updateSummary();
+    fetchLiveUsdToIdr();
+    setInterval(fetchLiveUsdToIdr, 15 * 60 * 1000);
   </script>
 </body>
 </html>
