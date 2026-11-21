@@ -94,15 +94,26 @@
     .wallet-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 8px;
       flex-wrap: nowrap;
       flex-shrink: 0;
     }
 
     @media (max-width: 640px) {
       .wallet-box {
-        flex-wrap: wrap;
         width: 100%;
+        flex-wrap: nowrap;
+      }
+
+      .status-pill {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+
+      .btn-secondary {
+        padding: 8px 12px;
+        font-size: 12px;
       }
     }
 
@@ -215,6 +226,11 @@
     @media (max-width: 480px) {
       .products {
         grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .product-item {
+        padding: 12px;
       }
     }
 
