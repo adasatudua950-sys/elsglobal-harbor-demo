@@ -130,6 +130,22 @@
       overflow-wrap: anywhere;
     }
 
+    .early-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #6ee7b7;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 3px 10px;
+      border-radius: 999px;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
     .wallet-box {
       display: flex;
       align-items: center;
@@ -228,6 +244,17 @@
       margin-top: 14px;
       border-radius: 999px;
       box-shadow: 0 8px 24px rgba(29, 211, 248, 0.22);
+    }
+
+    .btn-reset {
+      width: 100%;
+      padding: 10px 14px;
+      margin-top: 10px;
+      background: var(--card-2);
+      color: var(--accent);
+      border: 1px solid rgba(29, 211, 248, 0.35);
+      font-size: 12px;
+      border-radius: 10px;
     }
 
     .grid {
@@ -403,6 +430,15 @@
       overflow-wrap: anywhere;
     }
 
+    .utility-note {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(124, 145, 200, 0.22);
+      font-size: 11px;
+      color: #6ee7b7;
+      line-height: 1.45;
+    }
+
     .method-tabs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -534,6 +570,54 @@
       display: block;
     }
 
+    .receipt.sim-mode {
+      background: rgba(245, 158, 11, 0.09);
+      border-color: rgba(245, 158, 11, 0.42);
+    }
+
+    .receipt a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .history-box {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .history-clear {
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      text-decoration: underline;
+      padding: 2px 4px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      background: rgba(8, 12, 20, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 9px 11px;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
     .note {
       font-size: 12px;
       color: var(--muted);
@@ -569,6 +653,18 @@
       line-height: 1.45;
       overflow-wrap: anywhere;
     }
+
+    .community-card {
+      margin-top: 10px;
+      font-size: 11.5px;
+      color: #cbd5e1;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(29, 211, 248, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 9px 11px;
+      border-radius: 10px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
   </style>
 </head>
 <body>
@@ -581,6 +677,7 @@
         <div class="brand-text">
           <h1>ElsGlobal × Meta Earth</h1>
           <p>Web3 PPOB &amp; Digital Checkout • HARBOR Hackathon 2026 (Prototype)</p>
+          <span class="early-badge">✦ Built by Early ME Pass &amp; MEC Community • Real Utility</span>
         </div>
       </div>
 
@@ -662,6 +759,9 @@
             <span>Tagihan Penukaran MEC:</span>
             <strong id="sumToken" style="color: var(--accent);">-</strong>
           </div>
+          <div class="utility-note">
+            ✓ Utilitas langsung bagi pemegang MEC: bayar kebutuhan harian tanpa perlu top-up saldo Rupiah manual.
+          </div>
         </div>
 
         <div class="field" style="margin-bottom: 10px;">
@@ -687,7 +787,7 @@
                   <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
                   <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
                 </div>
-                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (opsional saat demo)" style="font-size: 12px; padding: 8px 10px;" />
+                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (kosong = mode simulasi)" style="font-size: 12px; padding: 8px 10px;" />
               </div>
             </div>
           </div>
@@ -698,6 +798,16 @@
         </button>
 
         <div id="receiptBox" class="receipt"></div>
+
+        <div class="history-box">
+          <div class="history-header">
+            <span>Riwayat Checkout Demo Terbaru (Lokal)</span>
+            <button type="button" class="history-clear" onclick="clearOrderHistory()">Bersihkan</button>
+          </div>
+          <div id="historyList" class="history-list">
+            <div class="note" style="margin-top: 0;">Belum ada transaksi tercatat di sesi ini.</div>
+          </div>
+        </div>
       </div>
 
       <!-- KOLOM PENGATURAN JARINGAN & KURS -->
@@ -760,6 +870,10 @@
           </select>
         </div>
 
+        <div class="community-card">
+          <strong>Komitmen Ekosistem Jangka Panjang:</strong> Dikembangkan oleh pelaku usaha PPOB &amp; pengguna awal ME Pass / pemegang MEC jangka panjang untuk menghadirkan pembayaran utilitas nyata sehari-hari di jaringan Meta Earth.
+        </div>
+
         <div class="tag-poc">
           Catatan Prototipe HARBOR Hackathon: Mendukung jalur transfer internal ME Pass (QR / Alamat ME Network) maupun koneksi wallet Web3 EVM untuk demonstrasi checkout PPOB.
         </div>
@@ -772,6 +886,7 @@
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
     const FALLBACK_USD_IDR = 18292;
     const CACHE_KEY = "elsglobal_usd_idr_cache_v3";
+    const HISTORY_KEY = "elsglobal_checkout_history_v1";
 
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
@@ -823,6 +938,14 @@
 
     function formatIdr(num) {
       return "Rp" + Math.round(Number(num)).toLocaleString("id-ID");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
 
     function calculateMecFromIdr(baseIdr, mecIdrRate, bufferRate) {
@@ -1042,8 +1165,65 @@
       }
     }
 
+    function saveOrderHistory(entry) {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        list.unshift(entry);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 5)));
+      } catch (e) {}
+      renderOrderHistory();
+    }
+
+    function clearOrderHistory() {
+      try {
+        localStorage.removeItem(HISTORY_KEY);
+      } catch (e) {}
+      renderOrderHistory();
+    }
+
+    function renderOrderHistory() {
+      const container = document.getElementById("historyList");
+      let list = [];
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        list = raw ? JSON.parse(raw) : [];
+      } catch (e) {}
+
+      if (!Array.isArray(list) || list.length === 0) {
+        container.innerHTML = `<div class="note" style="margin-top: 0;">Belum ada transaksi tercatat di sesi ini.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(item => `
+        <div class="history-item">
+          <div style="display:flex; justify-content:space-between; gap:8px;">
+            <strong>${escapeHtml(item.product)}</strong>
+            <strong style="color: var(--accent);">${escapeHtml(item.mecPaid)}</strong>
+          </div>
+          <div style="color: var(--muted);">
+            Tujuan: ${escapeHtml(item.customerId)} • ${escapeHtml(item.statusLabel)} • ${escapeHtml(item.time)}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function resetCheckoutForm() {
+      document.getElementById("manualTxHash").value = "";
+      const receiptBox = document.getElementById("receiptBox");
+      receiptBox.classList.remove("show", "sim-mode");
+      receiptBox.innerHTML = "";
+    }
+
     async function processPayment() {
-      const customerId = document.getElementById("customerId").value.trim() || "085200000000";
+      const customerInput = document.getElementById("customerId");
+      const customerId = customerInput.value.trim();
+      if (customerId.length < 5) {
+        alert("Mohon isi Nomor HP / ID Pelanggan PLN / Nomor E-Wallet dengan benar.");
+        customerInput.focus();
+        return;
+      }
+
       const mode = document.getElementById("modeSelect").value;
       const sym = getTokenSymbol();
       const bufferRate = getBufferRate();
@@ -1052,23 +1232,26 @@
       const mecIdrRate = mecUsd * usdIdr;
       const chainIdVal = document.getElementById("chainId").value.trim() || "mechain_400-1";
       const merchantAddr = getMerchantAddress();
+      const explorerUrl = document.getElementById("explorerUrl").value.trim();
       const manualTx = document.getElementById("manualTxHash").value.trim();
 
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
       let methodLabel = "ME Pass QR / Transfer ME Network";
-      let txHash = manualTx || ("0x" + Array.from({ length: 16 }, () =>
+      let isSimulation = mode === "simulation" || !manualTx;
+      let txHash = manualTx || ("SIM-" + Array.from({ length: 14 }, () =>
         Math.floor(Math.random() * 16).toString(16)
-      ).join("") + "...mepass");
+      ).join("").toUpperCase());
 
       if (activePaymentMethod === "web3") {
         methodLabel = "Direct Web3 Wallet (EVM)";
         if (!connectedAccount) {
           await connectWallet();
         }
-        txHash = "0x" + Array.from({ length: 16 }, () =>
+        isSimulation = true;
+        txHash = "SIM-EVM-" + Array.from({ length: 12 }, () =>
           Math.floor(Math.random() * 16).toString(16)
-        ).join("") + "...evm";
+        ).join("").toUpperCase();
 
         if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
           try {
@@ -1080,7 +1263,10 @@
                 value: "0x0"
               }]
             });
-            if (sentHash) txHash = sentHash;
+            if (sentHash) {
+              txHash = sentHash;
+              isSimulation = false;
+            }
           } catch (txErr) {
             console.warn("Transaksi wallet dibatalkan/fallback dipakai:", txErr);
           }
@@ -1092,26 +1278,47 @@
         statusEl.classList.add("connected");
       }
 
+      const statusTitle = isSimulation
+        ? "⏳ Simulasi Demo Tercatat (Menunggu Verifikasi Tx On-Chain)"
+        : "✓ Pesanan & Referensi Transfer Tercatat";
+      const statusShort = isSimulation ? "Simulasi Demo" : "Ref Tx Tercatat";
+      const titleColor = isSimulation ? "#fde68a" : "#6ee7b7";
+
+      const explorerLinkHtml = (!isSimulation && explorerUrl)
+        ? ` • <a href="${escapeHtml(explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
+        : "";
+
       const tokenCode = Math.floor(10000000000000000000 + Math.random() * 89999999999999999999).toString();
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
+      receiptBox.classList.toggle("sim-mode", isSimulation);
       receiptBox.innerHTML = `
-        <strong style="color: #6ee7b7;">✓ Pesanan &amp; Konversi Berhasil Tercatat (Prototype)</strong><br/>
-        <span>Metode: <strong>${methodLabel}</strong></span><br/>
-        <span>Tujuan: <strong>${customerId}</strong></span><br/>
-        <span>Produk: <strong>${selectedProduct.name}</strong></span><br/>
+        <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
+        <span>Metode: <strong>${escapeHtml(methodLabel)}</strong></span><br/>
+        <span>Tujuan: <strong>${escapeHtml(customerId)}</strong></span><br/>
+        <span>Produk: <strong>${escapeHtml(selectedProduct.name)}</strong></span><br/>
         <span>Harga Tagihan: <strong>${formatIdr(selectedProduct.baseIdr)}</strong></span><br/>
         <span>Total Efektif (termasuk buffer): <strong>${formatIdr(calc.effectiveIdr)}</strong></span><br/>
-        <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${source})</span><br/>
-        <span>Nominal Penukaran: <strong>${calc.mecAmount} ${sym}</strong></span><br/>
-        <span>Merchant Tujuan: <code style="word-break: break-all;">${merchantAddr}</code></span><br/>
-        <span>Jaringan / Chain ID: <strong>${chainIdVal}</strong></span><br/>
+        <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${escapeHtml(source)})</span><br/>
+        <span>Nominal Penukaran: <strong>${calc.mecAmount} ${escapeHtml(sym)}</strong></span><br/>
+        <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(merchantAddr)}</code></span><br/>
+        <span>Jaringan / Chain ID: <strong>${escapeHtml(chainIdVal)}</strong></span><br/>
         <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
-        <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
+        <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(txHash)}</code>${explorerLinkHtml}</span>
+        <button type="button" class="btn-reset" onclick="resetCheckoutForm()">Buat Pesanan Baru</button>
       `;
+
+      saveOrderHistory({
+        product: selectedProduct.name,
+        mecPaid: `${calc.mecAmount} ${sym}`,
+        customerId,
+        statusLabel: statusShort,
+        time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
+      });
     }
 
     updateSummary();
+    renderOrderHistory();
     fetchLiveUsdToIdr(false);
     setInterval(() => fetchLiveUsdToIdr(true), 15 * 60 * 1000);
   </script>
