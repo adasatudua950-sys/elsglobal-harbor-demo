@@ -56,6 +56,12 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      min-width: 0;
+      flex: 1 1 260px;
+    }
+
+    .brand > div {
+      min-width: 0;
     }
 
     .brand-badge {
@@ -89,7 +95,15 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .wallet-box {
+        flex-wrap: wrap;
+        width: 100%;
+      }
     }
 
     .status-pill {
@@ -99,6 +113,7 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border);
       color: var(--muted);
+      white-space: nowrap;
     }
 
     .status-pill.connected {
@@ -125,6 +140,8 @@
       color: var(--text);
       border: 1px solid var(--border);
       font-size: 13px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-primary {
@@ -654,7 +671,7 @@
       const statusEl = document.getElementById("walletStatus");
 
       if (mode === "simulation" || !window.ethereum) {
-        connectedAccount = "0xElsGlobalPoC71A9...48C2";
+        connectedAccount = "0xElsGlobal...48C2";
         statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
         statusEl.classList.add("connected");
         return;
@@ -695,8 +712,8 @@
           }
         }
       } catch (err) {
-        connectedAccount = "0xElsGlobalPoC71A9...48C2";
-        statusEl.textContent = "Wallet Uji Coba Aktif";
+        connectedAccount = "0xElsGlobal...48C2";
+        statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
         statusEl.classList.add("connected");
       }
     }
