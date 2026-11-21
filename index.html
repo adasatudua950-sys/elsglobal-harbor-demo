@@ -282,12 +282,109 @@
       padding: 12px;
       font-size: 13px;
       line-height: 1.7;
+      margin-bottom: 14px;
     }
 
     .summary-row {
       display: flex;
       justify-content: space-between;
       gap: 8px;
+    }
+
+    .method-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .method-btn {
+      padding: 10px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .method-btn.active {
+      border-color: var(--accent);
+      background: rgba(0, 210, 168, 0.14);
+      color: var(--text);
+    }
+
+    .qr-panel {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .qr-flex {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .qr-box {
+      width: 118px;
+      height: 118px;
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-box img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .qr-info {
+      flex: 1 1 200px;
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .addr-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+
+    .addr-code {
+      flex: 1 1 auto;
+      min-width: 0;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 11px;
+      color: #e2e8f0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-copy {
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(0, 210, 168, 0.16);
+      border: 1px solid rgba(0, 210, 168, 0.4);
+      color: #99f6e4;
+      font-size: 11px;
+      flex-shrink: 0;
     }
 
     .receipt {
@@ -430,8 +527,37 @@
           </div>
         </div>
 
+        <div class="field" style="margin-bottom: 10px;">
+          <label>Metode Pembayaran MEC</label>
+          <div class="method-tabs">
+            <button type="button" id="tabMepass" class="method-btn active" onclick="setPaymentMethod('mepass')">
+              ME Pass QR / Internal
+            </button>
+            <button type="button" id="tabWeb3" class="method-btn" onclick="setPaymentMethod('web3')">
+              Direct Web3 Wallet (EVM)
+            </button>
+          </div>
+
+          <div id="mepassQrPanel" class="qr-panel">
+            <div class="qr-flex">
+              <div class="qr-box">
+                <img id="merchantQrImg" alt="QR Merchant ME Pass" />
+              </div>
+              <div class="qr-info">
+                <strong style="color: var(--text); display: block; margin-bottom: 2px;">Scan QR via Aplikasi ME Pass</strong>
+                <span>Kirim tepat <strong id="qrAmountLabel" style="color: var(--accent);">0.5794 MEC</strong> ke alamat merchant ElsGlobal di jaringan ME Network:</span>
+                <div class="addr-row">
+                  <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
+                  <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
+                </div>
+                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (opsional saat demo)" style="font-size: 12px; padding: 8px 10px;" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Proses Checkout MEC
+          Konfirmasi Transfer &amp; Checkout MEC
         </button>
 
         <div id="receiptBox" class="receipt"></div>
@@ -443,6 +569,11 @@
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
           Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal, sedangkan harga <strong>MEC</strong> mengikuti jadwal kenaikan harian bertahap (+$0,01/hari sejak 20 Nov 2026 = $9,87) pada jaringan <strong>Meta Earth</strong>.
         </p>
+
+        <div class="field">
+          <label for="merchantAddress">Alamat Wallet Merchant (ME Pass / EVM)</label>
+          <input id="merchantAddress" type="text" value="me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc" placeholder="Masukkan alamat ME Pass atau 0x..." />
+        </div>
 
         <div class="field">
           <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC)</label>
@@ -493,7 +624,7 @@
         </div>
 
         <div class="tag-poc">
-          Catatan Prototipe HARBOR Hackathon: Halaman ini memperagakan alur konversi &amp; checkout Web3 PPOB dengan harga produk realistis untuk keperluan demonstrasi hackathon.
+          Catatan Prototipe HARBOR Hackathon: Mendukung jalur transfer internal ME Pass (QR / Alamat ME Network) maupun koneksi wallet Web3 EVM untuk demonstrasi checkout PPOB.
         </div>
       </div>
     </div>
@@ -508,6 +639,7 @@
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
     let connectedAccount = null;
+    let activePaymentMethod = "mepass";
 
     let selectedProduct = {
       name: "Pulsa Rp100.000",
@@ -517,6 +649,11 @@
     function getTokenSymbol() {
       const customSymbol = document.getElementById("symbol").value.trim();
       return customSymbol || "MEC";
+    }
+
+    function getMerchantAddress() {
+      const val = document.getElementById("merchantAddress").value.trim();
+      return val || "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
     }
 
     function getBufferRate() {
@@ -561,6 +698,28 @@
       };
     }
 
+    function setPaymentMethod(method) {
+      activePaymentMethod = method;
+      document.getElementById("tabMepass").classList.toggle("active", method === "mepass");
+      document.getElementById("tabWeb3").classList.toggle("active", method === "web3");
+      document.getElementById("mepassQrPanel").style.display = method === "mepass" ? "block" : "none";
+      document.getElementById("payBtn").textContent = method === "mepass"
+        ? "Konfirmasi Transfer & Checkout MEC"
+        : "Proses Checkout Web3 Wallet";
+    }
+
+    async function copyMerchantAddress() {
+      const addr = getMerchantAddress();
+      const btn = document.getElementById("copyAddrBtn");
+      try {
+        await navigator.clipboard.writeText(addr);
+        btn.textContent = "Tersalin!";
+        setTimeout(() => { btn.textContent = "Salin"; }, 1800);
+      } catch (e) {
+        btn.textContent = "Salin";
+      }
+    }
+
     function selectProduct(el) {
       document.querySelectorAll(".product-item").forEach(btn => btn.classList.remove("active"));
       el.classList.add("active");
@@ -580,6 +739,7 @@
       const mecUsd = getMecUsdPrice();
       const { rate: usdIdr, source } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
+      const merchantAddr = getMerchantAddress();
 
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
@@ -598,6 +758,11 @@
       document.getElementById("sumUsdIdr").textContent = `${formatIdr(usdIdr)} (${source})`;
       document.getElementById("sumMecIdr").textContent = `≈ ${formatIdr(mecIdrRate)} / ${sym}`;
       document.getElementById("sumToken").textContent = `${calc.mecAmount} ${sym}`;
+
+      document.getElementById("qrAmountLabel").textContent = `${calc.mecAmount} ${sym}`;
+      document.getElementById("merchantAddrDisplay").textContent = merchantAddr;
+      const qrPayload = encodeURIComponent(merchantAddr);
+      document.getElementById("merchantQrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=${qrPayload}`;
 
       document.querySelectorAll(".product-item").forEach((btn, idx) => {
         const priceEl = document.getElementById(`price-${idx}`);
@@ -673,7 +838,7 @@
       updateSummary();
     }
 
-    ["symbol", "mecBaseUsd", "mecDailyStep", "usdIdrOverride", "bufferPercent"].forEach(id => {
+    ["merchantAddress", "symbol", "mecBaseUsd", "mecDailyStep", "usdIdrOverride", "bufferPercent"].forEach(id => {
       document.getElementById(id).addEventListener("input", updateSummary);
     });
 
@@ -749,31 +914,45 @@
       const { rate: usdIdr, source } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
       const chainIdVal = document.getElementById("chainId").value.trim() || "mechain_400-1";
+      const merchantAddr = getMerchantAddress();
+      const manualTx = document.getElementById("manualTxHash").value.trim();
 
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
-      if (!connectedAccount) {
-        await connectWallet();
-      }
-
-      let txHash = "0x" + Array.from({ length: 16 }, () =>
+      let methodLabel = "ME Pass QR / Transfer ME Network";
+      let txHash = manualTx || ("0x" + Array.from({ length: 16 }, () =>
         Math.floor(Math.random() * 16).toString(16)
-      ).join("") + "...poc";
+      ).join("") + "...mepass");
 
-      if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
-        try {
-          const sentHash = await window.ethereum.request({
-            method: "eth_sendTransaction",
-            params: [{
-              from: connectedAccount,
-              to: connectedAccount,
-              value: "0x0"
-            }]
-          });
-          if (sentHash) txHash = sentHash;
-        } catch (txErr) {
-          console.warn("Transaksi wallet dibatalkan/fallback dipakai:", txErr);
+      if (activePaymentMethod === "web3") {
+        methodLabel = "Direct Web3 Wallet (EVM)";
+        if (!connectedAccount) {
+          await connectWallet();
         }
+        txHash = "0x" + Array.from({ length: 16 }, () =>
+          Math.floor(Math.random() * 16).toString(16)
+        ).join("") + "...evm";
+
+        if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
+          try {
+            const sentHash = await window.ethereum.request({
+              method: "eth_sendTransaction",
+              params: [{
+                from: connectedAccount,
+                to: connectedAccount,
+                value: "0x0"
+              }]
+            });
+            if (sentHash) txHash = sentHash;
+          } catch (txErr) {
+            console.warn("Transaksi wallet dibatalkan/fallback dipakai:", txErr);
+          }
+        }
+      } else if (!connectedAccount) {
+        const statusEl = document.getElementById("walletStatus");
+        connectedAccount = "ME-Pass-User";
+        statusEl.textContent = "Metode: ME Pass QR";
+        statusEl.classList.add("connected");
       }
 
       const tokenCode = Math.floor(10000000000000000000 + Math.random() * 89999999999999999999).toString();
@@ -781,12 +960,14 @@
       receiptBox.classList.add("show");
       receiptBox.innerHTML = `
         <strong style="color: #86efac;">✓ Pesanan &amp; Konversi Berhasil Tercatat (Prototype)</strong><br/>
+        <span>Metode: <strong>${methodLabel}</strong></span><br/>
         <span>Tujuan: <strong>${customerId}</strong></span><br/>
         <span>Produk: <strong>${selectedProduct.name}</strong></span><br/>
         <span>Harga Tagihan: <strong>${formatIdr(selectedProduct.baseIdr)}</strong></span><br/>
         <span>Total Efektif (termasuk buffer): <strong>${formatIdr(calc.effectiveIdr)}</strong></span><br/>
         <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${source})</span><br/>
         <span>Nominal Penukaran: <strong>${calc.mecAmount} ${sym}</strong></span><br/>
+        <span>Merchant Tujuan: <code style="word-break: break-all;">${merchantAddr}</code></span><br/>
         <span>Jaringan / Chain ID: <strong>${chainIdVal}</strong></span><br/>
         <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${txHash}</code></span>
