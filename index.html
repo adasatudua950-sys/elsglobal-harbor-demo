@@ -119,28 +119,12 @@
       transform: scale(0.98);
     }
 
-    button:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-
     .btn-secondary {
       padding: 9px 14px;
       background: var(--card-2);
       color: var(--text);
       border: 1px solid var(--border);
       font-size: 13px;
-    }
-
-    .btn-mini {
-      padding: 3px 8px;
-      font-size: 11px;
-      border-radius: 999px;
-      background: rgba(79, 124, 255, 0.18);
-      color: #bfdbfe;
-      border: 1px solid rgba(79, 124, 255, 0.4);
-      margin-left: 6px;
-      vertical-align: middle;
     }
 
     .btn-primary {
@@ -336,11 +320,7 @@
     <div class="grid">
       <!-- KOLOM KASIR PPOB -->
       <div class="card">
-        <h2>
-          1. Kasir Digital ElsGlobal
-          <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span>
-          <button id="refreshRateBtn" class="btn-mini" type="button" onclick="fetchLiveUsdToIdr(true)">↻ Refresh</button>
-        </h2>
+        <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
         <div class="field">
           <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</label>
@@ -483,8 +463,8 @@
   <script>
     // Patokan awal: 20 November 2026 = $9.87, naik +$0.01 per hari
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
-    const FALLBACK_USD_IDR = 18261;
-    const CACHE_KEY = "elsglobal_usd_idr_cache_v2";
+    const FALLBACK_USD_IDR = 18292;
+    const CACHE_KEY = "elsglobal_usd_idr_cache_v3";
 
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
@@ -590,10 +570,23 @@
       });
     }
 
-    async function fetchLiveUsdToIdr(forceFresh = false) {
-      const refreshBtn = document.getElementById("refreshRateBtn");
-      if (refreshBtn) refreshBtn.disabled = true;
+    async function fetchFromSource(url, parser) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      try {
+        const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const rate = parser(data);
+        return typeof rate === "number" && Number.isFinite(rate) && rate > 1000 ? rate : null;
+      } catch (e) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
 
+    async function fetchLiveUsdToIdr(forceFresh = false) {
       if (!forceFresh) {
         try {
           const rawCache = localStorage.getItem(CACHE_KEY);
@@ -608,31 +601,30 @@
         } catch (e) {}
       }
 
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 5000);
-        const res = await fetch("https://open.er-api.com/v6/latest/USD", {
-          signal: controller.signal,
-          cache: "no-store"
-        });
-        clearTimeout(timer);
-
-        if (res.ok) {
-          const data = await res.json();
-          const rate = data?.rates?.IDR;
-          if (typeof rate === "number" && rate > 1000) {
-            liveUsdIdr = rate;
-            usdIdrSourceLabel = "Live API";
-            try {
-              localStorage.setItem(CACHE_KEY, JSON.stringify({ rate, updatedAt: Date.now() }));
-            } catch (e) {}
-            updateSummary();
-            if (refreshBtn) refreshBtn.disabled = false;
-            return;
-          }
+      const sources = [
+        {
+          label: "Live API",
+          rate: await fetchFromSource("https://open.er-api.com/v6/latest/USD", d => d?.rates?.IDR)
+        },
+        {
+          label: "Frankfurter",
+          rate: await fetchFromSource("https://api.frankfurter.app/latest?from=USD&to=IDR", d => d?.rates?.IDR)
         }
-      } catch (err) {
-        console.warn("Fetch kurs USD-IDR menggunakan cache/fallback:", err);
+      ];
+
+      const validSource = sources.find(s => typeof s.rate === "number" && s.rate > 1000);
+      if (validSource) {
+        liveUsdIdr = validSource.rate;
+        usdIdrSourceLabel = validSource.label;
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            rate: validSource.rate,
+            source: validSource.label,
+            updatedAt: Date.now()
+          }));
+        } catch (e) {}
+        updateSummary();
+        return;
       }
 
       if (!liveUsdIdr) {
@@ -640,7 +632,6 @@
         usdIdrSourceLabel = "Fallback";
       }
       updateSummary();
-      if (refreshBtn) refreshBtn.disabled = false;
     }
 
     ["symbol", "mecBaseUsd", "mecDailyStep", "usdIdrOverride", "bufferPercent"].forEach(id => {
