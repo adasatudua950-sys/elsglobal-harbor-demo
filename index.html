@@ -104,16 +104,22 @@
       .wallet-box {
         width: 100%;
         flex-wrap: nowrap;
+        gap: 8px;
       }
 
       .status-pill {
         font-size: 11px;
         padding: 6px 10px;
+        min-width: 0;
+        flex: 1 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .btn-secondary {
-        padding: 8px 12px;
-        font-size: 12px;
+        padding: 8px 10px;
+        font-size: 11px;
+        flex-shrink: 0;
       }
     }
 
@@ -687,7 +693,7 @@
       const statusEl = document.getElementById("walletStatus");
 
       if (mode === "simulation" || !window.ethereum) {
-        connectedAccount = "0xElsGlobal...48C2";
+        connectedAccount = "0xEls...48C2";
         statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
         statusEl.classList.add("connected");
         return;
@@ -728,7 +734,7 @@
           }
         }
       } catch (err) {
-        connectedAccount = "0xElsGlobal...48C2";
+        connectedAccount = "0xEls...48C2";
         statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
         statusEl.classList.add("connected");
       }
