@@ -282,6 +282,7 @@
       padding: 3px 8px;
       border-radius: 999px;
       margin-left: 6px;
+      vertical-align: middle;
     }
 
     .tag-poc {
@@ -312,7 +313,7 @@
 
       <div class="wallet-box">
         <span id="walletStatus" class="status-pill">Wallet Belum Terhubung</span>
-        <button id="connectBtn" class="btn-secondary" onclick="connectWallet()">Hubungkan Wallet</button>
+        <button id="connectBtn" class="btn-secondary" type="button" onclick="connectWallet()">Hubungkan Wallet</button>
       </div>
     </div>
 
@@ -390,7 +391,7 @@
           </div>
         </div>
 
-        <button id="payBtn" class="btn-primary" onclick="processPayment()">
+        <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
           Proses Checkout MEC
         </button>
 
@@ -461,19 +462,18 @@
 
   <script>
     // Patokan awal: 20 November 2026 = $9.87, naik +$0.01 per hari
-    const BASE_DATE_UTC = Date.UTC(2026, 10, 20);
-    const FALLBACK_USD_IDR = 18261;
-    const CACHE_KEY = "elsglobal_usd_idr_cache_v2";
+    const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
+    const FALLBACK_USD_IDR = 18292;
+    const CACHE_KEY = "elsglobal_usd_idr_cache_v3";
 
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
+    let connectedAccount = null;
 
     let selectedProduct = {
       name: "Pulsa Rp100.000",
       baseIdr: 101500
     };
-
-    let connectedAccount = null;
 
     function getTokenSymbol() {
       const customSymbol = document.getElementById("symbol").value.trim();
@@ -492,8 +492,8 @@
       const safeStep = Number.isFinite(stepUsd) && stepUsd >= 0 ? stepUsd : 0.01;
 
       const now = new Date();
-      const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-      const dayDiff = Math.max(0, Math.floor((todayUtc - BASE_DATE_UTC) / (1000 * 60 * 60 * 24)));
+      const todayLocalMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const dayDiff = Math.max(0, Math.floor((todayLocalMidnight - BASE_LOCAL_MIDNIGHT) / (1000 * 60 * 60 * 24)));
       return Number((safeBase + dayDiff * safeStep).toFixed(4));
     }
 
@@ -570,40 +570,61 @@
       });
     }
 
-    async function fetchLiveUsdToIdr() {
+    async function fetchFromSource(url, parser) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
       try {
-        const rawCache = localStorage.getItem(CACHE_KEY);
-        if (rawCache) {
-          const parsed = JSON.parse(rawCache);
-          if (parsed && typeof parsed.rate === "number" && parsed.rate > 0) {
-            liveUsdIdr = parsed.rate;
-            usdIdrSourceLabel = "Cache";
-            updateSummary();
-          }
-        }
-      } catch (e) {}
-
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 5000);
-        const res = await fetch("https://open.er-api.com/v6/latest/USD", { signal: controller.signal });
+        const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
+        if (!res.ok) return null;
+        const data = await res.json();
+        const rate = parser(data);
+        return typeof rate === "number" && Number.isFinite(rate) && rate > 1000 ? rate : null;
+      } catch (e) {
+        return null;
+      } finally {
         clearTimeout(timer);
+      }
+    }
 
-        if (res.ok) {
-          const data = await res.json();
-          const rate = data?.rates?.IDR;
-          if (typeof rate === "number" && rate > 1000) {
-            liveUsdIdr = rate;
-            usdIdrSourceLabel = "Live API";
-            try {
-              localStorage.setItem(CACHE_KEY, JSON.stringify({ rate, updatedAt: Date.now() }));
-            } catch (e) {}
-            updateSummary();
-            return;
+    async function fetchLiveUsdToIdr(forceFresh = false) {
+      if (!forceFresh) {
+        try {
+          const rawCache = localStorage.getItem(CACHE_KEY);
+          if (rawCache) {
+            const parsed = JSON.parse(rawCache);
+            if (parsed && typeof parsed.rate === "number" && parsed.rate > 1000) {
+              liveUsdIdr = parsed.rate;
+              usdIdrSourceLabel = "Cache";
+              updateSummary();
+            }
           }
+        } catch (e) {}
+      }
+
+      const sources = [
+        {
+          label: "Live API",
+          rate: await fetchFromSource("https://open.er-api.com/v6/latest/USD", d => d?.rates?.IDR)
+        },
+        {
+          label: "Frankfurter",
+          rate: await fetchFromSource("https://api.frankfurter.app/latest?from=USD&to=IDR", d => d?.rates?.IDR)
         }
-      } catch (err) {
-        console.warn("Fetch kurs USD-IDR menggunakan cache/fallback:", err);
+      ];
+
+      const validSource = sources.find(s => typeof s.rate === "number" && s.rate > 1000);
+      if (validSource) {
+        liveUsdIdr = validSource.rate;
+        usdIdrSourceLabel = validSource.label;
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            rate: validSource.rate,
+            source: validSource.label,
+            updatedAt: Date.now()
+          }));
+        } catch (e) {}
+        updateSummary();
+        return;
       }
 
       if (!liveUsdIdr) {
@@ -734,8 +755,8 @@
     }
 
     updateSummary();
-    fetchLiveUsdToIdr();
-    setInterval(fetchLiveUsdToIdr, 15 * 60 * 1000);
+    fetchLiveUsdToIdr(false);
+    setInterval(() => fetchLiveUsdToIdr(true), 15 * 60 * 1000);
   </script>
 </body>
 </html>
