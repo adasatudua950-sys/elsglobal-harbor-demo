@@ -62,15 +62,9 @@
     }
 
     @keyframes spinLogo3D {
-      0% {
-        transform: perspective(600px) rotateY(0deg);
-      }
-      50% {
-        transform: perspective(600px) rotateY(360deg);
-      }
-      100% {
-        transform: perspective(600px) rotateY(360deg);
-      }
+      0% { transform: perspective(600px) rotateY(0deg); }
+      50% { transform: perspective(600px) rotateY(360deg); }
+      100% { transform: perspective(600px) rotateY(360deg); }
     }
 
     .brand {
@@ -157,24 +151,10 @@
     }
 
     @media (max-width: 640px) {
-      body {
-        padding: 14px 10px;
-      }
-
-      .topbar {
-        padding: 14px;
-      }
-
-      .brand h1 {
-        font-size: 16px;
-      }
-
-      .wallet-box {
-        width: 100%;
-        flex-wrap: nowrap;
-        gap: 8px;
-      }
-
+      body { padding: 14px 10px; }
+      .topbar { padding: 14px; }
+      .brand h1 { font-size: 16px; }
+      .wallet-box { width: 100%; flex-wrap: nowrap; gap: 8px; }
       .status-pill {
         font-size: 11px;
         padding: 6px 10px;
@@ -183,7 +163,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
       .btn-secondary {
         padding: 8px 10px;
         font-size: 11px;
@@ -207,15 +186,16 @@
       background: rgba(16, 185, 129, 0.14);
     }
 
-    button {
+    button, a.btn-link-catalog {
       cursor: pointer;
       border: none;
       border-radius: 12px;
       font-weight: 600;
       transition: transform 0.12s ease, opacity 0.15s ease, border-color 0.15s ease;
+      text-decoration: none;
     }
 
-    button:active {
+    button:active, a.btn-link-catalog:active {
       transform: scale(0.98);
     }
 
@@ -231,6 +211,33 @@
 
     .btn-secondary:hover {
       border-color: var(--accent);
+    }
+
+    .catalog-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: rgba(8, 12, 20, 0.55);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    a.btn-link-catalog {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(29, 211, 248, 0.14);
+      border: 1px solid rgba(29, 211, 248, 0.4);
+      color: var(--accent);
+      font-size: 12px;
+      border-radius: 999px;
     }
 
     .btn-primary {
@@ -347,10 +354,7 @@
         grid-template-columns: minmax(0, 1fr);
         gap: 10px;
       }
-
-      .product-item {
-        padding: 12px;
-      }
+      .product-item { padding: 12px; }
     }
 
     .product-item {
@@ -692,6 +696,11 @@
       <div class="card">
         <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
+        <div class="catalog-bar">
+          <span id="catalogSourceNote">Pilih produk langsung atau buka katalog pulsa</span>
+          <a href="pulsa.html" class="btn-link-catalog">Buka Katalog Pulsa (pulsa.html)</a>
+        </div>
+
         <div class="field">
           <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</label>
           <input id="customerId" type="text" value="085240001234" placeholder="Contoh: 0852xxxx atau ID Pelanggan PLN" />
@@ -700,25 +709,25 @@
         <div class="field">
           <label>Pilih Produk Digital (Harga Tagihan Aktual + Buffer Aman)</label>
           <div class="products" id="productList">
-            <button type="button" class="product-item active" data-name="Pulsa Rp100.000" data-nominal="Rp100.000" data-idr="101500" onclick="selectProduct(this)">
+            <button type="button" class="product-item active" data-id="default-1" data-name="Pulsa Rp100.000" data-nominal="Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">Pulsa Rp100.000</span>
               <span class="product-sub">Tagihan: Rp101.500</span>
               <span class="product-price" id="price-0">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Token Listrik PLN Rp100.000" data-nominal="Token Rp100.000" data-idr="101500" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-id="default-2" data-name="Token Listrik PLN Rp100.000" data-nominal="Token Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">Token PLN Rp100.000</span>
               <span class="product-sub">Harga Pusat: Rp101.500</span>
               <span class="product-price" id="price-1">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="Data 100GB 30 Hari" data-nominal="Paket Data 100GB" data-idr="102000" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-id="default-3" data-name="Data 100GB 30 Hari" data-nominal="Paket Data 100GB" data-idr="102000" onclick="selectProduct(this)">
               <span class="product-name">Data 100GB 30 Hari</span>
               <span class="product-sub">Tagihan: Rp102.000</span>
               <span class="product-price" id="price-2">Menghitung...</span>
             </button>
 
-            <button type="button" class="product-item" data-name="E-Wallet DANA Rp100.000" data-nominal="Saldo DANA Rp100.000" data-idr="101500" onclick="selectProduct(this)">
+            <button type="button" class="product-item" data-id="default-4" data-name="E-Wallet DANA Rp100.000" data-nominal="Saldo DANA Rp100.000" data-idr="101500" onclick="selectProduct(this)">
               <span class="product-name">E-Wallet DANA Rp100.000</span>
               <span class="product-sub">Tagihan: Rp101.500</span>
               <span class="product-price" id="price-3">Menghitung...</span>
@@ -882,7 +891,6 @@
   </div>
 
   <script>
-    // Patokan awal: 20 November 2026 = $9.87, naik +$0.01 per hari
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
     const FALLBACK_USD_IDR = 18292;
     const CACHE_KEY = "elsglobal_usd_idr_cache_v3";
@@ -894,6 +902,7 @@
     let activePaymentMethod = "mepass";
 
     let selectedProduct = {
+      id: "default-1",
       name: "Pulsa Rp100.000",
       baseIdr: 101500
     };
@@ -958,6 +967,50 @@
       };
     }
 
+    function applyUrlCatalogParams() {
+      const params = new URLSearchParams(window.location.search);
+      const idProduk = (params.get("id_produk") || "").trim();
+      const produkNama = (params.get("produk") || "").trim();
+      const rawHarga = (params.get("harga") || "").trim();
+      const tujuan = (params.get("tujuan") || "").trim();
+
+      if (tujuan) {
+        document.getElementById("customerId").value = tujuan;
+      }
+
+      const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
+      if (produkNama && Number.isFinite(parsedHarga) && parsedHarga > 0) {
+        const productList = document.getElementById("productList");
+        document.querySelectorAll(".product-item").forEach(btn => btn.classList.remove("active"));
+
+        const customBtn = document.createElement("button");
+        customBtn.type = "button";
+        customBtn.className = "product-item active";
+        customBtn.dataset.id = idProduk || "custom-url";
+        customBtn.dataset.name = produkNama;
+        customBtn.dataset.nominal = produkNama;
+        customBtn.dataset.idr = String(Math.round(parsedHarga));
+        customBtn.onclick = function () { selectProduct(this); };
+
+        const newIdx = productList.querySelectorAll(".product-item").length;
+        customBtn.innerHTML = `
+          <span class="product-name">${escapeHtml(produkNama)}</span>
+          <span class="product-sub">Dari Katalog${idProduk ? " • ID " + escapeHtml(idProduk) : ""}</span>
+          <span class="product-price" id="price-${newIdx}">Menghitung...</span>
+        `;
+
+        productList.prepend(customBtn);
+        selectedProduct = {
+          id: idProduk || "custom-url",
+          name: produkNama,
+          baseIdr: Math.round(parsedHarga)
+        };
+
+        document.getElementById("catalogSourceNote").textContent =
+          `Produk dimuat dari pulsa.html${tujuan ? " • Tujuan: " + tujuan : ""}`;
+      }
+    }
+
     function setPaymentMethod(method) {
       activePaymentMethod = method;
       document.getElementById("tabMepass").classList.toggle("active", method === "mepass");
@@ -986,6 +1039,7 @@
 
       const baseIdr = Number(el.dataset.idr) || 101500;
       selectedProduct = {
+        id: el.dataset.id || "item",
         name: el.dataset.name,
         baseIdr
       };
@@ -1025,7 +1079,7 @@
       document.getElementById("merchantQrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=4&data=${qrPayload}`;
 
       document.querySelectorAll(".product-item").forEach((btn, idx) => {
-        const priceEl = document.getElementById(`price-${idx}`);
+        const priceEl = btn.querySelector(".product-price") || document.getElementById(`price-${idx}`);
         const btnBaseIdr = Number(btn.dataset.idr) || 101500;
         const btnCalc = calculateMecFromIdr(btnBaseIdr, mecIdrRate, bufferRate);
         if (priceEl) {
@@ -1252,25 +1306,6 @@
         txHash = "SIM-EVM-" + Array.from({ length: 12 }, () =>
           Math.floor(Math.random() * 16).toString(16)
         ).join("").toUpperCase();
-
-        if (mode === "auto" && window.ethereum && connectedAccount && !connectedAccount.endsWith("...48C2")) {
-          try {
-            const sentHash = await window.ethereum.request({
-              method: "eth_sendTransaction",
-              params: [{
-                from: connectedAccount,
-                to: connectedAccount,
-                value: "0x0"
-              }]
-            });
-            if (sentHash) {
-              txHash = sentHash;
-              isSimulation = false;
-            }
-          } catch (txErr) {
-            console.warn("Transaksi wallet dibatalkan/fallback dipakai:", txErr);
-          }
-        }
       } else if (!connectedAccount) {
         const statusEl = document.getElementById("walletStatus");
         connectedAccount = "ME-Pass-User";
@@ -1279,8 +1314,8 @@
       }
 
       const statusTitle = isSimulation
-        ? "⏳ Simulasi Demo Tercatat (Menunggu Verifikasi Tx On-Chain)"
-        : "✓ Pesanan & Referensi Transfer Tercatat";
+        ? "⏳ Pencatatan Sesi Demo (Menunggu Verifikasi Tx & Fulfillment PPOB)"
+        : "✓ Referensi Transfer Tercatat di Sesi Demo";
       const statusShort = isSimulation ? "Simulasi Demo" : "Ref Tx Tercatat";
       const titleColor = isSimulation ? "#fde68a" : "#6ee7b7";
 
@@ -1288,22 +1323,22 @@
         ? ` • <a href="${escapeHtml(explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
         : "";
 
-      const tokenCode = Math.floor(10000000000000000000 + Math.random() * 89999999999999999999).toString();
+      const refOrderId = "ORD-" + Date.now().toString().slice(-8);
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
       receiptBox.classList.toggle("sim-mode", isSimulation);
       receiptBox.innerHTML = `
         <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
+        <span>Order ID: <strong>${escapeHtml(refOrderId)}</strong></span><br/>
         <span>Metode: <strong>${escapeHtml(methodLabel)}</strong></span><br/>
         <span>Tujuan: <strong>${escapeHtml(customerId)}</strong></span><br/>
-        <span>Produk: <strong>${escapeHtml(selectedProduct.name)}</strong></span><br/>
+        <span>Produk: <strong>${escapeHtml(selectedProduct.name)}</strong>${selectedProduct.id ? " (" + escapeHtml(selectedProduct.id) + ")" : ""}</span><br/>
         <span>Harga Tagihan: <strong>${formatIdr(selectedProduct.baseIdr)}</strong></span><br/>
         <span>Total Efektif (termasuk buffer): <strong>${formatIdr(calc.effectiveIdr)}</strong></span><br/>
         <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${escapeHtml(source)})</span><br/>
         <span>Nominal Penukaran: <strong>${calc.mecAmount} ${escapeHtml(sym)}</strong></span><br/>
         <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(merchantAddr)}</code></span><br/>
         <span>Jaringan / Chain ID: <strong>${escapeHtml(chainIdVal)}</strong></span><br/>
-        <span>Kode / Token: <strong>${tokenCode.slice(0, 20)}</strong></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(txHash)}</code>${explorerLinkHtml}</span>
         <button type="button" class="btn-reset" onclick="resetCheckoutForm()">Buat Pesanan Baru</button>
       `;
@@ -1317,6 +1352,7 @@
       });
     }
 
+    applyUrlCatalogParams();
     updateSummary();
     renderOrderHistory();
     fetchLiveUsdToIdr(false);
