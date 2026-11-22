@@ -294,11 +294,11 @@
     }
 
     #customerIdField {
-      display: none;
+      display: none !important;
     }
 
     #customerIdField.show {
-      display: block;
+      display: block !important;
     }
 
     label {
@@ -983,7 +983,7 @@
 
         <div id="customerIdField" class="field">
           <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet Tujuan</label>
-          <input id="customerId" type="text" value="" placeholder="Terisi otomatis dari kategori produk" readonly aria-readonly="true" />
+          <input id="customerId" name="els_target_no_autofill" type="text" value="" placeholder="Terisi otomatis dari kategori produk" autocomplete="off" data-lpignore="true" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1415,12 +1415,19 @@
       };
     }
 
-    function applyUrlCatalogParams() {
+    function resetCustomerInputState() {
       const customerInput = document.getElementById("customerId");
       if (customerInput) {
+        customerInput.removeAttribute("value");
         customerInput.value = "";
+        customerInput.defaultValue = "";
         customerInput.readOnly = true;
       }
+      syncCustomerFieldVisibility();
+    }
+
+    function applyUrlCatalogParams() {
+      resetCustomerInputState();
 
       const params = new URLSearchParams(window.location.search);
       const idProduk = (params.get("id_produk") || "").trim();
@@ -1428,8 +1435,11 @@
       const rawHarga = (params.get("harga") || "").trim();
       const tujuan = (params.get("tujuan") || "").trim();
 
-      if (tujuan && customerInput) {
-        customerInput.value = tujuan;
+      if (tujuan) {
+        const customerInput = document.getElementById("customerId");
+        if (customerInput) {
+          customerInput.value = tujuan;
+        }
       }
 
       const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
@@ -1844,6 +1854,7 @@
     function resetCheckoutForm() {
       stopStatusPolling();
       currentOrderContext = null;
+      resetCustomerInputState();
       document.getElementById("manualTxHash").value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
@@ -2067,6 +2078,10 @@
     }
 
     applyUrlCatalogParams();
+    window.addEventListener("pageshow", () => {
+      applyUrlCatalogParams();
+      updateSummary();
+    });
     updateSummary();
     renderOrderHistory();
     fetchLiveUsdToIdr(false);
