@@ -965,7 +965,7 @@
         <div class="field">
           <label for="modeSelect">Mode Eksekusi Prototipe</label>
           <select id="modeSelect">
-            <option value="auto">Otomatis (Sync Google Sheets + Auto Cek Status)</option>
+            <option value="auto">Otomatis (Wallet Web3 &amp; Pemrosesan Pesanan)</option>
             <option value="simulation">Uji Coba Alur (Presentasi &amp; Evaluasi Hackathon)</option>
           </select>
         </div>
@@ -975,7 +975,7 @@
         </div>
 
         <div class="tag-poc">
-          Catatan Prototipe HARBOR Hackathon: Pesanan otomatis tercatat ke Google Sheets merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
+          Catatan Prototipe HARBOR Hackathon: Pesanan masuk ke antrean pemrosesan merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
         </div>
       </div>
     </div>
@@ -1421,7 +1421,7 @@
             const st = String(data.status).trim();
             const tok = String(data.kodeToken || "-").trim();
             if (st.toUpperCase() === "SELESAI") {
-              renderReceiptCard(ctx, "SELESAI", tok, "Terkonfirmasi Google Sheets");
+              renderReceiptCard(ctx, "SELESAI", tok, "Terverifikasi & Terkirim");
               saveOrderHistory({
                 orderId: ctx.orderId,
                 product: ctx.productName,
@@ -1519,8 +1519,8 @@
       };
 
       const syncLabel = sentToSheets
-        ? "Terkirim ke Google Sheets"
-        : "Mode Lokal (URL Apps Script belum diisi)";
+        ? "Terkirim ke Antrean Proses"
+        : "Mode Lokal";
 
       renderReceiptCard(currentOrderContext, "MENUNGGU_VERIFIKASI", "-", syncLabel);
 
@@ -1529,7 +1529,7 @@
         product: selectedProduct.name,
         mecPaid: `${calc.mecAmount} ${sym}`,
         customerId,
-        statusLabel: sentToSheets ? "Terkirim ke Sheets" : "Lokal",
+        statusLabel: sentToSheets ? "Diproses" : "Lokal",
         time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
       });
 
