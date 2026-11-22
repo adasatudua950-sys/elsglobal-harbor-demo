@@ -781,6 +781,171 @@
       line-height: 1.5;
       overflow-wrap: anywhere;
     }
+
+    .playstore-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(21, 30, 51, 0.78);
+      border: 1px solid rgba(29, 211, 248, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      color: #cbd5e1;
+    }
+
+    .playstore-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    /* MODAL POP-UP KUSTOM ALA ELSGLOBAL */
+    @keyframes modalPopIn {
+      0% { opacity: 0; transform: translateY(10px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .els-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(4, 7, 13, 0.78);
+      backdrop-filter: blur(7px);
+    }
+
+    .els-modal-backdrop.show {
+      display: flex;
+    }
+
+    .els-modal-card {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(180deg, rgba(21, 30, 51, 0.98), rgba(10, 15, 27, 0.99));
+      border: 1px solid rgba(29, 211, 248, 0.36);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(108, 124, 255, 0.22);
+      animation: modalPopIn 0.18s ease-out;
+    }
+
+    .els-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(124, 145, 200, 0.16);
+    }
+
+    .els-modal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .els-modal-brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(29, 211, 248, 0.45);
+      flex-shrink: 0;
+    }
+
+    .els-modal-brand-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .els-modal-brand-sub {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .els-modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(21, 30, 51, 0.9);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .els-modal-close:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .els-modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .els-modal-title i {
+      color: var(--warning);
+      font-size: 16px;
+    }
+
+    .els-modal-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .els-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .els-modal-btn-ghost {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--card-2);
+      border: 1px solid rgba(29, 211, 248, 0.35);
+      color: var(--accent);
+      font-size: 12.5px;
+    }
+
+    .els-modal-btn-primary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      color: #050b14;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(29, 211, 248, 0.25);
+    }
   </style>
 </head>
 <body>
@@ -809,8 +974,8 @@
         <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
         <div class="field">
-          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</label>
-          <input id="customerId" type="text" value="" placeholder="Contoh: 0852xxxx atau ID Pelanggan PLN" />
+          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet (Otomatis dari Kategori Produk)</label>
+          <input id="customerId" type="text" value="" placeholder="Pilih kategori produk di bawah untuk mengisi nomor tujuan" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -968,6 +1133,11 @@
           </div>
           <div id="lookupStatusMsg" class="lookup-msg"></div>
         </div>
+
+        <div class="playstore-note">
+          <span>Ekosistem PPOB &amp; produk digital <strong>ELSGLOBAL</strong> juga tersedia di aplikasi Android.</span>
+          <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> Download aplikasi ELSGLOBAL di Play Store</span>
+        </div>
       </div>
 
       <!-- KOLOM PENGATURAN JARINGAN & KURS -->
@@ -994,7 +1164,7 @@
 
         <div class="field">
           <label for="usdIdrOverride">Kurs USD–IDR (Otomatis — Terkunci)</label>
-          <input id="usdIdrOverride" type="number" value="18292" readonly aria-readonly="true" />
+          <input id="usdIdrOverride" type="text" value="Rp18.292" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1031,13 +1201,37 @@
         </div>
 
         <div class="community-card">
-          <strong>Komitmen Ekosistem Jangka Panjang:</strong> Dikembangkan oleh pelaku usaha PPOB &amp; pengguna awal ME Pass / pemegang MEC jangka panjang untuk menghadirkan pembayaran utilitas nyata sehari-hari di jaringan Meta Earth.
+          <strong>Komitmen Ekosistem Jangka Panjang:</strong> Dikembangkan dari operasional nyata aplikasi &amp; layanan PPOB ElsGlobal serta komunitas pengguna awal ME Pass / pemegang MEC untuk menghadirkan pembayaran utilitas nyata sehari-hari di jaringan Meta Earth.
         </div>
 
         <div class="tag-poc">
           Catatan Prototipe HARBOR Hackathon: Pesanan masuk ke antrean pemrosesan merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL POP-UP KUSTOM ELSGLOBAL -->
+  <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitle">
+    <div class="els-modal-card" onclick="event.stopPropagation()">
+      <div class="els-modal-head">
+        <div class="els-modal-brand">
+          <img src="./logo-els.jpg" alt="ElsGlobal" />
+          <div>
+            <div class="els-modal-brand-title">ElsGlobal × Meta Earth</div>
+            <div class="els-modal-brand-sub">Notifikasi Kasir Digital</div>
+          </div>
+        </div>
+        <button type="button" class="els-modal-close" aria-label="Tutup" onclick="closeElsModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="elsModalTitle" class="els-modal-title">
+        <i id="elsModalIcon" class="fa-solid fa-circle-info"></i>
+        <span id="elsModalTitleText">Informasi</span>
+      </div>
+      <div id="elsModalBody" class="els-modal-body"></div>
+      <div id="elsModalActions" class="els-modal-actions"></div>
     </div>
   </div>
 
@@ -1073,6 +1267,60 @@
       baseIdr: 101500
     };
 
+    function showElsAlert(title, message, options = {}) {
+      const overlay = document.getElementById("elsModalOverlay");
+      const titleEl = document.getElementById("elsModalTitleText");
+      const iconEl = document.getElementById("elsModalIcon");
+      const bodyEl = document.getElementById("elsModalBody");
+      const actionsEl = document.getElementById("elsModalActions");
+
+      const type = options.type || "warning";
+      const iconMap = {
+        warning: { cls: "fa-solid fa-triangle-exclamation", color: "#f59e0b" },
+        info: { cls: "fa-solid fa-circle-info", color: "#1dd3f8" },
+        success: { cls: "fa-solid fa-circle-check", color: "#10b981" }
+      };
+      const chosenIcon = iconMap[type] || iconMap.warning;
+
+      titleEl.textContent = title || "Perhatian";
+      iconEl.className = chosenIcon.cls;
+      iconEl.style.color = chosenIcon.color;
+      bodyEl.innerHTML = message || "";
+
+      actionsEl.innerHTML = "";
+      if (options.secondaryHref && options.secondaryLabel) {
+        const linkBtn = document.createElement("a");
+        linkBtn.href = options.secondaryHref;
+        linkBtn.className = "els-modal-btn-ghost";
+        linkBtn.textContent = options.secondaryLabel;
+        actionsEl.appendChild(linkBtn);
+      }
+
+      const okBtn = document.createElement("button");
+      okBtn.type = "button";
+      okBtn.className = "els-modal-btn-primary";
+      okBtn.textContent = options.okLabel || "Mengerti";
+      okBtn.onclick = closeElsModal;
+      actionsEl.appendChild(okBtn);
+
+      overlay.classList.add("show");
+      okBtn.focus();
+    }
+
+    function closeElsModal() {
+      const overlay = document.getElementById("elsModalOverlay");
+      if (overlay) {
+        overlay.classList.remove("show");
+      }
+    }
+
+    document.getElementById("elsModalOverlay").addEventListener("click", closeElsModal);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeElsModal();
+      }
+    });
+
     function isSheetsConfigured() {
       return GOOGLE_SHEETS_WEBHOOK_URL &&
              GOOGLE_SHEETS_WEBHOOK_URL.startsWith("https://script.google.com/");
@@ -1086,6 +1334,9 @@
     }
 
     function enforceLockedInputs() {
+      const customerInput = document.getElementById("customerId");
+      if (customerInput) { customerInput.readOnly = true; }
+
       const bufferInput = document.getElementById("bufferPercent");
       if (bufferInput) { bufferInput.value = "4"; bufferInput.readOnly = true; }
 
@@ -1098,7 +1349,8 @@
       const rateInput = document.getElementById("usdIdrOverride");
       if (rateInput) {
         const { rate } = getActiveUsdIdr();
-        rateInput.value = String(Math.round(rate));
+        rateInput.type = "text";
+        rateInput.value = formatIdr(rate);
         rateInput.readOnly = true;
       }
     }
@@ -1147,14 +1399,19 @@
     }
 
     function applyUrlCatalogParams() {
+      const customerInput = document.getElementById("customerId");
+      if (customerInput) {
+        customerInput.readOnly = true;
+      }
+
       const params = new URLSearchParams(window.location.search);
       const idProduk = (params.get("id_produk") || "").trim();
       const produkNama = (params.get("produk") || "").trim();
       const rawHarga = (params.get("harga") || "").trim();
       const tujuan = (params.get("tujuan") || "").trim();
 
-      if (tujuan) {
-        document.getElementById("customerId").value = tujuan;
+      if (tujuan && customerInput) {
+        customerInput.value = tujuan;
       }
 
       const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
@@ -1677,8 +1934,16 @@
       const customerInput = document.getElementById("customerId");
       const customerId = customerInput.value.trim();
       if (customerId.length < 5) {
-        alert("Mohon isi Nomor HP / ID Pelanggan PLN / Nomor E-Wallet dengan benar.");
-        customerInput.focus();
+        showElsAlert(
+          "Nomor Tujuan Belum Terisi",
+          "Silakan pilih salah satu kategori produk terlebih dahulu untuk mengisi <strong>Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</strong>.",
+          {
+            type: "warning",
+            okLabel: "Tutup",
+            secondaryLabel: "Pilih Pulsa",
+            secondaryHref: "pulsa.html"
+          }
+        );
         return;
       }
 
