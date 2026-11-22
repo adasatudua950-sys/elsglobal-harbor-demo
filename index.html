@@ -982,7 +982,15 @@
   </div>
 
   <script>
-    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzqK8dX7m-ilcUOIsG22iPHjyl8ks09B3e_I_-SkZezStDK5_xoDHHO3KAj6KTe2Z5sfQ/exec";
+    const DEFAULT_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzqK8dX7m-ilcUOIsG22iPHjyl8ks09B3e_I_-SkZezStDK5_xoDHHO3KAj6KTe2Z5sfQ/exec";
+    const GOOGLE_SHEETS_WEBHOOK_URL = (function() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const qUrl = (params.get("webhook") || "").trim();
+        if (qUrl.startsWith("https://script.google.com/")) return qUrl;
+      } catch (e) {}
+      return DEFAULT_SHEETS_WEBHOOK_URL;
+    })();
 
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
     const FALLBACK_USD_IDR = 18292;
@@ -1511,7 +1519,7 @@
       };
 
       const syncLabel = sentToSheets
-        ? "Terkirim"
+        ? "Terkirim ke Google Sheets"
         : "Mode Lokal (URL Apps Script belum diisi)";
 
       renderReceiptCard(currentOrderContext, "MENUNGGU_VERIFIKASI", "-", syncLabel);
@@ -1521,7 +1529,7 @@
         product: selectedProduct.name,
         mecPaid: `${calc.mecAmount} ${sym}`,
         customerId,
-        statusLabel: sentToSheets ? "Terkirim" : "Lokal",
+        statusLabel: sentToSheets ? "Terkirim ke Sheets" : "Lokal",
         time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
       });
 
