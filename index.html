@@ -1423,16 +1423,6 @@
         customerInput.defaultValue = "";
         customerInput.readOnly = true;
       }
-      const banner = document.getElementById("selectedFromCatalogBanner");
-      if (banner) {
-        banner.innerHTML = "";
-        banner.classList.remove("show");
-      }
-      selectedProduct = {
-        id: "pulsa-reguler",
-        name: "Pulsa Reguler",
-        baseIdr: 101500
-      };
       syncCustomerFieldVisibility();
     }
 
@@ -1445,14 +1435,11 @@
       const rawHarga = (params.get("harga") || "").trim();
       const tujuan = (params.get("tujuan") || "").trim();
 
-      let hadCatalogParams = false;
-
       if (tujuan) {
         const customerInput = document.getElementById("customerId");
         if (customerInput) {
           customerInput.value = tujuan;
         }
-        hadCatalogParams = true;
       }
 
       const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
@@ -1466,11 +1453,6 @@
         const banner = document.getElementById("selectedFromCatalogBanner");
         banner.innerHTML = `Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
         banner.classList.add("show");
-        hadCatalogParams = true;
-      }
-
-      if (hadCatalogParams && window.history && typeof window.history.replaceState === "function") {
-        window.history.replaceState({}, document.title, window.location.pathname);
       }
 
       syncCustomerFieldVisibility();
@@ -1873,14 +1855,10 @@
       stopStatusPolling();
       currentOrderContext = null;
       resetCustomerInputState();
-      if (window.history && typeof window.history.replaceState === "function") {
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
       document.getElementById("manualTxHash").value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
       receiptBox.innerHTML = "";
-      updateSummary();
     }
 
     function renderReceiptCard(ctx, orderStatus, kodeToken, syncLabel) {
