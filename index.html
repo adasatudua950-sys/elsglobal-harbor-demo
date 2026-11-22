@@ -227,6 +227,11 @@
       box-shadow: 0 8px 24px rgba(29, 211, 248, 0.22);
     }
 
+    .btn-primary:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
     .btn-reset {
       width: 100%;
       padding: 10px 14px;
@@ -627,6 +632,16 @@
       text-decoration: underline;
     }
 
+    .token-highlight {
+      margin-top: 8px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.55);
+      color: #ecfdf5;
+      font-size: 12.5px;
+    }
+
     .history-box {
       margin-top: 16px;
       padding-top: 14px;
@@ -872,14 +887,14 @@
                   <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
                   <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
                 </div>
-                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (kosong = mode simulasi)" style="font-size: 12px; padding: 8px 10px;" />
+                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" style="font-size: 12px; padding: 8px 10px;" />
               </div>
             </div>
           </div>
         </div>
 
         <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Konfirmasi Transfer &amp; Checkout MEC
+          Konfirmasi Transfer &amp; Kirim ke Admin
         </button>
 
         <div id="receiptBox" class="receipt"></div>
@@ -950,7 +965,7 @@
         <div class="field">
           <label for="modeSelect">Mode Eksekusi Prototipe</label>
           <select id="modeSelect">
-            <option value="auto">Otomatis (Wallet Web3 / Fallback Uji Coba)</option>
+            <option value="auto">Otomatis (Sync Google Sheets + Auto Cek Status)</option>
             <option value="simulation">Uji Coba Alur (Presentasi &amp; Evaluasi Hackathon)</option>
           </select>
         </div>
@@ -960,13 +975,15 @@
         </div>
 
         <div class="tag-poc">
-          Catatan Prototipe HARBOR Hackathon: Kurs USD–IDR otomatis, buffer 4%, harga dasar MEC ($9.87), dan kenaikan harian ($0.01) dikunci agar perhitungan konsisten dan tidak bisa diubah sembarangan.
+          Catatan Prototipe HARBOR Hackathon: Pesanan otomatis tercatat ke Google Sheets merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzqK8dX7m-ilcUOIsG22iPHjyl8ks09B3e_I_-SkZezStDK5_xoDHHO3KAj6KTe2Z5sfQ/exec";
+
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
     const FALLBACK_USD_IDR = 18292;
     const FIXED_BUFFER_RATE = 0.04;
@@ -979,12 +996,19 @@
     let usdIdrSourceLabel = "Cadangan";
     let connectedAccount = null;
     let activePaymentMethod = "mepass";
+    let statusPollTimer = null;
+    let currentOrderContext = null;
 
     let selectedProduct = {
       id: "pulsa-reguler",
       name: "Pulsa Reguler",
       baseIdr: 101500
     };
+
+    function isSheetsConfigured() {
+      return GOOGLE_SHEETS_WEBHOOK_URL &&
+             GOOGLE_SHEETS_WEBHOOK_URL.startsWith("https://script.google.com/");
+    }
 
     function getActiveUsdIdr() {
       if (typeof liveUsdIdr === "number" && liveUsdIdr > 0) {
@@ -995,22 +1019,13 @@
 
     function enforceLockedInputs() {
       const bufferInput = document.getElementById("bufferPercent");
-      if (bufferInput) {
-        bufferInput.value = "4";
-        bufferInput.readOnly = true;
-      }
+      if (bufferInput) { bufferInput.value = "4"; bufferInput.readOnly = true; }
 
       const baseInput = document.getElementById("mecBaseUsd");
-      if (baseInput) {
-        baseInput.value = FIXED_MEC_BASE_USD.toFixed(2);
-        baseInput.readOnly = true;
-      }
+      if (baseInput) { baseInput.value = FIXED_MEC_BASE_USD.toFixed(2); baseInput.readOnly = true; }
 
       const stepInput = document.getElementById("mecDailyStep");
-      if (stepInput) {
-        stepInput.value = FIXED_MEC_DAILY_STEP.toFixed(2);
-        stepInput.readOnly = true;
-      }
+      if (stepInput) { stepInput.value = FIXED_MEC_DAILY_STEP.toFixed(2); stepInput.readOnly = true; }
 
       const rateInput = document.getElementById("usdIdrOverride");
       if (rateInput) {
@@ -1063,18 +1078,6 @@
       };
     }
 
-    function applyQuickService(name, baseIdr) {
-      selectedProduct = {
-        id: name.toLowerCase().replace(/\s+/g, "-"),
-        name,
-        baseIdr
-      };
-      const banner = document.getElementById("selectedFromCatalogBanner");
-      banner.textContent = `Layanan dipilih: ${name}`;
-      banner.classList.add("show");
-      updateSummary();
-    }
-
     function applyUrlCatalogParams() {
       const params = new URLSearchParams(window.location.search);
       const idProduk = (params.get("id_produk") || "").trim();
@@ -1106,7 +1109,7 @@
       document.getElementById("tabWeb3").classList.toggle("active", method === "web3");
       document.getElementById("mepassQrPanel").style.display = method === "mepass" ? "block" : "none";
       document.getElementById("payBtn").textContent = method === "mepass"
-        ? "Konfirmasi Transfer & Checkout MEC"
+        ? "Konfirmasi Transfer & Kirim ke Admin"
         : "Proses Checkout Web3 Wallet";
     }
 
@@ -1293,16 +1296,15 @@
       try {
         const raw = localStorage.getItem(HISTORY_KEY);
         const list = raw ? JSON.parse(raw) : [];
-        list.unshift(entry);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 5)));
+        const filtered = list.filter(x => x.orderId !== entry.orderId);
+        filtered.unshift(entry);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 5)));
       } catch (e) {}
       renderOrderHistory();
     }
 
     function clearOrderHistory() {
-      try {
-        localStorage.removeItem(HISTORY_KEY);
-      } catch (e) {}
+      try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
       renderOrderHistory();
     }
 
@@ -1332,11 +1334,99 @@
       `).join("");
     }
 
+    function stopStatusPolling() {
+      if (statusPollTimer) {
+        clearInterval(statusPollTimer);
+        statusPollTimer = null;
+      }
+    }
+
     function resetCheckoutForm() {
+      stopStatusPolling();
+      currentOrderContext = null;
       document.getElementById("manualTxHash").value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
       receiptBox.innerHTML = "";
+    }
+
+    function renderReceiptCard(ctx, orderStatus, kodeToken, syncLabel) {
+      const isCompleted = orderStatus.toUpperCase() === "SELESAI";
+      const receiptBox = document.getElementById("receiptBox");
+      receiptBox.classList.add("show");
+      receiptBox.classList.toggle("sim-mode", !isCompleted);
+
+      const statusTitle = isCompleted
+        ? "✓ ORDER SELESAI & PRODUK DIGITAL TERKIRIM"
+        : "⏳ Pesanan Masuk ke Google Sheets — Menunggu Proses Admin";
+      const titleColor = isCompleted ? "#6ee7b7" : "#fde68a";
+
+      const explorerLinkHtml = (!ctx.txHash.startsWith("SIM-") && ctx.explorerUrl)
+        ? ` • <a href="${escapeHtml(ctx.explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
+        : "";
+
+      const tokenBlockHtml = isCompleted
+        ? `<div class="token-highlight"><strong>Kode Token / SN Pengisian:</strong><br/><code style="font-size:13px; color:#6ee7b7;">${escapeHtml(kodeToken || "BERHASIL DIPROSES")}</code></div>`
+        : `<div class="note" style="margin-top:8px; color:#fde68a;">Status otomatis dicek setiap 5 detik. Begitu admin ubah kolom <strong>Status</strong> di Google Sheets menjadi <strong>SELESAI</strong>, layar ini otomatis ter-update.</div>`;
+
+      receiptBox.innerHTML = `
+        <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
+        <span>Order ID: <strong>${escapeHtml(ctx.orderId)}</strong> (${escapeHtml(syncLabel)})</span><br/>
+        <span>Metode: <strong>${escapeHtml(ctx.methodLabel)}</strong></span><br/>
+        <span>Tujuan: <strong>${escapeHtml(ctx.customerId)}</strong></span><br/>
+        <span>Produk: <strong>${escapeHtml(ctx.productName)}</strong></span><br/>
+        <span>Total Efektif: <strong>${formatIdr(ctx.effectiveIdr)}</strong></span><br/>
+        <span>Nominal Penukaran: <strong>${escapeHtml(ctx.mecAmount)} ${escapeHtml(ctx.sym)}</strong></span><br/>
+        <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(ctx.merchantAddr)}</code></span><br/>
+        <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(ctx.txHash)}</code>${explorerLinkHtml}</span>
+        ${tokenBlockHtml}
+        <button type="button" class="btn-reset" onclick="resetCheckoutForm()">Buat Pesanan Baru</button>
+      `;
+    }
+
+    async function sendOrderToGoogleSheets(payload) {
+      if (!isSheetsConfigured()) return false;
+      try {
+        await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function startStatusPolling(ctx) {
+      stopStatusPolling();
+      if (!isSheetsConfigured()) return;
+
+      statusPollTimer = setInterval(async () => {
+        try {
+          const url = `${GOOGLE_SHEETS_WEBHOOK_URL}?orderId=${encodeURIComponent(ctx.orderId)}&_t=${Date.now()}`;
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data && data.ok && data.status) {
+            const st = String(data.status).trim();
+            const tok = String(data.kodeToken || "-").trim();
+            if (st.toUpperCase() === "SELESAI") {
+              renderReceiptCard(ctx, "SELESAI", tok, "Terkonfirmasi Google Sheets");
+              saveOrderHistory({
+                orderId: ctx.orderId,
+                product: ctx.productName,
+                mecPaid: `${ctx.mecAmount} ${ctx.sym}`,
+                customerId: ctx.customerId,
+                statusLabel: "SELESAI",
+                time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
+              });
+              stopStatusPolling();
+            }
+          }
+        } catch (e) {}
+      }, 5000);
     }
 
     async function processPayment() {
@@ -1348,13 +1438,15 @@
         return;
       }
 
-      const mode = document.getElementById("modeSelect").value;
+      const payBtn = document.getElementById("payBtn");
+      payBtn.disabled = true;
+      payBtn.textContent = "Mengirim Data Pesanan...";
+
       const sym = getTokenSymbol();
       const bufferRate = getBufferRate();
       const mecUsd = getMecUsdPrice();
-      const { rate: usdIdr, source } = getActiveUsdIdr();
+      const { rate: usdIdr } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
-      const chainIdVal = document.getElementById("chainId").value.trim() || "mechain_400-1";
       const merchantAddr = getMerchantAddress();
       const explorerUrl = document.getElementById("explorerUrl").value.trim();
       const manualTx = document.getElementById("manualTxHash").value.trim();
@@ -1362,7 +1454,6 @@
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
       let methodLabel = "ME Pass QR / Transfer ME Network";
-      let isSimulation = mode === "simulation" || !manualTx;
       let txHash = manualTx || ("SIM-" + Array.from({ length: 14 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join("").toUpperCase());
@@ -1372,10 +1463,11 @@
         if (!connectedAccount) {
           await connectWallet();
         }
-        isSimulation = true;
-        txHash = "SIM-EVM-" + Array.from({ length: 12 }, () =>
-          Math.floor(Math.random() * 16).toString(16)
-        ).join("").toUpperCase();
+        if (!manualTx) {
+          txHash = "SIM-EVM-" + Array.from({ length: 12 }, () =>
+            Math.floor(Math.random() * 16).toString(16)
+          ).join("").toUpperCase();
+        }
       } else if (!connectedAccount) {
         const statusEl = document.getElementById("walletStatus");
         connectedAccount = "ME-Pass-User";
@@ -1383,43 +1475,62 @@
         statusEl.classList.add("connected");
       }
 
-      const statusTitle = isSimulation
-        ? "⏳ Pencatatan Sesi Demo (Menunggu Verifikasi Tx & Fulfillment PPOB)"
-        : "✓ Referensi Transfer Tercatat di Sesi Demo";
-      const statusShort = isSimulation ? "Simulasi Demo" : "Ref Tx Tercatat";
-      const titleColor = isSimulation ? "#fde68a" : "#6ee7b7";
-
-      const explorerLinkHtml = (!isSimulation && explorerUrl)
-        ? ` • <a href="${escapeHtml(explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
-        : "";
-
       const refOrderId = "ORD-" + Date.now().toString().slice(-8);
-      const receiptBox = document.getElementById("receiptBox");
-      receiptBox.classList.add("show");
-      receiptBox.classList.toggle("sim-mode", isSimulation);
-      receiptBox.innerHTML = `
-        <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
-        <span>Order ID: <strong>${escapeHtml(refOrderId)}</strong></span><br/>
-        <span>Metode: <strong>${escapeHtml(methodLabel)}</strong></span><br/>
-        <span>Tujuan: <strong>${escapeHtml(customerId)}</strong></span><br/>
-        <span>Produk: <strong>${escapeHtml(selectedProduct.name)}</strong>${selectedProduct.id ? " (" + escapeHtml(selectedProduct.id) + ")" : ""}</span><br/>
-        <span>Harga Tagihan: <strong>${formatIdr(selectedProduct.baseIdr)}</strong></span><br/>
-        <span>Total Efektif (termasuk buffer 4%): <strong>${formatIdr(calc.effectiveIdr)}</strong></span><br/>
-        <span>Harga MEC Acuan: <strong>$${mecUsd.toFixed(2)}</strong> × <strong>${formatIdr(usdIdr)}</strong> (${escapeHtml(source)})</span><br/>
-        <span>Nominal Penukaran: <strong>${calc.mecAmount} ${escapeHtml(sym)}</strong></span><br/>
-        <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(merchantAddr)}</code></span><br/>
-        <span>Jaringan / Chain ID: <strong>${escapeHtml(chainIdVal)}</strong></span><br/>
-        <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(txHash)}</code>${explorerLinkHtml}</span>
-        <button type="button" class="btn-reset" onclick="resetCheckoutForm()">Buat Pesanan Baru</button>
-      `;
+      const waktuStr = new Date().toLocaleString("id-ID", {
+        day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+      });
+
+      const sentToSheets = await sendOrderToGoogleSheets({
+        orderId: refOrderId,
+        waktu: waktuStr,
+        nomorTujuan: customerId,
+        produk: selectedProduct.name,
+        hargaTagihanIdr: selectedProduct.baseIdr,
+        totalEfektifIdr: calc.effectiveIdr,
+        hargaMecUsd: mecUsd,
+        kursUsdIdr: Math.round(usdIdr),
+        nominalMec: `${calc.mecAmount} ${sym}`,
+        metodePembayaran: methodLabel,
+        txHash: txHash,
+        status: "MENUNGGU_VERIFIKASI",
+        kodeToken: "-"
+      });
+
+      currentOrderContext = {
+        orderId: refOrderId,
+        methodLabel,
+        customerId,
+        productName: selectedProduct.name,
+        effectiveIdr: calc.effectiveIdr,
+        mecAmount: calc.mecAmount,
+        sym,
+        merchantAddr,
+        explorerUrl,
+        txHash
+      };
+
+      const syncLabel = sentToSheets
+        ? "Terkirim ke Google Sheets"
+        : "Mode Lokal (URL Apps Script belum diisi)";
+
+      renderReceiptCard(currentOrderContext, "MENUNGGU_VERIFIKASI", "-", syncLabel);
 
       saveOrderHistory({
+        orderId: refOrderId,
         product: selectedProduct.name,
         mecPaid: `${calc.mecAmount} ${sym}`,
         customerId,
-        statusLabel: statusShort,
+        statusLabel: sentToSheets ? "Terkirim ke Sheets" : "Lokal",
         time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
       });
+
+      if (sentToSheets) {
+        startStatusPolling(currentOrderContext);
+      }
+
+      payBtn.disabled = false;
+      setPaymentMethod(activePaymentMethod);
     }
 
     applyUrlCatalogParams();
