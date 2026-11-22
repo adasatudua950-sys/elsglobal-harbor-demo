@@ -642,6 +642,14 @@
       font-size: 12.5px;
     }
 
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
     .history-box {
       margin-top: 16px;
       padding-top: 14px;
@@ -678,6 +686,52 @@
       padding: 9px 11px;
       font-size: 11.5px;
       line-height: 1.5;
+    }
+
+    .history-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .history-token-preview {
+      color: #6ee7b7;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .btn-history-view {
+      padding: 5px 9px;
+      border-radius: 8px;
+      background: rgba(29, 211, 248, 0.14);
+      border: 1px solid rgba(29, 211, 248, 0.35);
+      color: var(--accent);
+      font-size: 10.5px;
+      flex-shrink: 0;
+    }
+
+    .lookup-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    .lookup-row input {
+      padding: 8px 10px;
+      font-size: 12px;
+      flex: 1 1 auto;
+    }
+
+    .lookup-msg {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      min-height: 15px;
     }
 
     .note {
@@ -907,6 +961,12 @@
           <div id="historyList" class="history-list">
             <div class="note" style="margin-top: 0;">Belum ada transaksi tercatat di sesi ini.</div>
           </div>
+
+          <div class="lookup-row">
+            <input id="lookupOrderInput" type="text" placeholder="Cek / Pulihkan Order ID (contoh: ORD-65894260)" />
+            <button type="button" id="lookupOrderBtn" class="btn-copy" onclick="lookupOrderById()">Cek / Pulihkan</button>
+          </div>
+          <div id="lookupStatusMsg" class="lookup-msg"></div>
         </div>
       </div>
 
@@ -1133,6 +1193,18 @@
       }
     }
 
+    async function copyTokenValue(tokenText, btnEl) {
+      if (!tokenText || tokenText === "-") return;
+      try {
+        await navigator.clipboard.writeText(tokenText);
+        if (btnEl) {
+          const prevText = btnEl.textContent;
+          btnEl.textContent = "Tersalin!";
+          setTimeout(() => { btnEl.textContent = prevText; }, 1800);
+        }
+      } catch (e) {}
+    }
+
     function updateSummary() {
       enforceLockedInputs();
 
@@ -1300,13 +1372,30 @@
       }
     }
 
-    function saveOrderHistory(entry) {
+    function getOrderHistoryList() {
       try {
         const raw = localStorage.getItem(HISTORY_KEY);
         const list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveOrderHistory(entry) {
+      try {
+        const list = getOrderHistoryList();
+        const existing = list.find(x => x.orderId === entry.orderId) || {};
+        const merged = {
+          ...existing,
+          ...entry,
+          kodeToken: entry.kodeToken !== undefined ? entry.kodeToken : (existing.kodeToken || "-"),
+          orderStatus: entry.orderStatus !== undefined ? entry.orderStatus : (existing.orderStatus || entry.statusLabel || "DIPROSES"),
+          ctx: entry.ctx !== undefined ? { ...(existing.ctx || {}), ...entry.ctx } : existing.ctx
+        };
         const filtered = list.filter(x => x.orderId !== entry.orderId);
-        filtered.unshift(entry);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 5)));
+        filtered.unshift(merged);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 10)));
       } catch (e) {}
       renderOrderHistory();
     }
@@ -1316,30 +1405,156 @@
       renderOrderHistory();
     }
 
+    function openHistoryReceipt(orderId) {
+      const item = getOrderHistoryList().find(x => x.orderId === orderId);
+      if (!item) return;
+
+      const fallbackCtx = {
+        orderId: item.orderId,
+        methodLabel: "ME Pass QR / Transfer ME Network",
+        customerId: item.customerId || "-",
+        productName: item.product || "Produk Digital",
+        effectiveIdr: 0,
+        mecAmount: (item.mecPaid || "").split(" ")[0] || "-",
+        sym: (item.mecPaid || "").split(" ")[1] || getTokenSymbol(),
+        merchantAddr: getMerchantAddress(),
+        explorerUrl: document.getElementById("explorerUrl").value.trim(),
+        txHash: "-"
+      };
+
+      const ctx = { ...fallbackCtx, ...(item.ctx || {}) };
+      currentOrderContext = ctx;
+      const statusToShow = item.orderStatus || ((item.statusLabel || "").toUpperCase() === "SELESAI" ? "SELESAI" : "MENUNGGU_VERIFIKASI");
+      const tokenToShow = item.kodeToken && item.kodeToken !== "-" ? item.kodeToken : "-";
+      renderReceiptCard(ctx, statusToShow, tokenToShow, item.syncLabel || "Riwayat Tersimpan");
+      document.getElementById("receiptBox").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    async function lookupOrderById() {
+      const inputEl = document.getElementById("lookupOrderInput");
+      const btnEl = document.getElementById("lookupOrderBtn");
+      const msgEl = document.getElementById("lookupStatusMsg");
+      const orderId = (inputEl.value || "").trim().toUpperCase();
+
+      if (!orderId) {
+        msgEl.style.color = "#fde68a";
+        msgEl.textContent = "Masukkan Order ID terlebih dahulu (contoh: ORD-65894260).";
+        inputEl.focus();
+        return;
+      }
+
+      if (!isSheetsConfigured()) {
+        const localItem = getOrderHistoryList().find(x => String(x.orderId).toUpperCase() === orderId);
+        if (localItem) {
+          openHistoryReceipt(localItem.orderId);
+          msgEl.style.color = "#6ee7b7";
+          msgEl.textContent = `Data ${orderId} dipulihkan dari riwayat perangkat ini.`;
+        } else {
+          msgEl.style.color = "#fde68a";
+          msgEl.textContent = "Endpoint belum dikonfigurasi dan Order ID tidak ada di riwayat lokal.";
+        }
+        return;
+      }
+
+      btnEl.disabled = true;
+      btnEl.textContent = "Mengecek...";
+      msgEl.style.color = "var(--muted)";
+      msgEl.textContent = `Mengambil status & kode token untuk ${orderId}...`;
+
+      try {
+        const url = `${GOOGLE_SHEETS_WEBHOOK_URL}?orderId=${encodeURIComponent(orderId)}&_t=${Date.now()}`;
+        const res = await fetch(url, { cache: "no-store" });
+        const data = await res.json();
+
+        if (data && data.ok && data.status) {
+          const st = String(data.status).trim();
+          const rawToken = data.kodeToken ?? data.token ?? data.sn ?? "-";
+          const tok = String(rawToken).trim() || "-";
+          const existing = getOrderHistoryList().find(x => String(x.orderId).toUpperCase() === orderId) || {};
+
+          const ctx = {
+            orderId: data.orderId || orderId,
+            methodLabel: data.metodePembayaran || existing.ctx?.methodLabel || "ME Pass QR / Transfer ME Network",
+            customerId: data.nomorTujuan || existing.customerId || "-",
+            productName: data.produk || existing.product || "Produk Digital",
+            effectiveIdr: Number(data.totalEfektifIdr || existing.ctx?.effectiveIdr || 0),
+            mecAmount: String(data.nominalMec || existing.mecPaid || "-").replace(/\s+[A-Z0-9]+$/i, ""),
+            sym: String(data.nominalMec || "").split(/\s+/)[1] || existing.ctx?.sym || getTokenSymbol(),
+            merchantAddr: getMerchantAddress(),
+            explorerUrl: document.getElementById("explorerUrl").value.trim(),
+            txHash: data.txHash || existing.ctx?.txHash || "-"
+          };
+
+          currentOrderContext = ctx;
+          renderReceiptCard(ctx, st, tok, "Terverifikasi");
+          saveOrderHistory({
+            orderId: ctx.orderId,
+            product: ctx.productName,
+            mecPaid: data.nominalMec || existing.mecPaid || `${ctx.mecAmount} ${ctx.sym}`,
+            customerId: ctx.customerId,
+            statusLabel: st.toUpperCase() === "SELESAI" ? "SELESAI" : st,
+            orderStatus: st,
+            kodeToken: tok,
+            syncLabel: "Terverifikasi",
+            time: existing.time || new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
+            ctx
+          });
+
+          msgEl.style.color = "#6ee7b7";
+          msgEl.textContent = `Status ${ctx.orderId}: ${st}${tok !== "-" ? " • Kode Token/SN ditemukan" : ""}.`;
+        } else {
+          msgEl.style.color = "#fde68a";
+          msgEl.textContent = `Order ID ${orderId} belum ditemukan atau belum berstatus SELESAI.`;
+        }
+      } catch (e) {
+        const localItem = getOrderHistoryList().find(x => String(x.orderId).toUpperCase() === orderId);
+        if (localItem) {
+          openHistoryReceipt(localItem.orderId);
+          msgEl.style.color = "#6ee7b7";
+          msgEl.textContent = `Koneksi terganggu, menampilkan data tersimpan untuk ${orderId}.`;
+        } else {
+          msgEl.style.color = "#fde68a";
+          msgEl.textContent = "Gagal mengambil data pesanan. Coba beberapa saat lagi.";
+        }
+      } finally {
+        btnEl.disabled = false;
+        btnEl.textContent = "Cek / Pulihkan";
+      }
+    }
+
     function renderOrderHistory() {
       const container = document.getElementById("historyList");
-      let list = [];
-      try {
-        const raw = localStorage.getItem(HISTORY_KEY);
-        list = raw ? JSON.parse(raw) : [];
-      } catch (e) {}
+      const list = getOrderHistoryList();
 
       if (!Array.isArray(list) || list.length === 0) {
         container.innerHTML = `<div class="note" style="margin-top: 0;">Belum ada transaksi tercatat di sesi ini.</div>`;
         return;
       }
 
-      container.innerHTML = list.map(item => `
-        <div class="history-item">
-          <div style="display:flex; justify-content:space-between; gap:8px;">
-            <strong>${escapeHtml(item.product)}</strong>
-            <strong style="color: var(--accent);">${escapeHtml(item.mecPaid)}</strong>
+      container.innerHTML = list.map(item => {
+        const hasToken = item.kodeToken && item.kodeToken !== "-";
+        const tokenPreview = hasToken
+          ? `<span class="history-token-preview">Token/SN: ${escapeHtml(item.kodeToken)}</span>`
+          : `<span style="color: var(--muted); font-size: 11px;">Status: ${escapeHtml(item.statusLabel || "-")}</span>`;
+
+        return `
+          <div class="history-item">
+            <div style="display:flex; justify-content:space-between; gap:8px;">
+              <strong>${escapeHtml(item.product)}</strong>
+              <strong style="color: var(--accent);">${escapeHtml(item.mecPaid)}</strong>
+            </div>
+            <div style="color: var(--muted);">
+              ID: ${escapeHtml(item.orderId)} • Tujuan: ${escapeHtml(item.customerId)} • ${escapeHtml(item.statusLabel)} • ${escapeHtml(item.time)}
+            </div>
+            <div class="history-foot">
+              ${tokenPreview}
+              <button type="button" class="btn-history-view" onclick="openHistoryReceipt('${escapeHtml(item.orderId)}')">
+                Lihat Struk${hasToken ? " & Token" : ""}
+              </button>
+            </div>
           </div>
-          <div style="color: var(--muted);">
-            Tujuan: ${escapeHtml(item.customerId)} • ${escapeHtml(item.statusLabel)} • ${escapeHtml(item.time)}
-          </div>
-        </div>
-      `).join("");
+        `;
+      }).join("");
     }
 
     function stopStatusPolling() {
@@ -1359,7 +1574,7 @@
     }
 
     function renderReceiptCard(ctx, orderStatus, kodeToken, syncLabel) {
-      const isCompleted = orderStatus.toUpperCase() === "SELESAI";
+      const isCompleted = String(orderStatus || "").toUpperCase() === "SELESAI";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
       receiptBox.classList.toggle("sim-mode", !isCompleted);
@@ -1369,12 +1584,28 @@
         : "⏳ Memverifikasi Transaksi & Memproses Pesanan";
       const titleColor = isCompleted ? "#6ee7b7" : "#fde68a";
 
-      const explorerLinkHtml = (!ctx.txHash.startsWith("SIM-") && ctx.explorerUrl)
+      const effectiveIdrText = (typeof ctx.effectiveIdr === "number" && ctx.effectiveIdr > 0)
+        ? `<span>Total Efektif: <strong>${formatIdr(ctx.effectiveIdr)}</strong></span><br/>`
+        : "";
+
+      const explorerLinkHtml = (ctx.txHash && !ctx.txHash.startsWith("SIM-") && ctx.txHash !== "-" && ctx.explorerUrl)
         ? ` • <a href="${escapeHtml(ctx.explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
         : "";
 
+      const cleanToken = kodeToken && kodeToken !== "-" ? String(kodeToken).trim() : "";
+      const tokenDisplay = cleanToken || "BERHASIL DIPROSES";
+      const copyTokenBtnHtml = cleanToken
+        ? `<button type="button" class="btn-copy" onclick="copyTokenValue('${escapeHtml(cleanToken)}', this)">Salin Token</button>`
+        : "";
+
       const tokenBlockHtml = isCompleted
-        ? `<div class="token-highlight"><strong>Kode Token / SN Pengisian:</strong><br/><code style="font-size:13px; color:#6ee7b7;">${escapeHtml(kodeToken || "BERHASIL DIPROSES")}</code></div>`
+        ? `<div class="token-highlight">
+             <div class="token-header">
+               <strong>Kode Token / SN Pengisian:</strong>
+               ${copyTokenBtnHtml}
+             </div>
+             <code style="font-size:13px; color:#6ee7b7; word-break:break-all;">${escapeHtml(tokenDisplay)}</code>
+           </div>`
         : `<div class="note" style="margin-top:8px; color:#fde68a;">Pesanan tercatat otomatis ke sistem dan status dicek berkala setiap 5 detik. Begitu status berubah menjadi <strong>SELESAI</strong>, bukti &amp; kode token/SN tampil otomatis di layar ini.</div>`;
 
       receiptBox.innerHTML = `
@@ -1383,7 +1614,7 @@
         <span>Metode: <strong>${escapeHtml(ctx.methodLabel)}</strong></span><br/>
         <span>Tujuan: <strong>${escapeHtml(ctx.customerId)}</strong></span><br/>
         <span>Produk: <strong>${escapeHtml(ctx.productName)}</strong></span><br/>
-        <span>Total Efektif: <strong>${formatIdr(ctx.effectiveIdr)}</strong></span><br/>
+        ${effectiveIdrText}
         <span>Nominal Penukaran: <strong>${escapeHtml(ctx.mecAmount)} ${escapeHtml(ctx.sym)}</strong></span><br/>
         <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(ctx.merchantAddr)}</code></span><br/>
         <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(ctx.txHash)}</code>${explorerLinkHtml}</span>
@@ -1419,7 +1650,8 @@
           const data = await res.json();
           if (data && data.ok && data.status) {
             const st = String(data.status).trim();
-            const tok = String(data.kodeToken || "-").trim();
+            const rawToken = data.kodeToken ?? data.token ?? data.sn ?? "-";
+            const tok = String(rawToken).trim() || "-";
             if (st.toUpperCase() === "SELESAI") {
               renderReceiptCard(ctx, "SELESAI", tok, "Terverifikasi & Terkirim");
               saveOrderHistory({
@@ -1428,7 +1660,11 @@
                 mecPaid: `${ctx.mecAmount} ${ctx.sym}`,
                 customerId: ctx.customerId,
                 statusLabel: "SELESAI",
-                time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
+                orderStatus: "SELESAI",
+                kodeToken: tok,
+                syncLabel: "Terverifikasi & Terkirim",
+                time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
+                ctx
               });
               stopStatusPolling();
             }
@@ -1530,7 +1766,11 @@
         mecPaid: `${calc.mecAmount} ${sym}`,
         customerId,
         statusLabel: sentToSheets ? "Diproses" : "Lokal",
-        time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
+        orderStatus: "MENUNGGU_VERIFIKASI",
+        kodeToken: "-",
+        syncLabel,
+        time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
+        ctx: currentOrderContext
       });
 
       if (sentToSheets) {
