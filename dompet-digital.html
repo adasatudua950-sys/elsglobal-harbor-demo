@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>E-Wallet Dompet Digital - Bayar MEC</title>
+    <link href="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: url('https://i.imgur.com/nlUnWwO.jpeg') !important;
+            background-size: 100% 100% !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+            min-height: 100vh;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+
+        p { margin: 0; font-size: 12px; }
+        input { border: none; transition: 0.3s; outline: none; width: 100%; background-color: transparent; }
+        a, a:focus, a:hover { text-decoration: none; color: inherit; }
+
+        .my-bg { background: linear-gradient(135deg, #0066ff 0%, #3385ff 100%) !important; }
+        .my-color { color: #0066ff !important; }
+        .borad-6 { border-radius: 6px; }
+        .borad-8 { border-radius: 8px; }
+        .borad-10 { border-radius: 10px; }
+        .borad-12 { border-radius: 12px; }
+        .borad-15 { border-radius: 15px; }
+
+        .my-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .bg-white { background-color: #fff !important; }
+        .text-white { color: #fff !important; }
+
+        .form-inp {
+            border: 1px solid #cbd5e1;
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .form-inp:focus {
+            border: 1px solid #0066ff;
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+            background: #fff;
+        }
+
+        .d-grid-1 {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 8px;
+        }
+
+        .card-kategori {
+            background: #0066ff;
+            border: 1.5px solid #0052cc;
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.2);
+        }
+
+        .card-kategori:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 102, 255, 0.35);
+            background: #0052cc;
+        }
+
+        .card-kategori.locked {
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+
+        .bg-produk {
+            background: linear-gradient(135deg, rgba(255, 238, 173, 0.65) 0%, rgba(184, 208, 255, 0.7) 50%, rgba(216, 191, 216, 0.65) 100%), #ffffff !important;
+            padding: 10px 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.03);
+            border-radius: 10px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.25s ease-in-out;
+        }
+
+        .bg-produk:hover {
+            border-color: #0066ff !important;
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .bg-detail {
+            background: linear-gradient(135deg, #0066ff 0%, #0047b3 100%);
+            padding: 12px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .badge-terlaris-modern {
+            display: inline-flex; align-items: center; background-color: #fef08a !important; color: #854d0e !important; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #facc15; white-space: nowrap;
+        }
+        .badge-gangguan-box {
+            display: inline-flex; align-items: center; justify-content: center; background: #fee2e2; color: #991b1b; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #f87171; white-space: nowrap;
+        }
+        .badge-berkualitas-modern {
+            display: inline-flex; align-items: center; background-color: #0066ff !important; color: #ffffff !important; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap;
+        }
+
+        .product-price-box {
+            background: rgba(255, 255, 255, 0.95); color: #0f172a !important; font-size: 13px; font-weight: 700; padding: 3px 7px; border-radius: 6px; border: 1px solid #cbd5e1; white-space: nowrap;
+        }
+
+        .modal-content { border: none; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); overflow: hidden; }
+        .btn-aksi-top { font-size: 11px; font-weight: 600; padding: 5px 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center; width: 100%; height: 30px; white-space: nowrap; }
+
+        .ping {
+            --uib-size: 3.5rem; --uib-speed: 2s; --uib-color: #0066ff;
+            position: relative; height: var(--uib-size); width: var(--uib-size);
+        }
+        .ping::before, .ping::after {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 100%; border-radius: 50%; background-color: var(--uib-color); animation: pulse7132 var(--uib-speed) linear infinite; transform: scale(0); opacity: 0;
+        }
+        .ping::after { animation-delay: calc(var(--uib-speed) / -2); }
+        @keyframes pulse7132 {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        #dataProduk { position: relative; z-index: 0; min-height: 85vh; padding-bottom: 60px; }
+    </style>
+</head>
+
+<body>
+
+    <div id="hiddenMemberLevel" class="d-none">{{nama_membership}}</div>
+
+    <!-- HALAMAN PILIH KATEGORI E-WALLET -->
+    <section class="p-3" id="pageKategori">
+        <div class="mb-3">
+            <input type="search" class="form-inp bg-white text-dark" placeholder="Cari Kategori E-Wallet..." id="searchKategori">
+        </div>
+        <div id="listKategoriContainer"></div>
+    </section>
+
+    <!-- HALAMAN UTAMA PRODUK E-WALLET -->
+    <div id="pageProdukUtama" class="d-none">
+
+        <section class="header px-3 pt-2" id="sectionInputForm">
+            <div class="bg-white p-3 borad-10 my-shadow" style="background: rgba(255, 255, 255, 0.95) !important;">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="my-bg text-white d-flex align-items-center justify-content-center borad-6" style="width: 28px; height: 28px;">
+                            <i class="fa-solid fa-wallet" style="font-size: 12px;"></i>
+                        </div>
+                        <p class="fw-bold ms-2 text-dark" style="font-size: 13px;"><span id="textTop">E-Wallet Dompet Digital</span></p>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <img src="" width="28" id="imgSavedContacts" class="my-bg p-1 borad-6 text-white shadow-sm" onclick="openSavedContactsModal()" style="cursor: pointer;" title="Pelanggan Tersimpan">
+                        <div class="btn btn-sm btn-light border text-primary fw-bold px-2 py-1" onclick="gantiKategori()" style="font-size: 11px; border-radius: 6px;">
+                            <i class="fa-solid fa-list-ul me-1"></i> Pilih Lain
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <p class="text-secondary fw-semibold mb-1" style="font-size: 11px;">Nomor Rekening / Tujuan E-Wallet</p>
+                    <div class="d-flex align-items-center">
+                        <input type="tel" class="form-inp" id="nomoId" placeholder="Masukkan nomor tujuan e-wallet...">
+                        <img src="" width="38" id="imgContact" class="ms-1.5 my-bg p-2 borad-8 shadow-sm text-white" onclick="getContact()" style="cursor: pointer;">
+                    </div>
+                </div>
+
+                <div class="mt-2 pt-2 border-top">
+                    <div class="form-check ps-0 mb-0">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" value="" id="chkSimpanPelanggan" style="width: 16px; height: 16px; cursor: pointer;">
+                            <label class="form-check-label fw-semibold text-dark" for="chkSimpanPelanggan" style="cursor: pointer; font-size: 12px;">
+                                Simpan nama & nomor tujuan (Opsional)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-1.5 d-none animate__animated animate__fadeIn" id="boxInputNama">
+                        <input type="text" class="form-inp" style="font-size: 12px; padding: 6px 10px;" id="namaPelangganInput" placeholder="Masukkan nama pemilik / keterangan...">
+                    </div>
+                </div>
+
+                <div class="mt-2.5 d-none animate__animated animate__fadeIn" id="boxBtnLanjut">
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm fw-bold" style="font-size: 13px; cursor: pointer;" onclick="lanjutTampilkanProduk()">
+                        Lanjut Pilih Nominal E-Wallet
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-3 pt-2 d-none" id="boxPilihan" style="position: relative; z-index: 1020; background: transparent;">
+            <div class="bg-white p-2 borad-10 my-shadow" style="background: rgba(255, 255, 255, 0.95) !important;">
+                <div class="row g-1">
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary btn-aksi-top" id="btnToggleFilter" onclick="toggleFilterMenu()">
+                            <span id="textToggleBtn">Sembunyikan Menu</span>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-light border text-primary btn-aksi-top" onclick="gantiKategori()">
+                            Ganti E-Wallet
+                        </button>
+                    </div>
+                </div>
+
+                <div id="collapseFilterBody" class="mt-2 animate__animated animate__fadeIn">
+                    <div class="px-2 py-1 borad-6 bg-light border d-flex align-items-center justify-content-between mb-1.5" style="min-height: 22px;">
+                        <span class="text-secondary fw-bold" style="font-size: 10px;">Nomor Tujuan:</span>
+                        <span class="text-dark fw-bold font-monospace" id="displayNomorAktif" style="font-size: 11px;">-</span>
+                    </div>
+
+                    <div class="px-2 py-1 borad-8 mb-1.5" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-magnifying-glass text-secondary me-2" style="font-size: 12px;"></i>
+                            <input type="search" class="form-inp border-0 shadow-none bg-transparent p-0" style="font-size: 12px;" placeholder="Cari nominal e-wallet..." id="search">
+                        </div>
+                    </div>
+
+                    <div class="dropdown pt-1 border-top">
+                        <p class="fw-bold text-dark mb-0 d-flex justify-content-between align-items-center" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; font-size: 12px;">
+                            <span>Urutkan: <span id="namaPil" class="my-color">Termurah</span></span>
+                            <i class="fa-solid fa-caret-down text-secondary"></i>
+                        </p>
+                        <ul class="dropdown-menu shadow-sm border-0 borad-10 p-1">
+                            <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termurah" onclick="rubahData('Termurah')">Termurah</li>
+                            <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termahal" onclick="rubahData('Termahal')">Termahal</li>
+                            <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-A-Z" onclick="rubahData('A-Z')">A - Z</li>
+                            <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Z-A" onclick="rubahData('Z-A')">Z - A</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-3 position-relative" style="z-index: 0;" id="dataProduk">
+        </section>
+    </div>
+
+    <!-- POPUP DETAIL PEMBAYARAN -->
+    <section class="offcanvas offcanvas-bottom p-2 h-auto" style="background-color: transparent; border: none !important;" tabindex="-1" id="detailCanv" aria-labelledby="detailCanv">
+        <div class="px-3 bg-white borad-10 my-shadow pb-0">
+            <div class="bg-detail">
+                <p class="text-center text-white fw-bold" style="font-size: 13px;">Detail Transaksi E-Wallet</p>
+            </div>
+        </div>
+        <div class="offcanvas-body bg-white borad-10 my-shadow pt-2.5" id="bodyCanv">
+        </div>
+    </section>
+
+    <!-- MODAL PELANGGAN TERSIMPAN -->
+    <section class="modal fade" id="modalPelangganTersimpan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content borad-12">
+                <div class="my-bg p-2.5 text-white d-flex justify-content-between align-items-center">
+                    <p class="fw-bold mb-0" style="font-size: 13px;">Pelanggan Tersimpan</p>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2.5 bg-white" id="listPelangganTersimpanBody">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        const token = "eyJhcHAiOiI5MzEyOSIsImF1dGgiOiIyMDIyMDExNyIsInNpZ24iOiJDbklZZHVXY2xOTVdSS0ZwdkdBaUF3PT0ifQ==";
+        const urlToko = "https://elsglobal.asia";
+        var data_page = 50;
+
+        const daftarKategoriEwallet = [
+            { "nama": "E-WALLET BEBAS JUMLAH", "id_kategori": "623267", "img": "https://i.ibb.co.com/ZRChbXyx/Rp-33-000.jpg", "desc": "Topup saldo e-wallet bebas nominal, proses instan otomatis masuk ke akun Anda detik ini juga!" },
+            { "nama": "E-WALLET DANA", "id_kategori": "550617", "img": "https://i.ibb.co.com/kVcLD0j1/d970c0431368862045.jpg", "desc": "Topup saldo DANA resmi anti ribet. Proses instan otomatis masuk detik ini juga!" },
+            { "nama": "E-WALLET GOPAY CUSTOMER", "id_kategori": "323866", "img": "https://i.ibb.co.com/nsTWVvmG/d89429a8a3df149978.jpg", "desc": "Topup saldo GoPay Customer cepat & akurat. Layanan siap sedia 24 jam penuh!" },
+            { "nama": "E-WALLET GOPAY DRIVER", "id_kategori": "579880", "img": "https://i.ibb.co.com/pj8wkK2B/398182973c7e328085.jpg", "desc": "Topup saldo GoPay Driver handal & lancar tanpa hambatan untuk operasional harian Anda." },
+            { "nama": "E-WALLET OVO", "id_kategori": "329101", "img": "https://i.ibb.co.com/9H5RJdd6/eca2a681b42d677499.jpg", "desc": "Isi saldo OVO instan & terpercaya. Server handal siap layani transaksi setiap hari." },
+            { "nama": "E-WALLET SHOPEE PAY", "id_kategori": "329112", "img": "https://i.ibb.co.com/HpnYDDsJ/edca1601b54926779.jpg", "desc": "Topup ShopeePay praktis dan cepat masuk. Solusi terbaik transaksi online Anda." },
+            { "nama": "E-WALLET LINK AJA", "id_kategori": "329104", "img": "https://i.ibb.co.com/RkyR53zz/fbf73eef06df389641.jpg", "desc": "Isi saldo LinkAja aman dan terpercaya. Proses otomatis langsung masuk ke akun." },
+            { "nama": "E-WALLET GRAB CUSTOMER", "id_kategori": "329107", "img": "https://i.ibb.co.com/vC9yh95g/297c7566fd28383051.jpg", "desc": "Topup saldo Grab Customer cepat dan mudah untuk menunjang mobilitas harian." },
+            { "nama": "E-WALLET TAPCASH BNI", "id_kategori": "329109", "img": "https://i.ibb.co.com/JwLs7wjN/7b86d0d92402465007.jpg", "desc": "Isi ulang TapCash BNI resmi, siap digunakan untuk pembayaran tol dan transportasi." },
+            { "nama": "E-WALLET BRI BRIZZI", "id_kategori": "331096", "img": "https://i.ibb.co.com/Z6BcGtHn/7e6144aeed0a223347.jpg", "desc": "Topup BRI Brizzi praktis untuk kebutuhan pembayaran tol dan belanja harian Anda." },
+            { "nama": "E-WALLET MAXIM", "id_kategori": "329114", "img": "https://i.ibb.co.com/nq4VTyc3/7e9a01ce200d63903.jpg", "desc": "Topup saldo Maxim driver/customer cepat dan lancar tanpa kendala." },
+            { "nama": "E-WALLET DOKU", "id_kategori": "329116", "img": "https://i.ibb.co.com/B21svW3c/437181359k.jpg", "desc": "Isi saldo DOKU aman & instan. Pilihan tepat untuk berbagai transaksi digital." },
+            { "nama": "E-WALLET IN DRIVER", "id_kategori": "592280", "img": "https://i.ibb.co.com/4w2pQ6BM/images.png", "desc": "Topup saldo InDriver cepat dan otomatis masuk dalam hitungan detik." },
+            { "nama": "E-WALLET MITRA BIBIT", "id_kategori": "592284", "img": "https://i.ibb.co.com/nM6JM5TJ/Rp-33-000-1.jpg", "desc": "Topup Mitra Bibit mudah dan terpercaya untuk kelancaran investasi reksa dana." },
+            { "nama": "E-WALLET KAS PRO", "id_kategori": "592286", "img": "https://i.ibb.co.com/rGgF4Zzr/images-2.png", "desc": "Isi saldo Kas Pro instan dan aman untuk kebutuhan pembayaran digital Anda." },
+            { "nama": "E-WALLET ASTRA PAY", "id_kategori": "592287", "img": "https://i.ibb.co.com/21hXtMLG/Rp-33-000-2.jpg", "desc": "Topup AstraPay cepat, aman, dan langsung masuk ke akun tujuan." },
+            { "nama": "E-WALLET SHOPEE FOOD", "id_kategori": "592289", "img": "https://i.ibb.co.com/YBS7wmc4/images-1.jpg", "desc": "Topup saldo ShopeeFood praktis untuk kelancaran pesanan makanan online." },
+            { "nama": "E-WALLET M TIX", "id_kategori": "592292", "img": "https://i.ibb.co.com/FLzKxRKs/Rp-33-000-4.jpg", "desc": "Topup saldo M-Tix cepat dan siap digunakan untuk pesan tiket bioskop favorit." },
+            { "nama": "E-WALLET I-SAKU", "id_kategori": "329113", "img": "https://i.ibb.co.com/fYq7g4sT/Rp-33-000-5.jpg", "desc": "Topup saldo I-Saku Indomaret praktis dan cepat masuk ke akun Anda." }
+        ];
+
+        const iconPilihan = [
+            {
+                "contact": "https://uki.my.id/assets/images/phone-book.png",
+                "search": "https://cdn-icons-png.flaticon.com/128/151/151773.png",
+                "close": "https://cdn-icons-png.flaticon.com/128/9684/9684650.png",
+            }
+        ];
+
+        const loads = `<div class="d-flex justify-content-center py-4 align-items-center"><div class="ping"></div></div>`;
+        const produkNone = `<div class="text-center animate__animated animate__fadeIn"><img src="https://uki.my.id/assets/images/produk-none.webp" class="w-100 borad-10 shadow-sm"><p class="mt-2 fw-semibold text-secondary" style="font-size: 12px;">Produk e-wallet belum tersedia...</p></div>`;
+
+        let dataProduk = null;
+        let dataDesc = null;
+        let urutanProduk = "Termurah";
+        let currentKategoriId = "";
+        let currentDesc = "";
+        let currentKategoriNama = "";
+        let isFilterOpen = true;
+
+        function toggleFilterMenu() {
+            if (isFilterOpen) {
+                $("#collapseFilterBody").slideUp(150);
+                $("#textToggleBtn").text("Tampilkan Menu");
+                isFilterOpen = false;
+            } else {
+                $("#collapseFilterBody").slideDown(150);
+                $("#textToggleBtn").text("Sembunyikan Menu");
+                isFilterOpen = true;
+            }
+        }
+
+        const daftarProdukTerlaris = [];
+        const daftarProdukGangguan = [];
+
+        function bersihkanDeskripsi(text) {
+            if (!text) return "-";
+            let temp = document.createElement("div");
+            let formatText = text.replace(/<br\s*[\/]?>/gi, '\n')
+                                 .replace(/<\/p>/gi, '\n')
+                                 .replace(/&lt;br\s*[\/]?-&gt;/gi, '\n');
+            temp.innerHTML = formatText;
+            let hasilText = temp.textContent || temp.innerText || "";
+            return hasilText.trim();
+        }
+
+        $("#imgContact").attr("src", iconPilihan[0].contact);
+        $("#imgSavedContacts").attr("src", iconPilihan[0].contact);
+
+        function getContact() {
+            window.location.href = urlToko + "/ambil_kontak";
+        }
+
+        function gantiKategori() {
+            $("#pageProdukUtama").addClass("d-none");
+            $("#pageKategori").removeClass("d-none");
+        }
+
+        $("#chkSimpanPelanggan").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("#boxInputNama").removeClass("d-none");
+            } else {
+                $("#boxInputNama").addClass("d-none");
+            }
+        });
+
+        function simpanDataPelangganKeLocal(nomorTujuan, namaPelanggan) {
+            if (!nomorTujuan || nomorTujuan.length < 3) return;
+            let listSimpan = JSON.parse(localStorage.getItem("ewallet_pelanggan") || "[]");
+            let indexCari = listSimpan.findIndex(item => item.nomor === nomorTujuan);
+            if (indexCari !== -1) {
+                listSimpan[indexCari].nama = namaPelanggan;
+            } else {
+                listSimpan.push({ nomor: nomorTujuan, nama: namaPelanggan });
+            }
+            localStorage.setItem("ewallet_pelanggan", JSON.stringify(listSimpan));
+        }
+
+        function hapusPelangganTersimpan(nomorTujuan) {
+            let listSimpan = JSON.parse(localStorage.getItem("ewallet_pelanggan") || "[]");
+            listSimpan = listSimpan.filter(item => item.nomor !== nomorTujuan);
+            localStorage.setItem("ewallet_pelanggan", JSON.stringify(listSimpan));
+            openSavedContactsModal();
+        }
+
+        function openSavedContactsModal() {
+            let listSimpan = JSON.parse(localStorage.getItem("ewallet_pelanggan") || "[]");
+            let htmlList = "";
+            if (listSimpan.length === 0) {
+                htmlList = `<p class="text-center text-secondary py-3" style="font-size: 12px;">Belum ada pelanggan tersimpan.</p>`;
+            } else {
+                $.each(listSimpan, function (i, item) {
+                    htmlList += `
+                        <div class="d-flex justify-content-between align-items-center p-2 mb-1.5 border borad-8 bg-light">
+                            <div style="cursor: pointer; flex-grow: 1;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">
+                                <p class="fw-bold text-dark" style="font-size: 12px;">${item.nama ? item.nama : 'Tanpa Nama'}</p>
+                                <p class="text-secondary" style="font-size: 11px;">${item.nomor}</p>
+                            </div>
+                            <div class="d-flex gap-1.5 align-items-center">
+                                <span class="badge bg-primary px-2 py-1" style="font-size: 10px; cursor: pointer;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">Pilih</span>
+                                <button class="btn btn-sm btn-outline-danger py-0 px-1.5" onclick="hapusPelangganTersimpan('${item.nomor}')"><i class="fa-solid fa-trash-can" style="font-size: 10px;"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            $("#listPelangganTersimpanBody").html(htmlList);
+            var myModal = new bootstrap.Modal(document.getElementById('modalPelangganTersimpan'));
+            myModal.show();
+        }
+
+        function pilihPelangganTersimpan(nomor, nama) {
+            $("#nomoId").val(nomor);
+            if (nama && nama !== "null" && nama !== "") {
+                $("#chkSimpanPelanggan").prop("checked", true);
+                $("#boxInputNama").removeClass("d-none");
+                $("#namaPelangganInput").val(nama);
+            }
+            $("#boxBtnLanjut").removeClass("d-none");
+            var modalEl = document.getElementById('modalPelangganTersimpan');
+            var modalObj = bootstrap.Modal.getInstance(modalEl);
+            modalObj.hide();
+        }
+
+        $("#nomoId").on("input change paste", function () {
+            setTimeout(function() {
+                var val = $("#nomoId").val();
+                var cleanVal = val.replace(/[^\d]/g, '');
+                $('#nomoId').val(cleanVal);
+                if (cleanVal.length >= 3) {
+                    $("#boxBtnLanjut").removeClass("d-none");
+                } else {
+                    $("#boxBtnLanjut").addClass("d-none");
+                }
+            }, 50);
+        });
+
+        function lanjutTampilkanProduk() {
+            var nomorTujuan = $("#nomoId").val().trim();
+            var isSimpan = $("#chkSimpanPelanggan").is(":checked");
+            var namaPlg = $("#namaPelangganInput").val();
+
+            if (isSimpan && namaPlg.trim() !== "") {
+                simpanDataPelangganKeLocal(nomorTujuan, namaPlg);
+            }
+
+            $("#displayNomorAktif").html(nomorTujuan + (namaPlg ? " (" + namaPlg + ")" : ""));
+            $("#sectionInputForm").addClass("d-none");
+            $("#boxPilihan").removeClass("d-none");
+
+            tarikDataTanpaCache(currentKategoriId, currentDesc);
+        }
+
+        function renderDaftarKategori() {
+            $("#listKategoriContainer").html("");
+
+            let rawLevelMember = $("#hiddenMemberLevel").text().trim().toLowerCase();
+            let isMemberDanaEls = rawLevelMember.includes("dana els") || rawLevelMember.includes("pengguna dana els");
+
+            $.each(daftarKategoriEwallet, function (i, v) {
+                let isBebasJumlah = v.nama.toUpperCase().includes("BEBAS JUMLAH");
+
+                let cardClass = "card-kategori";
+                let clickAction = `onclick="pilihKategori('${i}', '${v.id_kategori}', \`${encodeURIComponent(v.desc || '')}\`, '${v.nama}')"`;
+
+                if (isMemberDanaEls && isBebasJumlah) {
+                    cardClass += " locked";
+                    clickAction = "";
+                }
+
+                let itemHtml = `
+                    <div class="${cardClass}" ${clickAction} style="cursor: pointer;">
+                        <img src="${v.img}" width="36" height="36" class="rounded me-3 object-fit-cover bg-white p-0.5" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2830/2830284.png'">
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: 600; font-size: 13px; color: #ffffff;">${v.nama}</div>
+                            <div style="font-size: 11px; color: rgba(255,255,255,0.8);">${v.desc}</div>
+                        </div>
+                    </div>
+                `;
+                $("#listKategoriContainer").append(itemHtml);
+            });
+        }
+
+        function pilihKategori(i, id_kategori, encodedDesc, nama) {
+            currentKategoriId = id_kategori;
+            currentDesc = decodeURIComponent(encodedDesc);
+            currentKategoriNama = nama;
+
+            $("#pageKategori").addClass("d-none");
+            $("#pageProdukUtama").removeClass("d-none");
+
+            $("#textTop").html(nama);
+
+            let isProdukTampil = $("#boxPilihan").hasClass("d-none") == false;
+            if (isProdukTampil) {
+                tarikDataTanpaCache(currentKategoriId, currentDesc);
+            } else {
+                $("#boxPilihan").addClass("d-none");
+                $("#sectionInputForm").removeClass("d-none");
+                $("#nomoId").val("");
+                $("#namaPelangganInput").val("");
+                $("#chkSimpanPelanggan").prop("checked", false);
+                $("#boxInputNama").addClass("d-none");
+                $("#boxBtnLanjut").addClass("d-none");
+                $("#dataProduk").html("");
+            }
+        }
+
+        function tarikDataTanpaCache(id_kategori, desc) {
+            $("#dataProduk").html(loads);
+
+            let xmlHttpRequest = new XMLHttpRequest();
+            let url = `https://openapi.bukaolshop.net/v1/app/produk?token=${token}&id_kategori=${id_kategori}&total_data=${data_page}`;
+            xmlHttpRequest.open("GET", url, true);
+            xmlHttpRequest.onreadystatechange = function () {
+                if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                    let res = JSON.parse(xmlHttpRequest.responseText);
+                    if (res && res.data && res.data.length > 0) {
+                        dataProduk = res.data;
+                        resGetData(dataProduk, desc);
+                    } else {
+                        resGetData(null, desc);
+                    }
+                }
+            }
+            xmlHttpRequest.send();
+        }
+
+        function resGetData(data, desc) {
+            if (data == null) {
+                $("#dataProduk").html(produkNone);
+            } else {
+                $("#dataProduk").html(`<div class="animate__animated animate__fadeIn d-grid-1" id="isiProduk"></div>`);
+                loopProduk(data, desc);
+                dataProduk = data;
+                dataDesc = desc;
+            }
+        }
+
+        function loopProduk(data, desc) {
+            if (!data || data.length == 0) {
+                $("#dataProduk").html(produkNone);
+                return;
+            }
+
+            let sortedData = [...data];
+
+            if (urutanProduk == "Termurah") {
+                sortedData.sort((a, b) => parseFloat(a.harga_produk) - parseFloat(b.harga_produk));
+            } else if (urutanProduk == "Termahal") {
+                sortedData.sort((a, b) => parseFloat(b.harga_produk) - parseFloat(a.harga_produk));
+            } else if (urutanProduk == "A-Z") {
+                sortedData.sort((a, b) => a.nama_produk.localeCompare(b.nama_produk));
+            } else if (urutanProduk == "Z-A") {
+                sortedData.sort((a, b) => b.nama_produk.localeCompare(a.nama_produk));
+            }
+
+            sortedData.sort((a, b) => {
+                let aTerlaris = daftarProdukTerlaris.includes(String(a.id_produk)) ? -1 : 0;
+                let bTerlaris = daftarProdukTerlaris.includes(String(b.id_produk)) ? -1 : 0;
+                return aTerlaris - bTerlaris;
+            });
+
+            dataProduk = sortedData;
+            $("#isiProduk").html("");
+
+            $.each(sortedData, function (i, v) {
+                var nama_produk = v.nama_produk ? v.nama_produk : "";
+                var harga_produk = formatRupiah(v.harga_produk);
+                let hargaAsli = (v.harga_produk_asli != "0") ? `<span class="text-danger text-decoration-line-through ms-2" style="font-size: 10px;">${v.harga_produk_asli}</span>` : ``;
+
+                var isTerlaris = daftarProdukTerlaris.includes(String(v.id_produk));
+                var isGangguan = daftarProdukGangguan.includes(String(v.id_produk));
+
+                var statusBadgeHtml = "";
+                if (isGangguan) {
+                    statusBadgeHtml = `<span class="badge-gangguan-box"><i class="fa-solid fa-triangle-exclamation me-1"></i>E-Wallet Gangguan</span>`;
+                } else if (isTerlaris) {
+                    statusBadgeHtml = `<span class="badge-terlaris-modern"><i class="fa-solid fa-fire me-1"></i>E-Wallet Terlaris</span>`;
+                } else {
+                    statusBadgeHtml = `<span class="badge-berkualitas-modern"><i class="fa-solid fa-circle-check me-1"></i>E-Wallet Detikan</span>`;
+                }
+
+                $("#isiProduk").append(`
+                <div class="bg-produk animate__animated animate__fadeIn" id="bg-prod-${i}" onclick="nextDetail('${v.id_produk}', \`${encodeURIComponent(v.deskripsi_panjang || '')}\`)" data-bs-toggle="offcanvas" data-bs-target="#detailCanv" aria-controls="detailCanv" style="cursor: pointer;">
+                    <div class="text-start">
+                        <p class="fw-bold text-dark mb-2" style="font-size: 12px; line-height: 1.35;">${nama_produk}</p>
+
+                        <div class="d-flex align-items-center justify-content-between pt-1.5 border-top border-light">
+                            <div class="product-price-box">${harga_produk} ${hargaAsli}</div>
+                            <div>
+                                ${statusBadgeHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `);
+            });
+        }
+
+        function nextDetail(idProduk, encodedDesk) {
+            var v = dataProduk.find(item => String(item.id_produk) === String(idProduk));
+            if (!v) return;
+
+            var nama_produk = v.nama_produk ? v.nama_produk : "";
+            var harga_produk = formatRupiah(v.harga_produk);
+            var no = $("#nomoId").val();
+            let nomor = (no == "") ? `<span class="text-danger">Masukkan nomor tujuan dahulu...</span>` : no;
+
+            let rawDesk = decodeURIComponent(encodedDesk);
+            let cleanDesk = bersihkanDeskripsi(rawDesk);
+
+            let btn = (no != "") ? `
+            <div class="row g-1.5">
+                <div class="col-12">
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')" style="cursor: pointer;">
+                        <p class="text-white fw-bold" style="font-size: 12px;"><i class="fa-solid fa-coins me-1"></i> Bayar Pakai MEC</p>
+                    </div>
+                </div>
+            </div>` : ``;
+
+            $("#bodyCanv").html(`
+                <div class="text-start">
+                    <p class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.3;">${nama_produk}</p>
+                </div>
+                <div class="p-2 mt-2 mb-2 borad-8" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
+                    <p class="fw-semibold text-secondary" style="font-size: 10px;">Deskripsi Produk :</p>
+                    <div class="mt-1">
+                        <p class="text-dark" style="font-size: 11px; white-space: pre-line; line-height: 1.35;">${cleanDesk}</p>
+                    </div>
+                </div>
+
+                <div class="bg-light p-2.5 borad-8 mb-2 border">
+                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
+                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-wallet me-1 text-primary"></i> Nomor Tujuan :</span>
+                        <span class="fw-bold text-dark font-monospace">${nomor}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12px;">
+                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-tag me-1 text-success"></i> Harga Produk :</span>
+                        <span class="fw-bold f-14 text-success">${harga_produk}</span>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    ${btn}
+                    <div class="mt-1.5">
+                        <div class="w-100 bg-light border p-2 borad-8 text-center shadow-sm" data-bs-dismiss="offcanvas" aria-label="Close" style="cursor: pointer;">
+                            <p class="text-secondary fw-semibold" style="font-size: 12px;">Kembali</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function getBayarMEC(idProduk, encodedNamaProduk, hargaProduk) {
+            var no = $("#nomoId").val().trim();
+            var namaProduk = decodeURIComponent(encodedNamaProduk);
+            var hargaAngka = parseFloat(hargaProduk) || 0;
+
+            const params = new URLSearchParams({
+                id_produk: String(idProduk),
+                produk: namaProduk,
+                harga: String(hargaAngka),
+                tujuan: no
+            });
+
+            window.location.href = "index.html?" + params.toString();
+        }
+
+        $("#search").on("input", function () {
+            var value = $(this).val().toLowerCase();
+            $("#isiProduk .bg-produk").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        $("#searchKategori").on("input", function () {
+            var value = $(this).val().toLowerCase();
+            $("#listKategoriContainer .card-kategori").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        function defaultData() {
+            urutanProduk = "Termurah";
+            $(".dropdown-item").removeClass("my-color");
+            $("#pil-" + urutanProduk).addClass("my-color");
+            $("#namaPil").html(urutanProduk);
+            $("#search").val("");
+        }
+
+        function rubahData(nama) {
+            $(".dropdown-item").removeClass("my-color");
+            $("#pil-" + nama).addClass("my-color");
+            $("#namaPil").html(nama);
+            urutanProduk = nama;
+            if (dataProduk != null) {
+                loopProduk(dataProduk, dataDesc);
+            }
+        }
+
+        function formatRupiah(angka) {
+            var formatter = new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0,
+            });
+            return formatter.format(angka).replace(/IDR/g, "").trim();
+        }
+
+        renderDaftarKategori();
+        defaultData();
+    </script>
+</body>
+</html>
