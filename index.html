@@ -301,6 +301,14 @@
       display: block !important;
     }
 
+    .saved-target-caption {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #93c5fd;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
     label {
       display: block;
       font-size: 12px;
@@ -984,6 +992,7 @@
         <div id="customerIdField" class="field">
           <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet Tujuan</label>
           <input id="customerId" name="els_target_no_autofill" type="text" value="" placeholder="Terisi otomatis dari kategori produk" autocomplete="off" data-lpignore="true" readonly aria-readonly="true" />
+          <div id="savedTargetCaption" class="saved-target-caption"></div>
         </div>
 
         <div class="field">
@@ -1141,11 +1150,6 @@
           </div>
           <div id="lookupStatusMsg" class="lookup-msg"></div>
         </div>
-
-        <div class="playstore-note">
-          <span>Bagian dari layanan digital &amp; PPOB <strong>ELSGLOBAL</strong> yang berjalan di Android (Play Store) dan jalur referral.</span>
-          <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> ELSGLOBAL di Play Store</span>
-        </div>
       </div>
 
       <!-- KOLOM PENGATURAN JARINGAN & KURS -->
@@ -1214,6 +1218,11 @@
 
         <div class="tag-poc">
           Catatan Prototipe HARBOR Hackathon: Pesanan masuk ke antrean pemrosesan merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
+        </div>
+
+        <div class="playstore-note">
+          <span>Bagian dari layanan digital &amp; PPOB <strong>ELSGLOBAL</strong> yang berjalan di Android (Play Store) dan jalur referral.</span>
+          <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> ELSGLOBAL di Play Store</span>
         </div>
       </div>
     </div>
@@ -1341,6 +1350,38 @@
       return { rate: FALLBACK_USD_IDR, source: "Fallback" };
     }
 
+    function getLatestSavedTargetInfo() {
+      const list = getOrderHistoryList();
+      if (Array.isArray(list) && list.length > 0) {
+        const latest = list[0];
+        const target = String(latest.customerId || "").trim();
+        if (target) {
+          return {
+            target,
+            isDefault: false,
+            orderId: latest.orderId || ""
+          };
+        }
+      }
+      return {
+        target: "",
+        isDefault: true,
+        orderId: ""
+      };
+    }
+
+    function updateSavedTargetCaption() {
+      const captionEl = document.getElementById("savedTargetCaption");
+      if (!captionEl) return;
+
+      const latest = getLatestSavedTargetInfo();
+      if (!latest.isDefault && latest.target) {
+        captionEl.innerHTML = `Nomor transaksi terakhir: <strong>${escapeHtml(latest.target)}</strong>${latest.orderId ? ` (${escapeHtml(latest.orderId)})` : ""}`;
+      } else {
+        captionEl.innerHTML = `Nomor transaksi terakhir: <strong>Riwayat Tersimpan</strong>`;
+      }
+    }
+
     function syncCustomerFieldVisibility() {
       const fieldEl = document.getElementById("customerIdField");
       const inputEl = document.getElementById("customerId");
@@ -1349,6 +1390,7 @@
       inputEl.readOnly = true;
       const hasTarget = inputEl.value.trim().length > 0;
       fieldEl.classList.toggle("show", hasTarget);
+      updateSavedTargetCaption();
     }
 
     function enforceLockedInputs() {
@@ -1684,11 +1726,13 @@
         filtered.unshift(merged);
         localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 10)));
       } catch (e) {}
+      updateSavedTargetCaption();
       renderOrderHistory();
     }
 
     function clearOrderHistory() {
       try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+      updateSavedTargetCaption();
       renderOrderHistory();
     }
 
@@ -2083,6 +2127,7 @@
       updateSummary();
     });
     updateSummary();
+    updateSavedTargetCaption();
     renderOrderHistory();
     fetchLiveUsdToIdr(false);
     setInterval(() => fetchLiveUsdToIdr(true), 15 * 60 * 1000);
