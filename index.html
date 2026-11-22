@@ -1395,7 +1395,7 @@
     async function sendOrderToGoogleSheets(payload) {
       if (!isSheetsConfigured()) return false;
       try {
-        await fetch(https://script.google.com/macros/s/AKfycbyzPGVWP0TxUMysXpI-YtPVCHO31VuGp4tVWXHSEFnvXKML-BvvhI7UkzUDdX2cpwpM/exec, {
+        await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
