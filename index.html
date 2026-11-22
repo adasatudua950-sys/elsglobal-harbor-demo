@@ -899,7 +899,7 @@
       <div class="card">
         <h2>2. Parameter Kurs &amp; Jaringan</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal, sedangkan harga <strong>MEC</strong> dikunci pada jadwal kenaikan harian bertahap (+$0,01/hari sejak 20 Nov 2026 = $9,87) pada jaringan <strong>Meta Earth</strong>.
+          Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal dan dikunci agar tidak diubah pengguna, sedangkan harga <strong>MEC</strong> mengikuti kenaikan harian (+$0,01/hari sejak 20 Nov 2026 = $9,87) pada jaringan <strong>Meta Earth</strong>.
         </p>
 
         <div class="field">
@@ -918,8 +918,8 @@
         </div>
 
         <div class="field">
-          <label for="usdIdrOverride">Kurs USD–IDR (Otomatis / Override Manual)</label>
-          <input id="usdIdrOverride" type="number" value="" min="1" step="10" placeholder="Otomatis dari API (isi untuk override)" />
+          <label for="usdIdrOverride">Kurs USD–IDR (Otomatis — Terkunci)</label>
+          <input id="usdIdrOverride" type="number" value="18292" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -960,7 +960,7 @@
         </div>
 
         <div class="tag-poc">
-          Catatan Prototipe HARBOR Hackathon: Buffer 4%, harga dasar MEC ($9.87), dan kenaikan harian ($0.01) dikunci agar konsisten selama penilaian dan transaksi.
+          Catatan Prototipe HARBOR Hackathon: Kurs USD–IDR otomatis, buffer 4%, harga dasar MEC ($9.87), dan kenaikan harian ($0.01) dikunci agar perhitungan konsisten dan tidak bisa diubah sembarangan.
         </div>
       </div>
     </div>
@@ -986,6 +986,13 @@
       baseIdr: 101500
     };
 
+    function getActiveUsdIdr() {
+      if (typeof liveUsdIdr === "number" && liveUsdIdr > 0) {
+        return { rate: liveUsdIdr, source: usdIdrSourceLabel };
+      }
+      return { rate: FALLBACK_USD_IDR, source: "Fallback" };
+    }
+
     function enforceLockedInputs() {
       const bufferInput = document.getElementById("bufferPercent");
       if (bufferInput) {
@@ -1003,6 +1010,13 @@
       if (stepInput) {
         stepInput.value = FIXED_MEC_DAILY_STEP.toFixed(2);
         stepInput.readOnly = true;
+      }
+
+      const rateInput = document.getElementById("usdIdrOverride");
+      if (rateInput) {
+        const { rate } = getActiveUsdIdr();
+        rateInput.value = String(Math.round(rate));
+        rateInput.readOnly = true;
       }
     }
 
@@ -1025,17 +1039,6 @@
       const todayLocalMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
       const dayDiff = Math.max(0, Math.floor((todayLocalMidnight - BASE_LOCAL_MIDNIGHT) / (1000 * 60 * 60 * 24)));
       return Number((FIXED_MEC_BASE_USD + dayDiff * FIXED_MEC_DAILY_STEP).toFixed(4));
-    }
-
-    function getActiveUsdIdr() {
-      const overrideVal = Number(document.getElementById("usdIdrOverride").value);
-      if (Number.isFinite(overrideVal) && overrideVal > 0) {
-        return { rate: overrideVal, source: "Manual" };
-      }
-      if (typeof liveUsdIdr === "number" && liveUsdIdr > 0) {
-        return { rate: liveUsdIdr, source: usdIdrSourceLabel };
-      }
-      return { rate: FALLBACK_USD_IDR, source: "Fallback" };
     }
 
     function formatIdr(num) {
@@ -1217,9 +1220,11 @@
       updateSummary();
     }
 
-    ["merchantAddress", "symbol", "usdIdrOverride"].forEach(id => {
+    ["merchantAddress", "symbol"].forEach(id => {
       document.getElementById(id).addEventListener("input", updateSummary);
     });
+
+    document.getElementById("usdIdrOverride").addEventListener("input", enforceLockedInputs);
 
     function toEvmHexChainId(rawChainId) {
       if (!rawChainId) return null;
