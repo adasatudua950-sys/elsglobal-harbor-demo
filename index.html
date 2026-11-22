@@ -314,7 +314,6 @@
       box-shadow: 0 0 0 2px rgba(29, 211, 248, 0.16);
     }
 
-    /* MENU LAYANAN BERGAYA APLIKASI (TANPA LABEL "BUKA ...") */
     .service-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -781,7 +780,7 @@
               </div>
             </a>
 
-            <a href="#checkoutSummary" class="menu-card" onclick="applyQuickService('Dompet Digital E-Wallet', 101500)">
+            <a href="dompet-digital.html" class="menu-card">
               <div>
                 <div class="menu-top">
                   <div class="menu-icon"><i class="fa-solid fa-wallet"></i></div>
@@ -792,7 +791,7 @@
               </div>
               <div class="menu-foot">
                 <span class="menu-ready">● Ready</span>
-                <span class="menu-go">Hitung ›</span>
+                <span class="menu-go">Pilih ›</span>
               </div>
             </a>
           </div>
@@ -1030,18 +1029,6 @@
         bufferIdr: Math.round(baseIdr * bufferRate),
         mecAmount: Number(mecAmount.toFixed(4)).toString()
       };
-    }
-
-    function applyQuickService(name, baseIdr) {
-      selectedProduct = {
-        id: name.toLowerCase().replace(/\s+/g, "-"),
-        name,
-        baseIdr
-      };
-      const banner = document.getElementById("selectedFromCatalogBanner");
-      banner.textContent = `Layanan dipilih: ${name}`;
-      banner.classList.add("show");
-      updateSummary();
     }
 
     function applyUrlCatalogParams() {
