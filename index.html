@@ -293,6 +293,14 @@
       max-width: 100%;
     }
 
+    #customerIdField {
+      display: none;
+    }
+
+    #customerIdField.show {
+      display: block;
+    }
+
     label {
       display: block;
       font-size: 12px;
@@ -973,9 +981,9 @@
       <div class="card">
         <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
-        <div class="field">
-          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet (Otomatis dari Kategori Produk)</label>
-          <input id="customerId" type="text" value="" placeholder="Pilih kategori produk di bawah untuk mengisi nomor tujuan" readonly aria-readonly="true" />
+        <div id="customerIdField" class="field">
+          <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet Tujuan</label>
+          <input id="customerId" type="text" value="" placeholder="Terisi otomatis dari kategori produk" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1064,7 +1072,7 @@
           </div>
           <div class="summary-row">
             <span>Harga MEC Hari Ini (<span id="sumMecDate">-</span>):</span>
-            <span id="sumMecUsd">$9.87</span>
+            <span id="sumMecUsd">USD 9.87</span>
           </div>
           <div class="summary-row">
             <span>Kurs USD–IDR Acuan:</span>
@@ -1135,8 +1143,8 @@
         </div>
 
         <div class="playstore-note">
-          <span>Ekosistem PPOB &amp; produk digital <strong>ELSGLOBAL</strong> juga tersedia di aplikasi Android.</span>
-          <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> Download aplikasi ELSGLOBAL di Play Store</span>
+          <span>Bagian dari layanan digital &amp; PPOB <strong>ELSGLOBAL</strong> yang berjalan di Android (Play Store) dan jalur referral.</span>
+          <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> ELSGLOBAL di Play Store</span>
         </div>
       </div>
 
@@ -1144,7 +1152,7 @@
       <div class="card">
         <h2>2. Parameter Kurs &amp; Jaringan</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal dan dikunci agar tidak diubah pengguna, sedangkan harga <strong>MEC</strong> mengikuti kenaikan harian (+$0,01/hari sejak 20 Nov 2026 = $9,87) pada jaringan <strong>Meta Earth</strong>.
+          Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal dan dikunci agar tidak diubah pengguna, sedangkan harga <strong>MEC</strong> mengikuti kenaikan harian (+USD 0.01/hari sejak 20 Nov 2026 = USD 9.87) pada jaringan <strong>Meta Earth</strong>.
         </p>
 
         <div class="field">
@@ -1154,12 +1162,12 @@
 
         <div class="field">
           <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC — Terkunci)</label>
-          <input id="mecBaseUsd" type="number" value="9.87" readonly aria-readonly="true" />
+          <input id="mecBaseUsd" type="text" value="USD 9.87" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
           <label for="mecDailyStep">Kenaikan Harian MEC (USD / hari — Terkunci)</label>
-          <input id="mecDailyStep" type="number" value="0.01" readonly aria-readonly="true" />
+          <input id="mecDailyStep" type="text" value="USD 0.01" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1169,7 +1177,7 @@
 
         <div class="field">
           <label for="bufferPercent">Buffer Pengaman Harga (Tetap 4% — Terkunci)</label>
-          <input id="bufferPercent" type="number" value="4" readonly aria-readonly="true" />
+          <input id="bufferPercent" type="text" value="4%" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1333,18 +1341,27 @@
       return { rate: FALLBACK_USD_IDR, source: "Fallback" };
     }
 
+    function syncCustomerFieldVisibility() {
+      const fieldEl = document.getElementById("customerIdField");
+      const inputEl = document.getElementById("customerId");
+      if (!fieldEl || !inputEl) return;
+
+      inputEl.readOnly = true;
+      const hasTarget = inputEl.value.trim().length > 0;
+      fieldEl.classList.toggle("show", hasTarget);
+    }
+
     function enforceLockedInputs() {
-      const customerInput = document.getElementById("customerId");
-      if (customerInput) { customerInput.readOnly = true; }
+      syncCustomerFieldVisibility();
 
       const bufferInput = document.getElementById("bufferPercent");
-      if (bufferInput) { bufferInput.value = "4"; bufferInput.readOnly = true; }
+      if (bufferInput) { bufferInput.type = "text"; bufferInput.value = "4%"; bufferInput.readOnly = true; }
 
       const baseInput = document.getElementById("mecBaseUsd");
-      if (baseInput) { baseInput.value = FIXED_MEC_BASE_USD.toFixed(2); baseInput.readOnly = true; }
+      if (baseInput) { baseInput.type = "text"; baseInput.value = `USD ${FIXED_MEC_BASE_USD.toFixed(2)}`; baseInput.readOnly = true; }
 
       const stepInput = document.getElementById("mecDailyStep");
-      if (stepInput) { stepInput.value = FIXED_MEC_DAILY_STEP.toFixed(2); stepInput.readOnly = true; }
+      if (stepInput) { stepInput.type = "text"; stepInput.value = `USD ${FIXED_MEC_DAILY_STEP.toFixed(2)}`; stepInput.readOnly = true; }
 
       const rateInput = document.getElementById("usdIdrOverride");
       if (rateInput) {
@@ -1401,6 +1418,7 @@
     function applyUrlCatalogParams() {
       const customerInput = document.getElementById("customerId");
       if (customerInput) {
+        customerInput.value = "";
         customerInput.readOnly = true;
       }
 
@@ -1426,6 +1444,8 @@
         banner.innerHTML = `Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
         banner.classList.add("show");
       }
+
+      syncCustomerFieldVisibility();
     }
 
     function setPaymentMethod(method) {
@@ -1485,7 +1505,7 @@
         month: "short",
         year: "numeric"
       });
-      document.getElementById("sumMecUsd").textContent = `$${mecUsd.toFixed(2)}`;
+      document.getElementById("sumMecUsd").textContent = `USD ${mecUsd.toFixed(2)}`;
       document.getElementById("sumUsdIdr").textContent = `${formatIdr(usdIdr)} (${source})`;
       document.getElementById("sumMecIdr").textContent = `≈ ${formatIdr(mecIdrRate)} / ${sym}`;
       document.getElementById("sumToken").textContent = `${calc.mecAmount} ${sym}`;
@@ -1935,8 +1955,8 @@
       const customerId = customerInput.value.trim();
       if (customerId.length < 5) {
         showElsAlert(
-          "Nomor Tujuan Belum Terisi",
-          "Silakan pilih salah satu kategori produk terlebih dahulu untuk mengisi <strong>Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</strong>.",
+          "Nomor Tujuan Belum Dipilih",
+          "Silakan pilih salah satu kategori produk terlebih dahulu untuk menentukan <strong>Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</strong> tujuan.",
           {
             type: "warning",
             okLabel: "Tutup",
