@@ -1511,7 +1511,7 @@
       };
 
       const syncLabel = sentToSheets
-        ? "Terkirim ke Google Sheets"
+        ? "Terkirim"
         : "Mode Lokal (URL Apps Script belum diisi)";
 
       renderReceiptCard(currentOrderContext, "MENUNGGU_VERIFIKASI", "-", syncLabel);
@@ -1521,7 +1521,7 @@
         product: selectedProduct.name,
         mecPaid: `${calc.mecAmount} ${sym}`,
         customerId,
-        statusLabel: sentToSheets ? "Terkirim ke Sheets" : "Lokal",
+        statusLabel: sentToSheets ? "Terkirim" : "Lokal",
         time: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })
       });
 
