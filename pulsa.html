@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pulsa All Operator - Bayar MEC</title>
+    <link href="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        const urlToko = "https://elsglobal.asia";
+        var token = "eyJhcHAiOiI5MzEyOSIsImF1dGgiOiIyMDIyMDExNyIsInNpZ24iOiJDbklZZHVXY2xOTVdSS0ZwdkdBaUF3PT0ifQ==";
+        var data_page = 100;
+
+        const urlKategori = [
+            {
+                "ISAT": {
+                    "nama": "Indosat",
+                    "gambar": "https://i.ibb.co.com/wZ8jQKGf/f0ba7e56900c671461.png",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "313218", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." },
+                        { "nama": "Pulsa Transfer", "view": "list", "img": "no", "id_kategori": "313223", "desc": "Menambah masa aktif" }
+                    ]
+                },
+                "TSEL": {
+                    "nama": "Telkomsel",
+                    "gambar": "https://i.ibb.co.com/XfKG81XN/1fda3e2d35dd90105.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "312169", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." },
+                        { "nama": "Pulsa Transfer", "view": "list", "img": "no", "id_kategori": "311182", "desc": "Menambah masa aktif" }
+                    ]
+                },
+                "THREE": {
+                    "nama": "Three",
+                    "gambar": "https://i.ibb.co.com/ZzDnXH08/ca9c9f5847a3170204.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "314371", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." },
+                        { "nama": "Pulsa Transfer", "view": "list", "img": "no", "id_kategori": "323577", "desc": "Paket nelpon dan sms" }
+                    ]
+                },
+                "XL": {
+                    "nama": "XL Axiata",
+                    "gambar": "https://i.ibb.co.com/3yR4fsZ8/9f6e7b20f37f395198.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "314372", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." },
+                        { "nama": "Pulsa Transfer", "view": "list", "img": "no", "id_kategori": "323634", "desc": "Paket nelpon dan sms" }
+                    ]
+                },
+                "AXIS": {
+                    "nama": "Axis",
+                    "gambar": "https://i.ibb.co.com/PZ0nMVSY/703902492c50822998.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "314133", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." },
+                        { "nama": "Pulsa Transfer", "view": "list", "img": "no", "id_kategori": "323143", "desc": "Paket nelpon dan sms" }
+                    ]
+                },
+                "SFREN": {
+                    "nama": "Smartfren",
+                    "gambar": "https://i.ibb.co.com/prXYZpSB/64773918.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "314162", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." }
+                    ]
+                },
+                "BYU": {
+                    "nama": "Byu",
+                    "gambar": "https://i.ibb.co.com/rfpwSJWt/15615987.jpg",
+                    "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal.",
+                    "data": [
+                        { "nama": "Pulsa Reguler", "view": "list", "img": "no", "id_kategori": "323133", "desc": "Tambah Masa Aktif Lebih Banyak, Pilihan Terbaik dan Terpercaya untuk Sobat ElsGlobal." }
+                    ]
+                }
+            }
+        ];
+
+        const iconPilihan = [
+            {
+                "signal": "https://uki.my.id/assets/images/signal-1.png",
+                "contact": "https://uki.my.id/assets/images/phone-book.png",
+                "scan": "https://uki.my.id/assets/images/barcode.png",
+                "search": "https://cdn-icons-png.flaticon.com/128/151/151773.png",
+                "close": "https://cdn-icons-png.flaticon.com/128/9684/9684650.png",
+            }
+        ]
+    </script>
+    <style type="text/css">
+        .ping {
+            --uib-size: 3.5rem;
+            --uib-speed: 2s;
+            --uib-color: #0066ff;
+            position: relative;
+            height: var(--uib-size);
+            width: var(--uib-size);
+        }
+
+        .ping::before,
+        .ping::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            background-color: var(--uib-color);
+            animation: pulse7132 var(--uib-speed) linear infinite;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .ping::after {
+            animation-delay: calc(var(--uib-speed) / -2);
+        }
+
+        @keyframes pulse7132 {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: url('https://i.imgur.com/nlUnWwO.jpeg') !important;
+            background-size: 100% 100% !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        input {
+            border: none;
+            transition: 0.2s;
+            outline: none;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        a, a:focus, a:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .my-bg {
+            background: linear-gradient(135deg, #0066ff 0%, #3385ff 100%) !important;
+        }
+
+        .my-color {
+            color: #0066ff !important;
+        }
+
+        .borad-6 { border-radius: 6px; }
+        .borad-8 { border-radius: 8px; }
+        .borad-10 { border-radius: 10px; }
+        .borad-12 { border-radius: 12px; }
+
+        .my-shadow {
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-inp {
+            border: 1px solid #cbd5e1;
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .form-inp:focus {
+            border: 1px solid #0066ff;
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+            background: #fff;
+        }
+
+        .d-grid-1 {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 8px;
+        }
+
+        .bg-produk {
+            background: linear-gradient(135deg, rgba(255, 238, 173, 0.65) 0%, rgba(184, 208, 255, 0.7) 50%, rgba(216, 191, 216, 0.65) 100%), #ffffff !important;
+            padding: 10px 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.03);
+            border-radius: 10px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.25s ease-in-out;
+        }
+
+        .bg-produk:hover {
+            border-color: #0066ff !important;
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 238, 173, 0.85) 0%, rgba(184, 208, 255, 0.9) 50%, rgba(216, 191, 216, 0.85) 100%), #ffffff !important;
+        }
+
+        .bg-produk:active {
+            transform: scale(0.99);
+        }
+
+        .bg-detail {
+            background: linear-gradient(135deg, #0066ff 0%, #0047b3 100%);
+            padding: 12px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .badge-terlaris-modern {
+            display: inline-flex;
+            align-items: center;
+            background-color: #fef08a !important;
+            color: #854d0e !important;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #facc15;
+            white-space: nowrap;
+        }
+
+        .badge-gangguan-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #f87171;
+            white-space: nowrap;
+        }
+
+        .badge-berkualitas-modern {
+            display: inline-flex;
+            align-items: center;
+            background-color: #0066ff !important;
+            color: #ffffff !important;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .product-price-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f172a !important;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            white-space: nowrap;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .btn-aksi-top {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 30px;
+            white-space: nowrap;
+        }
+
+        #dataProduk {
+            position: relative;
+            z-index: 0;
+            min-height: 85vh;
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="header px-3 pt-2" id="sectionInputPage">
+        <div class="bg-white p-3 borad-10 my-shadow">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img src="" id="imgTop" width="28" class="borad-6">
+                    <p class="f-13 fw-bold ms-2 text-dark">Pulsa <span id="textTop"></span></p>
+                </div>
+                <img src="" width="28" id="imgSavedContacts" class="my-bg p-1 borad-6 text-white shadow-sm" onclick="openSavedContactsModal()" style="cursor: pointer;" title="Pelanggan Tersimpan">
+            </div>
+
+            <div class="mt-2">
+                <p class="text-secondary fw-semibold mb-1" style="font-size: 11px;">Nomor Tujuan</p>
+                <div class="d-flex align-items-center">
+                    <input type="tel" class="form-inp {{hasil_kontak}}" id="nomoId" placeholder="Masukkan nomor HP...">
+                    <img src="" width="38" id="imgContact" class="ms-1.5 my-bg p-2 borad-8 shadow-sm text-white" onclick="getContact()" style="cursor: pointer;">
+                    <img src="" width="38" id="imgScan" class="ms-1.5 my-bg p-2 borad-8 shadow-sm text-white" onclick="getScan()" style="cursor: pointer;">
+                </div>
+            </div>
+
+            <div class="mt-2 pt-2 border-top">
+                <div class="form-check ps-0 mb-0">
+                    <div class="d-flex align-items-center">
+                        <input class="form-check-input ms-0 me-2" type="checkbox" value="" id="chkSimpanPelanggan" style="width: 16px; height: 16px; cursor: pointer;">
+                        <label class="form-check-label fw-semibold text-dark" for="chkSimpanPelanggan" style="cursor: pointer; font-size: 12px;">
+                            Simpan nama & nomor pelanggan (Opsional)
+                        </label>
+                    </div>
+                </div>
+                <div class="mt-1.5 d-none animate__animated animate__fadeIn" id="boxInputNama">
+                    <input type="text" class="form-inp" style="font-size: 12px; padding: 6px 10px;" id="namaPelangganInput" placeholder="Masukkan nama pelanggan...">
+                </div>
+            </div>
+
+            <div class="mt-2.5 d-none animate__animated animate__fadeIn" id="boxBtnLanjut">
+                <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm fw-bold" style="font-size: 13px; cursor: pointer;" onclick="lanjutKeFullLayar()">
+                    Lanjut Pilih Produk
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-3 pt-2 d-none" id="boxPilihan" style="position: relative; z-index: 1020; background-color: transparent;">
+        <div class="bg-white p-2 borad-10 my-shadow" style="background: rgba(255, 255, 255, 0.95) !important;">
+            <div class="row g-1">
+                <div class="col-6">
+                    <button class="btn btn-outline-primary btn-aksi-top" id="btnToggleFilter" onclick="toggleFilterMenu()">
+                        <span id="textToggleBtn">Sembunyikan Menu</span>
+                    </button>
+                </div>
+                <div class="col-6">
+                    <button class="btn btn-light border text-primary btn-aksi-top" onclick="kembaliKeInputNomor()">
+                        Ubah Nomor
+                    </button>
+                </div>
+            </div>
+
+            <div id="collapseFilterBody" class="mt-2 animate__animated animate__fadeIn">
+                <div class="px-2 py-1 borad-6 bg-light border d-flex align-items-center justify-content-between mb-1.5" style="min-height: 22px;">
+                    <span class="text-secondary fw-bold" style="font-size: 10px;">Nomor Tujuan:</span>
+                    <span class="text-dark fw-bold font-monospace" id="displayNomorAktif" style="font-size: 11px;">-</span>
+                </div>
+
+                <div class="px-2 py-1 borad-8 mb-1.5" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-magnifying-glass text-secondary me-2" style="font-size: 12px;"></i>
+                        <input type="search" class="form-inp border-0 shadow-none bg-transparent p-0" style="font-size: 12px;" placeholder="Cari nama produk..." id="search">
+                    </div>
+                </div>
+
+                <div class="dropdown pt-1 border-top">
+                    <p class="fw-bold text-dark mb-0 d-flex justify-content-between align-items-center" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; font-size: 12px;">
+                        <span>Urutkan: <span id="namaPil" class="my-color">Termurah</span></span>
+                        <i class="fa-solid fa-caret-down text-secondary"></i>
+                    </p>
+                    <ul class="dropdown-menu shadow-sm border-0 borad-10 p-1">
+                        <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termurah" onclick="rubahData('Termurah')">Termurah</li>
+                        <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termahal" onclick="rubahData('Termahal')">Termahal</li>
+                        <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-A-Z" onclick="rubahData('A-Z')">A - Z</li>
+                        <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Z-A" onclick="rubahData('Z-A')">Z - A</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-3 position-relative" style="z-index: 0;" id="dataProduk">
+    </section>
+
+    <section class="offcanvas offcanvas-bottom p-2 h-auto"
+        style="background-color: transparent; border: none !important;" tabindex="-1" id="detailCanv"
+        aria-labelledby="detailCanv">
+        <div class="px-3 bg-white borad-10 my-shadow pb-0">
+            <div class="bg-detail">
+                <p class="text-center text-white fw-bold" style="font-size: 13px;">Detail Transaksi</p>
+            </div>
+        </div>
+        <div class="offcanvas-body bg-white borad-10 my-shadow pt-2.5" id="bodyCanv">
+        </div>
+    </section>
+
+    <section class="modal fade" id="modalPelangganTersimpan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content borad-12">
+                <div class="my-bg p-2.5 text-white d-flex justify-content-between align-items-center">
+                    <p class="fw-bold mb-0" style="font-size: 13px;">Pelanggan Tersimpan</p>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2.5 bg-white" id="listPelangganTersimpanBody">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        const loadAwal = ``;
+        const loads = `<div class="d-flex justify-content-center py-4 align-items-center"><div class="ping"></div></div>`;
+        const noSalah = ``;
+        const produkNone = `<div class="text-center animate__animated animate__fadeIn"><img src="https://uki.my.id/assets/images/produk-none.webp" class="w-100 borad-10 shadow-sm"><p class="mt-2 fw-semibold text-secondary" style="font-size: 12px;">Produk tidak ditemukan...</p></div>`;
+
+        const daftarProdukTerlaris = ["3697339", "3697329", "3697355", "3697353", "3697847", "3697852", "3697750", "3697794", "3697440", "3697446", "3697863", "3697873", "3697888", "3697926", "3697428", "3697771", "3697868", "3697892"];
+        const daftarProdukGangguan = [];
+
+        let dataProduk = null;
+        let dataDesc = null;
+        let urutanProduk = "Termurah";
+        let currentCatData = [];
+        let currentOperatorKey = "";
+        let isFilterOpen = true;
+
+        function toggleFilterMenu() {
+            if (isFilterOpen) {
+                $("#collapseFilterBody").slideUp(150);
+                $("#textToggleBtn").text("Tampilkan Menu");
+                isFilterOpen = false;
+            } else {
+                $("#collapseFilterBody").slideDown(150);
+                $("#textToggleBtn").text("Sembunyikan Menu");
+                isFilterOpen = true;
+            }
+        }
+
+        function bersihkanDeskripsi(text) {
+            if (!text) return "-";
+            let temp = document.createElement("div");
+            let formatText = text.replace(/<br\s*[\/]?>/gi, '\n')
+                                 .replace(/<\/p>/gi, '\n')
+                                 .replace(/&lt;br\s*[\/]?-&gt;/gi, '\n');
+            temp.innerHTML = formatText;
+            let hasilText = temp.textContent || temp.innerText || "";
+            return hasilText.trim();
+        }
+
+        $("#imgContact").attr("src", iconPilihan[0].contact);
+        $("#imgScan").attr("src", iconPilihan[0].scan);
+        $("#imgSavedContacts").attr("src", iconPilihan[0].contact);
+
+        function getContact() { window.location.href = urlToko + "/ambil_kontak"; }
+        function getScan() { window.location.href = urlToko + "/scan"; }
+
+        $("#chkSimpanPelanggan").on("change", function () {
+            if ($(this).is(":checked")) { $("#boxInputNama").removeClass("d-none"); }
+            else { $("#boxInputNama").addClass("d-none"); }
+        });
+
+        function simpanDataPelangganKeLocal(nomorHp, namaPelanggan) {
+            if (!nomorHp || nomorHp.length < 5) return;
+            let listSimpan = JSON.parse(localStorage.getItem("payfazz_pelanggan") || "[]");
+            let indexCari = listSimpan.findIndex(item => item.nomor === nomorHp);
+            if (indexCari !== -1) { listSimpan[indexCari].nama = namaPelanggan; }
+            else { listSimpan.push({ nomor: nomorHp, nama: namaPelanggan }); }
+            localStorage.setItem("payfazz_pelanggan", JSON.stringify(listSimpan));
+        }
+
+        function hapusPelangganTersimpan(nomorHp) {
+            let listSimpan = JSON.parse(localStorage.getItem("payfazz_pelanggan") || "[]");
+            listSimpan = listSimpan.filter(item => item.nomor !== nomorHp);
+            localStorage.setItem("payfazz_pelanggan", JSON.stringify(listSimpan));
+            openSavedContactsModal();
+        }
+
+        function openSavedContactsModal() {
+            let listSimpan = JSON.parse(localStorage.getItem("payfazz_pelanggan") || "[]");
+            let htmlList = "";
+            if (listSimpan.length === 0) {
+                htmlList = `<p class="text-center text-secondary py-3" style="font-size: 12px;">Belum ada pelanggan tersimpan.</p>`;
+            } else {
+                $.each(listSimpan, function (i, item) {
+                    htmlList += `
+                        <div class="d-flex justify-content-between align-items-center p-2 mb-1.5 border borad-8 bg-light">
+                            <div style="cursor: pointer; flex-grow: 1;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">
+                                <p class="fw-bold text-dark" style="font-size: 12px;">${item.nama ? item.nama : 'Tanpa Nama'}</p>
+                                <p class="text-secondary" style="font-size: 11px;">${item.nomor}</p>
+                            </div>
+                            <div class="d-flex gap-1.5 align-items-center">
+                                <span class="badge bg-primary px-2 py-1" style="font-size: 10px; cursor: pointer;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">Pilih</span>
+                                <button class="btn btn-sm btn-outline-danger py-0 px-1.5" onclick="hapusPelangganTersimpan('${item.nomor}')"><i class="fa-solid fa-trash-can" style="font-size: 10px;"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            $("#listPelangganTersimpanBody").html(htmlList);
+            var myModal = new bootstrap.Modal(document.getElementById('modalPelangganTersimpan'));
+            myModal.show();
+        }
+
+        function pilihPelangganTersimpan(nomor, nama) {
+            $("#nomoId").val(nomor);
+            if (nama && nama !== "null" && nama !== "") {
+                $("#chkSimpanPelanggan").prop("checked", true);
+                $("#boxInputNama").removeClass("d-none");
+                $("#namaPelangganInput").val(nama);
+            }
+            cekInputan(2);
+            var modalEl = document.getElementById('modalPelangganTersimpan');
+            var modalObj = bootstrap.Modal.getInstance(modalEl);
+            modalObj.hide();
+        }
+
+        function lanjutKeFullLayar() {
+            var noHp = $("#nomoId").val();
+            var isSimpan = $("#chkSimpanPelanggan").is(":checked");
+            var namaPlg = $("#namaPelangganInput").val();
+
+            if (isSimpan && namaPlg.trim() !== "") {
+                simpanDataPelangganKeLocal(noHp, namaPlg);
+            }
+
+            $("#displayNomorAktif").html(noHp + (namaPlg ? " (" + namaPlg + ")" : ""));
+            $("#sectionInputPage").addClass("d-none");
+            $("#boxPilihan").removeClass("d-none");
+
+            tarikSemuaDataLangsung();
+        }
+
+        function kembaliKeInputNomor() {
+            $("#boxPilihan").addClass("d-none");
+            $("#sectionInputPage").removeClass("d-none");
+        }
+
+        async function tarikSemuaDataLangsung() {
+            if (!currentCatData || currentCatData.length === 0) return;
+            $("#dataProduk").html(loads);
+
+            let promises = currentCatData.map(async (v) => {
+                try {
+                    let url = `https://openapi.bukaolshop.net/v1/app/produk?token=${token}&id_kategori=${v.id_kategori}&total_data=${data_page}`;
+                    let response = await fetch(url);
+                    let res = await response.json();
+                    if (res && res.data && res.data.length > 0) return res.data;
+                } catch (e) {}
+                return [];
+            });
+
+            let results = await Promise.all(promises);
+            let gabunganProduk = results.flat();
+
+            if (gabunganProduk.length > 0) {
+                let uniqueProduk = [];
+                gabunganProduk.forEach(p => {
+                    if (!uniqueProduk.some(item => item.id_produk === p.id_produk)) uniqueProduk.push(p);
+                });
+                dataProduk = uniqueProduk;
+                dataDesc = currentCatData[0].desc;
+                resGetData(dataProduk, dataDesc);
+            } else {
+                resGetData(null, "");
+            }
+        }
+
+        function resGetData(data, desc) {
+            if (data == null || data.length === 0) {
+                $("#dataProduk").html(produkNone);
+            } else {
+                $("#dataProduk").html(`<div class="animate__animated animate__fadeIn d-grid-1" id="isiProduk"></div>`);
+                loopProduk(data, desc);
+            }
+        }
+
+        function loopProduk(data, desc) {
+            if (!data || data.length == 0) {
+                $("#dataProduk").html(produkNone);
+                return;
+            }
+
+            let sortedData = [...data];
+            if (urutanProduk == "Termurah") sortedData.sort((a, b) => parseFloat(a.harga_produk) - parseFloat(b.harga_produk));
+            else if (urutanProduk == "Termahal") sortedData.sort((a, b) => parseFloat(b.harga_produk) - parseFloat(a.harga_produk));
+            else if (urutanProduk == "A-Z") sortedData.sort((a, b) => a.nama_produk.localeCompare(b.nama_produk));
+            else if (urutanProduk == "Z-A") sortedData.sort((a, b) => b.nama_produk.localeCompare(a.nama_produk));
+
+            sortedData.sort((a, b) => {
+                let aTerlaris = daftarProdukTerlaris.includes(String(a.id_produk)) ? -1 : 0;
+                let bTerlaris = daftarProdukTerlaris.includes(String(b.id_produk)) ? -1 : 0;
+                return aTerlaris - bTerlaris;
+            });
+
+            dataProduk = sortedData;
+            $("#isiProduk").html("");
+
+            $.each(sortedData, function (i, v) {
+                var nama_produk = v.nama_produk ? v.nama_produk : "";
+                var harga_produk = formatRupiah(v.harga_produk);
+                let hargaAsli = (v.harga_produk_asli != "0") ? `<span class="text-danger text-decoration-line-through ms-2" style="font-size: 10px;">${v.harga_produk_asli}</span>` : ``;
+
+                var isTerlaris = daftarProdukTerlaris.includes(String(v.id_produk));
+                var isGangguan = daftarProdukGangguan.includes(String(v.id_produk));
+
+                var statusBadgeHtml = "";
+                if (isGangguan) {
+                    statusBadgeHtml = `<span class="badge-gangguan-box"><i class="fa-solid fa-triangle-exclamation me-1"></i>Pulsa Reguler Gangguan</span>`;
+                } else if (isTerlaris) {
+                    statusBadgeHtml = `<span class="badge-terlaris-modern"><i class="fa-solid fa-fire me-1"></i>Pulsa Reguler Terlaris</span>`;
+                } else {
+                    statusBadgeHtml = `<span class="badge-berkualitas-modern"><i class="fa-solid fa-circle-check me-1"></i>Pulsa Reguler Detikan</span>`;
+                }
+
+                $("#isiProduk").append(`
+                <div class="bg-produk animate__animated animate__fadeIn" id="bg-prod-${i}" onclick="nextDetail('${v.id_produk}', \`${encodeURIComponent(v.deskripsi_panjang || '')}\`)" data-bs-toggle="offcanvas" data-bs-target="#detailCanv" aria-controls="detailCanv" style="cursor: pointer;">
+                    <div class="text-start">
+                        <p class="fw-bold text-dark mb-2" style="font-size: 12px; line-height: 1.35;">${nama_produk}</p>
+
+                        <div class="d-flex align-items-center justify-content-between pt-1.5 border-top border-light">
+                            <div class="product-price-box">${harga_produk} ${hargaAsli}</div>
+                            <div>
+                                ${statusBadgeHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `);
+            });
+        }
+
+        function nextDetail(idProduk, encodedDesk) {
+            var v = dataProduk.find(item => String(item.id_produk) === String(idProduk));
+            if (!v) return;
+
+            var nama_produk = v.nama_produk ? v.nama_produk : "";
+            var harga_produk = formatRupiah(v.harga_produk);
+            var no = $("#nomoId").val();
+            let nomor = (no == "") ? `<span class="text-danger">Masukkan nomor dahulu...</span>` : no;
+
+            let rawDesk = decodeURIComponent(encodedDesk);
+            let cleanDesk = bersihkanDeskripsi(rawDesk);
+
+            let btn = (no != "") ? `
+            <div class="row g-1.5">
+                <div class="col-12">
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')" style="cursor: pointer;">
+                        <p class="text-white fw-bold" style="font-size: 12px;"><i class="fa-solid fa-coins me-1"></i> Bayar Pakai MEC</p>
+                    </div>
+                </div>
+            </div>` : ``;
+
+            $("#bodyCanv").html(`
+                <div class="text-start">
+                    <p class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.3;">${nama_produk}</p>
+                </div>
+                <div class="p-2 mt-2 mb-2 borad-8" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
+                    <p class="fw-semibold text-secondary" style="font-size: 10px;">Deskripsi Produk :</p>
+                    <div class="mt-1">
+                        <p class="text-dark" style="font-size: 11px; white-space: pre-line; line-height: 1.35;">${cleanDesk}</p>
+                    </div>
+                </div>
+
+                <div class="bg-light p-2.5 borad-8 mb-2 border">
+                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
+                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-phone-volume me-1 text-primary"></i> Nomor Tujuan :</span>
+                        <span class="fw-bold text-dark font-monospace">${nomor}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12px;">
+                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-tag me-1 text-success"></i> Harga Produk :</span>
+                        <span class="fw-bold f-14 text-success">${harga_produk}</span>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    ${btn}
+                    <div class="mt-1.5">
+                        <div class="w-100 bg-light border p-2 borad-8 text-center shadow-sm" data-bs-dismiss="offcanvas" aria-label="Close" style="cursor: pointer;">
+                            <p class="text-secondary fw-semibold" style="font-size: 12px;">Kembali</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        function getBayarMEC(idProduk, encodedNamaProduk, hargaProduk) {
+            var no = $("#nomoId").val().trim();
+            var namaProduk = decodeURIComponent(encodedNamaProduk);
+            var hargaAngka = parseFloat(hargaProduk) || 0;
+
+            const params = new URLSearchParams({
+                id_produk: String(idProduk),
+                produk: namaProduk,
+                harga: String(hargaAngka),
+                tujuan: no
+            });
+
+            window.location.href = "index.html?" + params.toString();
+        }
+
+        $("#search").on("input", function () {
+            var value = $(this).val().toLowerCase();
+            $("#isiProduk .bg-produk").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+
+        let noX, noY, opera;
+
+        function clearData() {
+            var data = $("#dataProduk").html();
+            if (data != loadAwal) { $("#dataProduk").html(loadAwal); }
+            $("#boxPilihan").addClass("d-none");
+            $("#boxBtnLanjut").addClass("d-none");
+            $("#textTop").html("");
+            $("#imgTop").attr("src", iconPilihan[0].signal);
+            $("#imgTop").addClass("my-bg p-1 text-white");
+            noX = ""; opera = "";
+            currentCatData = [];
+            currentOperatorKey = "";
+        }
+
+        function cekStr(a) {
+            let b;
+            if (a.substr(0, 2) == "62") { b = "0" + a.substr(2, 20); return b; }
+            else if (a.substr(0, 3) == "+62") { b = "0" + a.substr(3, 20); return b; }
+            else { return a; }
+        }
+
+        function cekNomorUlang(x, y) {
+            if (y >= "085154" && y <= "085180") {
+                loadOperator("BYU");
+            } else if (['0811','0812','0813','0821','0822','0852','0853','0823','0851'].includes(x)) {
+                loadOperator("TSEL");
+            } else if (['0814','0815','0816','0855','0856','0857','0858'].includes(x)) {
+                loadOperator("ISAT");
+            } else if (['0818','0817','0819','0859','0877','0878'].includes(x)) {
+                loadOperator("XL");
+            } else if (['0838','0831','0832','0833'].includes(x)) {
+                loadOperator("AXIS");
+            } else if (['0895','0896','0897','0898','0899'].includes(x)) {
+                loadOperator("THREE");
+            } else if (['0881','0882','0883','0884','0885','0886','0887','0888','0889'].includes(x)) {
+                loadOperator("SFREN");
+            } else {
+                loadOperator("SALAH");
+            }
+        }
+
+        function loadOperator(nama) {
+            if (opera != nama) {
+                if (nama == "SALAH") {
+                    var dataSalah = $("#dataProduk").html();
+                    $("#textTop").html("");
+                    $("#imgTop").attr("src", iconPilihan[0].signal);
+                    $("#imgTop").addClass("my-bg p-1 text-white");
+                    $("#boxPilihan").addClass("d-none");
+                    $("#boxBtnLanjut").addClass("d-none");
+                    if (dataSalah != noSalah) { $("#dataProduk").html(noSalah); }
+                } else {
+                    var v = urlKategori[0][nama];
+                    $("#textTop").html(v.nama);
+                    $("#imgTop").attr("src", v.gambar);
+                    $("#imgTop").removeClass("my-bg p-1 text-white");
+                    $("#boxBtnLanjut").removeClass("d-none");
+                    currentCatData = v.data;
+                    currentOperatorKey = nama;
+                }
+                opera = nama;
+            }
+        }
+
+        $("#nomoId").on("input", function () {
+            var val = $("#nomoId").val();
+            if (val.length <= 3) {
+                clearData();
+                noX = ''; noY = '';
+            } else if (val.length >= 6) {
+                cekInputan(1);
+            }
+        });
+
+        function cekInputan(type) {
+            var val = $("#nomoId").val();
+            var cleanVal = val.replace(/[^\d]/g, '');
+            var finalVal = cekStr(cleanVal);
+            $('#nomoId').val(finalVal);
+            var no4 = cekStr(cleanVal).substr(0, 4);
+            var no6 = cekStr(cleanVal).substr(0, 6);
+            if (type == 1) {
+                if (no4.length == 4 && noX != no4 || no6.length == 6 && noY != no6) {
+                    noX = no4;
+                    noY = no6;
+                }
+                cekNomorUlang(noX, noY);
+            } else if (no4.length == 4 && noX != no4 || no6.length == 6 && noY != no6) {
+                noX = no4;
+                noY = no6;
+                cekNomorUlang(noX, noY);
+            }
+        }
+
+        function rubahData(nama) {
+            $(".dropdown-item").removeClass("my-color");
+            $("#pil-" + nama).addClass("my-color");
+            $("#namaPil").html(nama);
+            urutanProduk = nama;
+            if (dataProduk != null) loopProduk(dataProduk, dataDesc);
+        }
+
+        function formatRupiah(angka) {
+            var formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+            return formatter.format(angka).replace(/IDR/g, "").trim();
+        }
+
+        clearData();
+    </script>
+</body>
+
+</html>
