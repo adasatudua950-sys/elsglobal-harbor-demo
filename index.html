@@ -894,7 +894,7 @@
         </div>
 
         <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Konfirmasi Transfer &amp; Kirim ke Admin
+          Konfirmasi &amp; Proses Pesanan MEC
         </button>
 
         <div id="receiptBox" class="receipt"></div>
@@ -1109,8 +1109,8 @@
       document.getElementById("tabWeb3").classList.toggle("active", method === "web3");
       document.getElementById("mepassQrPanel").style.display = method === "mepass" ? "block" : "none";
       document.getElementById("payBtn").textContent = method === "mepass"
-        ? "Konfirmasi Transfer & Kirim ke Admin"
-        : "Proses Checkout Web3 Wallet";
+        ? "Konfirmasi & Proses Pesanan MEC"
+        : "Proses Pembayaran & Checkout MEC";
     }
 
     async function copyMerchantAddress() {
@@ -1358,7 +1358,7 @@
 
       const statusTitle = isCompleted
         ? "✓ ORDER SELESAI & PRODUK DIGITAL TERKIRIM"
-        : "⏳ Pesanan Masuk ke Google Sheets — Menunggu Proses Admin";
+        : "⏳ Memverifikasi Transaksi & Memproses Pesanan";
       const titleColor = isCompleted ? "#6ee7b7" : "#fde68a";
 
       const explorerLinkHtml = (!ctx.txHash.startsWith("SIM-") && ctx.explorerUrl)
@@ -1367,7 +1367,7 @@
 
       const tokenBlockHtml = isCompleted
         ? `<div class="token-highlight"><strong>Kode Token / SN Pengisian:</strong><br/><code style="font-size:13px; color:#6ee7b7;">${escapeHtml(kodeToken || "BERHASIL DIPROSES")}</code></div>`
-        : `<div class="note" style="margin-top:8px; color:#fde68a;">Status otomatis dicek setiap 5 detik. Begitu admin ubah kolom <strong>Status</strong> di Google Sheets menjadi <strong>SELESAI</strong>, layar ini otomatis ter-update.</div>`;
+        : `<div class="note" style="margin-top:8px; color:#fde68a;">Pesanan tercatat otomatis ke sistem dan status dicek berkala setiap 5 detik. Begitu status berubah menjadi <strong>SELESAI</strong>, bukti &amp; kode token/SN tampil otomatis di layar ini.</div>`;
 
       receiptBox.innerHTML = `
         <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
