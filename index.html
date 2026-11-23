@@ -698,13 +698,16 @@
       color: var(--muted);
     }
 
-    .addr-row {
+    .addr-row, .hash-row {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       gap: 6px;
+      min-width: 0;
+    }
+
+    .addr-row {
       margin-top: 7px;
       margin-bottom: 9px;
-      min-width: 0;
     }
 
     .addr-code {
@@ -719,10 +722,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+
+    .hash-row input {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 12px;
+      padding: 8px 10px;
     }
 
     .btn-copy {
-      padding: 7px 11px;
+      min-width: 68px;
+      padding: 7px 12px;
       border-radius: var(--radius-sm);
       background: linear-gradient(90deg, rgba(108, 124, 255, 0.25), rgba(29, 211, 248, 0.22));
       border: 1px solid rgba(29, 211, 248, 0.45);
@@ -730,6 +743,10 @@
       font-size: 11px;
       white-space: nowrap;
       flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     .btn-copy:hover {
@@ -1253,7 +1270,7 @@
             <strong id="sumBaseIdr">Rp45.500</strong>
           </div>
           <div class="summary-row">
-            <span>Harga MEC (<span id="sumMecDate">24 Nov 2026</span>)</span>
+            <span>Harga MEC Hari Ini (<span id="sumMecDate">24 Nov 2026</span>)</span>
             <strong id="sumMecUsd">USD 9.91</strong>
           </div>
           <div class="summary-row">
@@ -1294,7 +1311,10 @@
                   <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
                   <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
                 </div>
-                <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" style="font-size: 12px; padding: 8px 10px;" />
+                <div class="hash-row">
+                  <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" />
+                  <button type="button" id="pasteHashBtn" class="btn-copy" onclick="pasteTxHash()">Tempel</button>
+                </div>
               </div>
             </div>
           </div>
@@ -1721,6 +1741,44 @@
       } catch (e) {
         btn.textContent = "Salin";
       }
+    }
+
+    async function pasteTxHash() {
+      const inputEl = document.getElementById("manualTxHash");
+      const btn = document.getElementById("pasteHashBtn");
+      if (!inputEl) return;
+
+      try {
+        if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
+          const text = await navigator.clipboard.readText();
+          if (text && text.trim()) {
+            inputEl.value = text.trim();
+            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+            if (btn) {
+              btn.textContent = "Tertempel!";
+              setTimeout(() => { btn.textContent = "Tempel"; }, 1800);
+            }
+            return;
+          }
+        }
+      } catch (e) {}
+
+      inputEl.focus();
+      try {
+        if (document.execCommand("paste")) {
+          if (btn) {
+            btn.textContent = "Tertempel!";
+            setTimeout(() => { btn.textContent = "Tempel"; }, 1800);
+          }
+          return;
+        }
+      } catch (e) {}
+
+      showElsAlert(
+        "Tempel Tx Hash Secara Manual",
+        "Browser membatasi akses clipboard otomatis. Silakan tekan dan tahan di kolom Tx Hash lalu pilih <strong>Tempel</strong> (atau tekan <strong>Ctrl+V / Cmd+V</strong>).",
+        { type: "info", okLabel: "Siap" }
+      );
     }
 
     async function copyTokenValue(tokenText, btnEl) {
