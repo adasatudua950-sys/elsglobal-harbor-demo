@@ -890,7 +890,7 @@
       white-space: nowrap;
     }
 
-    /* MODAL POP-UP KUSTOM ALA ELSGLOBAL */
+    /* MODAL POP-UP KUSTOM ALA ELSGLOBAL (DISESUAIKAN) */
     @keyframes modalPopIn {
       0% { opacity: 0; transform: translateY(10px) scale(0.96); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -903,9 +903,10 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 14px;
       background: rgba(4, 7, 13, 0.78);
       backdrop-filter: blur(7px);
+      overflow-y: auto;
     }
 
     .els-modal-backdrop.show {
@@ -915,10 +916,12 @@
     .els-modal-card {
       width: 100%;
       max-width: 420px;
+      max-height: calc(100dvh - 28px);
+      overflow-y: auto;
       background: linear-gradient(180deg, rgba(21, 30, 51, 0.98), rgba(10, 15, 27, 0.99));
       border: 1px solid rgba(29, 211, 248, 0.36);
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(108, 124, 255, 0.22);
       animation: modalPopIn 0.18s ease-out;
     }
@@ -963,8 +966,8 @@
     }
 
     .els-modal-close {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
       background: rgba(21, 30, 51, 0.9);
       border: 1px solid var(--border);
@@ -982,18 +985,20 @@
     }
 
     .els-modal-title {
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 800;
       color: var(--text);
       margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
+      overflow-wrap: anywhere;
     }
 
     .els-modal-title i {
       color: var(--warning);
       font-size: 16px;
+      flex-shrink: 0;
     }
 
     .els-modal-body {
@@ -1006,7 +1011,7 @@
 
     .els-modal-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: flex-end;
       flex-wrap: wrap;
     }
@@ -1018,6 +1023,10 @@
       border: 1px solid rgba(29, 211, 248, 0.35);
       color: var(--accent);
       font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
     }
 
     .els-modal-btn-primary {
@@ -1028,6 +1037,13 @@
       font-size: 13px;
       font-weight: 800;
       box-shadow: 0 6px 18px rgba(29, 211, 248, 0.25);
+    }
+
+    @media (max-width: 480px) {
+      .els-modal-actions .els-modal-btn-ghost,
+      .els-modal-actions .els-modal-btn-primary {
+        flex: 1 1 auto;
+      }
     }
   </style>
 </head>
@@ -1306,8 +1322,8 @@
     </div>
   </div>
 
-  <!-- MODAL POP-UP KUSTOM ELSGLOBAL -->
-  <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitle">
+  <!-- MODAL POP-UP KUSTOM ELSGLOBAL (DISESUAIKAN) -->
+  <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitleText">
     <div class="els-modal-card" onclick="event.stopPropagation()">
       <div class="els-modal-head">
         <div class="els-modal-brand">
@@ -1355,6 +1371,7 @@
     let activePaymentMethod = "mepass";
     let statusPollTimer = null;
     let currentOrderContext = null;
+    let lastModalTrigger = null;
 
     let selectedProduct = {
       id: "pulsa-reguler",
@@ -1368,6 +1385,9 @@
       const iconEl = document.getElementById("elsModalIcon");
       const bodyEl = document.getElementById("elsModalBody");
       const actionsEl = document.getElementById("elsModalActions");
+      if (!overlay || !titleEl || !iconEl || !bodyEl || !actionsEl) return;
+
+      lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
       const type = options.type || "warning";
       const iconMap = {
@@ -1388,6 +1408,7 @@
         linkBtn.href = options.secondaryHref;
         linkBtn.className = "els-modal-btn-ghost";
         linkBtn.textContent = options.secondaryLabel;
+        linkBtn.onclick = closeElsModal;
         actionsEl.appendChild(linkBtn);
       }
 
@@ -1404,8 +1425,12 @@
 
     function closeElsModal() {
       const overlay = document.getElementById("elsModalOverlay");
-      if (overlay) {
+      if (overlay && overlay.classList.contains("show")) {
         overlay.classList.remove("show");
+        if (lastModalTrigger && typeof lastModalTrigger.focus === "function") {
+          try { lastModalTrigger.focus(); } catch (e) {}
+        }
+        lastModalTrigger = null;
       }
     }
 
