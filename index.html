@@ -309,6 +309,19 @@
       max-width: 100%;
     }
 
+    /* Jarak napas ekstra antara blok checkout dan menu Layanan Digital & PPOB */
+    #checkoutActiveArea {
+      margin-bottom: 10px;
+    }
+
+    #serviceMenuSection {
+      margin-top: 4px;
+    }
+
+    #serviceMenuSection > label {
+      margin-bottom: 10px;
+    }
+
     .hidden-ui {
       display: none !important;
     }
@@ -1434,7 +1447,7 @@
           </div>
 
           <div id="paymentMethodSection" class="field" style="margin-bottom: 10px;">
-            <label>Metode Pembayaran MEC</label>
+            <label>Metode Pembayaran MEC (Mepass Internal & Web3)</label>
             <div class="method-tabs">
               <button type="button" id="tabMepass" class="method-btn active" onclick="setPaymentMethod('mepass')">
                 ME Pass QR / Internal
@@ -1797,20 +1810,15 @@
       updateSavedTargetCaption();
     }
 
-    // Jika produk dipilih dari katalog, naikkan blok ringkasan & pembayaran ke atas menu layanan
+    // Jika produk dipilih dari katalog, naikkan blok ringkasan & pembayaran ke atas menu layanan dengan jarak napas yang jelas
     function setCheckoutPlacement(isCatalogSelected) {
-      const kasirCard = document.getElementById("kasirCard");
       const serviceSection = document.getElementById("serviceMenuSection");
       const activeArea = document.getElementById("checkoutActiveArea");
-      const customerField = document.getElementById("customerIdField");
-      if (!kasirCard || !serviceSection || !activeArea) return;
+      if (!serviceSection || !activeArea) return;
 
       if (isCatalogSelected) {
-        const anchorAfter = (customerField && customerField.classList.contains("show"))
-          ? customerField
-          : kasirCard.querySelector("h2");
-        if (anchorAfter && anchorAfter.nextElementSibling !== activeArea) {
-          anchorAfter.insertAdjacentElement("afterend", activeArea);
+        if (activeArea.nextElementSibling !== serviceSection) {
+          serviceSection.insertAdjacentElement("beforebegin", activeArea);
         }
       } else {
         if (serviceSection.nextElementSibling !== activeArea) {
