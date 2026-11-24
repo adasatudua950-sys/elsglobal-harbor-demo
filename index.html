@@ -990,7 +990,6 @@
       white-space: nowrap;
     }
 
-    /* BILAH SOSIAL MEDIA 2 BARIS (YOUTUBE PENUH DI ATAS, FB/TELE/X/WA DI BAWAH) */
     .bottom-social-bar {
       margin-top: 20px;
       padding: 12px 14px;
@@ -1298,7 +1297,7 @@
 
     <div class="grid">
       <!-- KOLOM 1 (KIRI): KASIR PPOB -->
-      <div class="card">
+      <div class="card" id="kasirCard">
         <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
         <div id="customerIdField" class="field">
@@ -1307,7 +1306,7 @@
           <div id="savedTargetCaption" class="saved-target-caption"></div>
         </div>
 
-        <div class="field">
+        <div id="serviceMenuSection" class="field">
           <label>Layanan Digital &amp; PPOB</label>
           <div class="service-grid">
             <a href="pulsa.html" class="menu-card featured">
@@ -1383,97 +1382,100 @@
           </a>
         </div>
 
-        <div id="selectedFromCatalogBanner" class="selected-banner"></div>
+        <!-- BLOK RINGKASAN & PEMBAYARAN (OTOMATIS NAIK KE ATAS SAAT PRODUK DIPILIH DARI KATALOG) -->
+        <div id="checkoutActiveArea">
+          <div id="selectedFromCatalogBanner" class="selected-banner"></div>
 
-        <div id="checkoutSummary" class="summary-box">
-          <div class="summary-row">
-            <span>Produk Dipilih:</span>
-            <strong id="sumProduct">Pulsa Reguler</strong>
-          </div>
+          <div id="checkoutSummary" class="summary-box">
+            <div class="summary-row">
+              <span>Produk Dipilih:</span>
+              <strong id="sumProduct">Pulsa Reguler</strong>
+            </div>
 
-          <div class="summary-row hidden-ui">
-            <span>Harga Produk:</span>
-            <span id="sumBaseIdr">Rp45.500</span>
-          </div>
-          <div class="summary-row hidden-ui">
-            <span>Buffer Pengaman (<span id="sumBufferLabel">6%</span>):</span>
-            <span id="sumBufferIdr">Rp2.730</span>
-          </div>
-          <div class="summary-row hidden-ui">
-            <span>Total Tagihan Efektif (Buffer 6%):</span>
-            <span id="sumEffectiveIdr">Rp48.230</span>
-          </div>
+            <div class="summary-row hidden-ui">
+              <span>Harga Produk:</span>
+              <span id="sumBaseIdr">Rp45.500</span>
+            </div>
+            <div class="summary-row hidden-ui">
+              <span>Buffer Pengaman (<span id="sumBufferLabel">6%</span>):</span>
+              <span id="sumBufferIdr">Rp2.730</span>
+            </div>
+            <div class="summary-row hidden-ui">
+              <span>Total Tagihan Efektif (Buffer 6%):</span>
+              <span id="sumEffectiveIdr">Rp48.230</span>
+            </div>
 
-          <!-- Menampilkan harga asli produk di layar, sementara buffer 6% tetap dipakai di perhitungan MEC -->
-          <div class="summary-row">
-            <span>Harga Produk (IDR):</span>
-            <strong id="sumDisplayPriceIdr">Rp45.500</strong>
-          </div>
+            <!-- Menampilkan harga asli produk di layar, sementara buffer 6% tetap dipakai di perhitungan MEC -->
+            <div class="summary-row">
+              <span>Harga Produk (IDR):</span>
+              <strong id="sumDisplayPriceIdr">Rp45.500</strong>
+            </div>
 
-          <div class="summary-row">
-            <span>Harga MEC (<span id="sumMecDate">-</span>):</span>
-            <strong id="sumMecUsd">USD 9.87</strong>
-          </div>
+            <div class="summary-row">
+              <span>Harga MEC (<span id="sumMecDate">-</span>):</span>
+              <strong id="sumMecUsd">USD 9.87</strong>
+            </div>
 
-          <div class="summary-row">
-            <span>Kurs USD–IDR Acuan:</span>
-            <span id="sumUsdIdr">Memuat...</span>
-          </div>
-          <div class="summary-row">
-            <span>Harga 1 MEC (IDR):</span>
-            <span id="sumMecIdr">-</span>
-          </div>
-          <div class="summary-row">
-            <span>Jumlah Penukaran MEC:</span>
-            <strong id="sumToken" style="color: var(--accent);">-</strong>
-          </div>
-          <div class="utility-note">
-            ✓ Harga mengikuti pembaruan real-time pasar serta pergerakan kurs yang berlaku.
-          </div>
-        </div>
-
-        <div class="field" style="margin-bottom: 10px;">
-          <label>Metode Pembayaran MEC</label>
-          <div class="method-tabs">
-            <button type="button" id="tabMepass" class="method-btn active" onclick="setPaymentMethod('mepass')">
-              ME Pass QR / Internal
-            </button>
-            <button type="button" id="tabWeb3" class="method-btn" onclick="setPaymentMethod('web3')">
-              Jalur 2 (Web3 / Lanjutan)
-            </button>
+            <div class="summary-row">
+              <span>Kurs USD–IDR Acuan:</span>
+              <span id="sumUsdIdr">Memuat...</span>
+            </div>
+            <div class="summary-row">
+              <span>Harga 1 MEC (IDR):</span>
+              <span id="sumMecIdr">-</span>
+            </div>
+            <div class="summary-row">
+              <span>Jumlah Penukaran MEC:</span>
+              <strong id="sumToken" style="color: var(--accent);">-</strong>
+            </div>
+            <div class="utility-note">
+              ✓ Harga mengikuti pembaruan real-time pasar serta pergerakan kurs yang berlaku.
+            </div>
           </div>
 
-          <div id="mepassQrPanel" class="qr-panel">
-            <div class="qr-flex">
-              <div class="qr-box">
-                <img id="merchantQrImg" alt="MEC payment address QR" />
+          <div id="paymentMethodSection" class="field" style="margin-bottom: 10px;">
+            <label>Metode Pembayaran MEC</label>
+            <div class="method-tabs">
+              <button type="button" id="tabMepass" class="method-btn active" onclick="setPaymentMethod('mepass')">
+                ME Pass QR / Internal
+              </button>
+              <button type="button" id="tabWeb3" class="method-btn" onclick="setPaymentMethod('web3')">
+                Jalur 2 (Web3 / Lanjutan)
+              </button>
+            </div>
+
+            <div id="mepassQrPanel" class="qr-panel">
+              <div class="qr-flex">
+                <div class="qr-box">
+                  <img id="merchantQrImg" alt="MEC payment address QR" />
+                </div>
+                <div class="qr-info">
+                  <strong style="color: var(--text); display: block; margin-bottom: 2px;">MEC payment address (ME Pass)</strong>
+                  <span>Kirim tepat <strong id="qrAmountLabel" style="color: var(--accent);">0.5850 MEC</strong> ke alamat merchant ElsGlobal di jaringan ME Network:</span>
+                  <div class="addr-row">
+                    <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
+                    <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
+                  </div>
+                  <div class="hash-row">
+                    <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" />
+                    <button type="button" id="pasteHashBtn" class="btn-copy" onclick="pasteTxHash()">Tempel</button>
+                  </div>
+                </div>
               </div>
-              <div class="qr-info">
-                <strong style="color: var(--text); display: block; margin-bottom: 2px;">MEC payment address (ME Pass)</strong>
-                <span>Kirim tepat <strong id="qrAmountLabel" style="color: var(--accent);">0.5850 MEC</strong> ke alamat merchant ElsGlobal di jaringan ME Network:</span>
-                <div class="addr-row">
-                  <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
-                  <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
-                </div>
-                <div class="hash-row">
-                  <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" />
-                  <button type="button" id="pasteHashBtn" class="btn-copy" onclick="pasteTxHash()">Tempel</button>
-                </div>
+            </div>
+
+            <div id="jalur2Panel" class="qr-panel" style="display: none;">
+              <strong style="color: var(--text); display: block; margin-bottom: 4px;">Jalur 2 — Konfirmasi &amp; Pemrosesan Lanjutan</strong>
+              <div class="jalur2-box">
+                Blok persiapan untuk alur <strong>Jalur 2</strong> (bisa disesuaikan saat detail alur/tautan/verifikasi finalnya sudah ditetapkan).
               </div>
             </div>
           </div>
 
-          <div id="jalur2Panel" class="qr-panel" style="display: none;">
-            <strong style="color: var(--text); display: block; margin-bottom: 4px;">Jalur 2 — Konfirmasi &amp; Pemrosesan Lanjutan</strong>
-            <div class="jalur2-box">
-              Blok persiapan untuk alur <strong>Jalur 2</strong> (bisa disesuaikan saat detail alur/tautan/verifikasi finalnya sudah ditetapkan).
-            </div>
-          </div>
+          <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
+            Konfirmasi &amp; Proses Transaksi
+          </button>
         </div>
-
-        <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Konfirmasi &amp; Proses Transaksi
-        </button>
 
         <div id="receiptBox" class="receipt"></div>
 
@@ -1795,6 +1797,28 @@
       updateSavedTargetCaption();
     }
 
+    // Jika produk dipilih dari katalog, naikkan blok ringkasan & pembayaran ke atas menu layanan
+    function setCheckoutPlacement(isCatalogSelected) {
+      const kasirCard = document.getElementById("kasirCard");
+      const serviceSection = document.getElementById("serviceMenuSection");
+      const activeArea = document.getElementById("checkoutActiveArea");
+      const customerField = document.getElementById("customerIdField");
+      if (!kasirCard || !serviceSection || !activeArea) return;
+
+      if (isCatalogSelected) {
+        const anchorAfter = (customerField && customerField.classList.contains("show"))
+          ? customerField
+          : kasirCard.querySelector("h2");
+        if (anchorAfter && anchorAfter.nextElementSibling !== activeArea) {
+          anchorAfter.insertAdjacentElement("afterend", activeArea);
+        }
+      } else {
+        if (serviceSection.nextElementSibling !== activeArea) {
+          serviceSection.insertAdjacentElement("afterend", activeArea);
+        }
+      }
+    }
+
     function enforceLockedInputs() {
       syncCustomerFieldVisibility();
 
@@ -1867,7 +1891,6 @@
         .replace(/"/g, "&quot;");
     }
 
-    // Harga asli dipakai untuk tampilan IDR; effectiveIdr (dengan buffer 6%) dipakai untuk perhitungan MEC & pengaman harga
     function calculateMecFromIdr(baseIdr, mecIdrRate, bufferRate) {
       const displayPriceIdr = Math.round(Number(baseIdr));
       const effectiveIdr = Math.round(displayPriceIdr * (1 + bufferRate));
@@ -1908,19 +1931,25 @@
       }
 
       const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
-      if (produkNama && Number.isFinite(parsedHarga) && parsedHarga > 0) {
+      const hasCatalogProduct = Boolean(produkNama && Number.isFinite(parsedHarga) && parsedHarga > 0);
+      const banner = document.getElementById("selectedFromCatalogBanner");
+
+      if (hasCatalogProduct) {
         selectedProduct = {
           id: idProduk || "catalog-item",
           name: produkNama,
           baseIdr: Math.round(parsedHarga)
         };
 
-        const banner = document.getElementById("selectedFromCatalogBanner");
         banner.innerHTML = `Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
         banner.classList.add("show");
+      } else {
+        banner.classList.remove("show");
+        banner.innerHTML = "";
       }
 
       syncCustomerFieldVisibility();
+      setCheckoutPlacement(hasCatalogProduct || Boolean(tujuan));
     }
 
     function setPaymentMethod(method) {
@@ -2348,6 +2377,8 @@
       stopStatusPolling();
       currentOrderContext = null;
       resetCustomerInputState();
+      setCheckoutPlacement(false);
+      document.getElementById("selectedFromCatalogBanner").classList.remove("show");
       document.getElementById("manualTxHash").value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
