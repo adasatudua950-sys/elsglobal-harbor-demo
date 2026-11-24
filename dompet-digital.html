@@ -91,6 +91,8 @@
         }
 
         .card-kategori.locked {
+            opacity: 0.55;
+            filter: grayscale(40%);
             cursor: not-allowed !important;
             pointer-events: none !important;
         }
@@ -470,22 +472,21 @@
         function renderDaftarKategori() {
             $("#listKategoriContainer").html("");
 
-            let rawLevelMember = $("#hiddenMemberLevel").text().trim().toLowerCase();
-            let isMemberDanaEls = rawLevelMember.includes("dana els") || rawLevelMember.includes("pengguna dana els");
-
             $.each(daftarKategoriEwallet, function (i, v) {
-                let isBebasJumlah = v.nama.toUpperCase().includes("BEBAS JUMLAH");
+                let isBebasJumlah = String(v.id_kategori) === "623267" || v.nama.toUpperCase().includes("BEBAS JUMLAH");
 
                 let cardClass = "card-kategori";
                 let clickAction = `onclick="pilihKategori('${i}', '${v.id_kategori}', \`${encodeURIComponent(v.desc || '')}\`, '${v.nama}')"`;
+                let cursorStyle = "cursor: pointer;";
 
-                if (isMemberDanaEls && isBebasJumlah) {
+                if (isBebasJumlah) {
                     cardClass += " locked";
                     clickAction = "";
+                    cursorStyle = "cursor: not-allowed;";
                 }
 
                 let itemHtml = `
-                    <div class="${cardClass}" ${clickAction} style="cursor: pointer;">
+                    <div class="${cardClass}" ${clickAction} style="${cursorStyle}">
                         <img src="${v.img}" width="36" height="36" class="rounded me-3 object-fit-cover bg-white p-0.5" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2830/2830284.png'">
                         <div style="flex-grow: 1;">
                             <div style="font-weight: 600; font-size: 13px; color: #ffffff;">${v.nama}</div>
@@ -498,6 +499,8 @@
         }
 
         function pilihKategori(i, id_kategori, encodedDesc, nama) {
+            if (String(id_kategori) === "623267" || String(nama).toUpperCase().includes("BEBAS JUMLAH")) return;
+
             currentKategoriId = id_kategori;
             currentDesc = decodeURIComponent(encodedDesc);
             currentKategoriNama = nama;
