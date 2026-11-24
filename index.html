@@ -3,125 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElsGlobal × Meta Earth — Web3 PPOB &amp; Checkout</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <title>ElsGlobal × Meta Earth — Layanan Digital &amp; Penukaran MEC</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
-      --bg: #070b14;
-      --bg-elevated: #0d1322;
-      --surface: rgba(15, 23, 42, 0.86);
-      --surface-2: rgba(23, 34, 59, 0.92);
-      --surface-3: rgba(9, 14, 26, 0.78);
+      --bg: #080c14;
+      --card: #0e1422;
+      --card-2: #151e33;
       --accent: #1dd3f8;
       --accent-2: #6c7cff;
-      --accent-glow: rgba(29, 211, 248, 0.22);
       --text: #f8fafc;
-      --text-soft: #cbd5e1;
-      --muted: #94a3b8;
-      --border: rgba(148, 163, 184, 0.16);
-      --border-accent: rgba(29, 211, 248, 0.42);
+      --muted: #9aa6c2;
+      --border: rgba(124, 145, 200, 0.18);
       --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
       --warning: #f59e0b;
-      --warning-bg: rgba(245, 158, 11, 0.12);
-      --radius-xl: 20px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --radius-sm: 9px;
-      --shadow-card: 0 14px 34px rgba(2, 6, 23, 0.45);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    code, pre, .mono {
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
 
     html, body {
       max-width: 100%;
       overflow-x: clip;
-      scroll-behavior: smooth;
     }
 
     body {
-      background:
-        radial-gradient(ellipse 80% 45% at 50% -8%, rgba(29, 211, 248, 0.15), transparent 65%),
-        radial-gradient(ellipse 55% 40% at 15% 15%, rgba(108, 124, 255, 0.16), transparent 60%),
-        radial-gradient(ellipse 50% 45% at 88% 20%, rgba(16, 185, 129, 0.08), transparent 60%),
-        var(--bg);
+      background: radial-gradient(circle at 50% -5%, rgba(29, 211, 248, 0.16), transparent 42%),
+                  radial-gradient(circle at 18% 12%, rgba(108, 124, 255, 0.16), transparent 40%),
+                  var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 24px 16px 48px;
-      line-height: 1.5;
+      padding: 24px 16px;
     }
 
     .container {
       width: 100%;
-      max-width: 920px;
+      max-width: 820px;
       margin: 0 auto;
+      overflow-x: clip;
     }
 
-    /* TOPBAR */
     .topbar {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      background: linear-gradient(145deg, rgba(22, 33, 58, 0.94), rgba(11, 17, 30, 0.96));
+      gap: 12px;
+      background: linear-gradient(180deg, rgba(21, 30, 51, 0.94), rgba(14, 20, 34, 0.98));
       border: 1px solid var(--border);
       padding: 16px 20px;
-      border-radius: var(--radius-xl);
+      border-radius: 18px;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-card);
-      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+      min-width: 0;
     }
 
     @keyframes spinLogo3D {
-      0% { transform: perspective(640px) rotateY(0deg); }
-      45% { transform: perspective(640px) rotateY(360deg); }
-      100% { transform: perspective(640px) rotateY(360deg); }
+      0% { transform: perspective(600px) rotateY(0deg); }
+      50% { transform: perspective(600px) rotateY(360deg); }
+      100% { transform: perspective(600px) rotateY(360deg); }
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       min-width: 0;
-      flex: 1 1 300px;
+      flex: 1 1 260px;
     }
 
     .logo-card {
-      width: 50px;
-      height: 50px;
-      border-radius: 15px;
+      width: 46px;
+      min-width: 46px;
+      max-width: 46px;
+      height: 46px;
+      min-height: 46px;
+      max-height: 46px;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
       padding: 2px;
       background: linear-gradient(135deg, var(--accent-2), var(--accent));
-      flex: 0 0 50px;
+      flex: 0 0 46px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      animation: spinLogo3D 16s linear infinite;
+      animation: spinLogo3D 15s linear infinite;
       transform-style: preserve-3d;
-      box-shadow: 0 6px 20px rgba(29, 211, 248, 0.25);
+      will-change: transform;
     }
 
     .logo-card img {
       width: 100%;
       height: 100%;
-      border-radius: 13px;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
       object-fit: cover;
       display: block;
-      background: var(--bg);
+      background: #080c14;
     }
 
     .brand-text {
@@ -131,49 +114,68 @@
 
     .brand h1 {
       font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.01em;
       overflow-wrap: anywhere;
     }
 
     .brand p {
       font-size: 12px;
       color: var(--muted);
-      margin-top: 2px;
       overflow-wrap: anywhere;
     }
 
     .early-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 7px;
+      gap: 5px;
+      margin-top: 6px;
       font-size: 11px;
       font-weight: 600;
       color: #6ee7b7;
-      background: var(--success-bg);
-      border: 1px solid rgba(16, 185, 129, 0.32);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
       padding: 3px 10px;
       border-radius: 999px;
       max-width: 100%;
+      overflow-wrap: anywhere;
     }
 
     .wallet-box {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 8px;
+      flex-wrap: nowrap;
       flex-shrink: 0;
       min-width: 0;
     }
 
+    @media (max-width: 640px) {
+      body { padding: 14px 10px; }
+      .topbar { padding: 14px; }
+      .brand h1 { font-size: 16px; }
+      .wallet-box { width: 100%; flex-wrap: nowrap; gap: 8px; }
+      .status-pill {
+        font-size: 11px;
+        padding: 6px 10px;
+        min-width: 0;
+        flex: 1 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .btn-secondary {
+        padding: 8px 10px;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+    }
+
     .status-pill {
       font-size: 12px;
-      font-weight: 500;
-      padding: 7px 12px;
+      padding: 6px 12px;
       border-radius: 999px;
-      background: var(--surface-3);
+      background: rgba(11, 16, 28, 0.85);
       border: 1px solid var(--border);
       color: var(--muted);
       white-space: nowrap;
@@ -182,57 +184,50 @@
     .status-pill.connected {
       color: #6ee7b7;
       border-color: rgba(16, 185, 129, 0.45);
-      background: var(--success-bg);
+      background: rgba(16, 185, 129, 0.14);
     }
 
-    /* BUTTONS & INTERACTIVE LINKS */
-    button, a.menu-card, a.mepass-reg-banner {
+    button, a.menu-card, a.mepass-reg-banner, a.contact-btn {
       cursor: pointer;
-      border: none;
       font-weight: 600;
-      transition: transform 0.14s ease, opacity 0.15s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      transition: transform 0.14s ease, opacity 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       text-decoration: none;
     }
 
-    button:active, a.menu-card:active, a.mepass-reg-banner:active {
-      transform: scale(0.985);
+    button, a.mepass-reg-banner, a.contact-btn {
+      border: none;
+    }
+
+    button:active, a.menu-card:active, a.mepass-reg-banner:active, a.contact-btn:active {
+      transform: scale(0.98);
     }
 
     .btn-secondary {
       padding: 9px 14px;
-      background: var(--surface-2);
+      background: var(--card-2);
       color: var(--text);
-      border: 1px solid var(--border-accent);
-      border-radius: var(--radius-md);
-      font-size: 12.5px;
+      border: 1px solid rgba(29, 211, 248, 0.32);
+      border-radius: 12px;
+      font-size: 13px;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .btn-secondary:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(29, 211, 248, 0.14);
     }
 
     .btn-primary {
       width: 100%;
-      padding: 14px 20px;
+      max-width: 100%;
+      padding: 14px 18px;
       background: linear-gradient(90deg, var(--accent-2), var(--accent));
-      color: #04101d;
-      font-size: 14.5px;
+      color: #050b14;
+      font-size: 15px;
       font-weight: 800;
-      margin-top: 12px;
+      margin-top: 14px;
       border-radius: 999px;
-      box-shadow: 0 10px 24px rgba(29, 211, 248, 0.24);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      filter: brightness(1.05);
-      box-shadow: 0 12px 28px rgba(29, 211, 248, 0.34);
+      box-shadow: 0 8px 24px rgba(29, 211, 248, 0.22);
     }
 
     .btn-primary:disabled {
@@ -243,124 +238,74 @@
     .btn-reset {
       width: 100%;
       padding: 10px 14px;
-      margin-top: 12px;
-      background: var(--surface-2);
+      margin-top: 10px;
+      background: var(--card-2);
       color: var(--accent);
-      border: 1px solid var(--border-accent);
+      border: 1px solid rgba(29, 211, 248, 0.35);
       font-size: 12px;
-      border-radius: var(--radius-md);
+      border-radius: 10px;
     }
 
-    .btn-reset:hover {
-      background: rgba(29, 211, 248, 0.1);
-    }
-
-    /* MAIN GRID */
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.22fr) minmax(0, 0.78fr);
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
       gap: 18px;
-      align-items: start;
+      width: 100%;
+      min-width: 0;
     }
 
-    .stack {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      min-width: 0;
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+      }
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(18, 27, 46, 0.92), rgba(11, 17, 30, 0.96));
+      background: linear-gradient(180deg, rgba(17, 25, 43, 0.94), rgba(12, 18, 31, 0.98));
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
+      border-radius: 18px;
       padding: 20px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.34);
       min-width: 0;
-      backdrop-filter: blur(10px);
+      max-width: 100%;
+      overflow-x: clip;
     }
 
-    .card-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    @media (min-width: 721px) {
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 15px 13px;
+        border-radius: 16px;
+      }
     }
 
     .card h2 {
       font-size: 15px;
-      font-weight: 700;
+      margin-bottom: 14px;
       color: var(--text);
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0;
-    }
-
-    .step-chip {
-      width: 22px;
-      height: 22px;
-      border-radius: 7px;
-      background: rgba(29, 211, 248, 0.14);
-      border: 1px solid rgba(29, 211, 248, 0.35);
-      color: var(--accent);
-      font-size: 11px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .rate-meta {
-      display: inline-flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      background: rgba(29, 211, 248, 0.11);
-      border: 1px solid rgba(29, 211, 248, 0.34);
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-
-    .live-badge::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
-    }
-
-    .sync-subbadge {
-      font-size: 10.5px;
-      color: var(--muted);
-      background: var(--surface-3);
-      border: 1px solid var(--border);
-      padding: 3px 8px;
-      border-radius: 999px;
+      min-width: 0;
     }
 
     .field {
       margin-bottom: 14px;
       min-width: 0;
+      max-width: 100%;
     }
 
-    .field:last-child {
-      margin-bottom: 0;
+    .hidden-ui {
+      display: none !important;
     }
 
     #customerIdField {
@@ -382,30 +327,29 @@
     label {
       display: block;
       font-size: 12px;
-      font-weight: 500;
       color: var(--muted);
       margin-bottom: 6px;
+      overflow-wrap: anywhere;
     }
 
     input, select {
       width: 100%;
+      max-width: 100%;
       min-width: 0;
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
+      padding: 11px 12px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--surface-2);
+      background: var(--card-2);
       color: var(--text);
-      font-size: 13.5px;
+      font-size: 14px;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     input[readonly] {
-      background: var(--surface-3);
+      background: rgba(11, 16, 28, 0.85);
       color: #93c5fd;
-      border-color: rgba(29, 211, 248, 0.22);
+      border-color: rgba(29, 211, 248, 0.25);
       cursor: not-allowed;
-      font-variant-numeric: tabular-nums;
     }
 
     input:focus, select:focus {
@@ -414,23 +358,32 @@
     }
 
     input[readonly]:focus {
-      border-color: rgba(29, 211, 248, 0.22);
+      border-color: rgba(29, 211, 248, 0.25);
       box-shadow: none;
     }
 
-    /* SERVICE CARDS */
     .service-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-bottom: 10px;
+      width: 100%;
+      min-width: 0;
     }
 
-    .menu-card {
-      background: linear-gradient(160deg, rgba(24, 35, 61, 0.92), rgba(14, 21, 38, 0.95));
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 13px;
+    @media (max-width: 480px) {
+      .service-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    a.menu-card,
+    a.menu-card.featured {
+      background: var(--card-2);
+      border: 1.5px solid #1dd3f8;
+      box-shadow: 0 0 14px rgba(29, 211, 248, 0.28), inset 0 0 8px rgba(29, 211, 248, 0.08);
+      border-radius: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -438,15 +391,11 @@
       min-width: 0;
     }
 
-    .menu-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 8px 20px rgba(29, 211, 248, 0.15);
+    a.menu-card:hover,
+    a.menu-card.featured:hover {
+      border-color: #7ee8ff;
+      box-shadow: 0 0 20px rgba(29, 211, 248, 0.48), inset 0 0 12px rgba(29, 211, 248, 0.14);
       transform: translateY(-2px);
-    }
-
-    .menu-card.featured {
-      border-color: rgba(29, 211, 248, 0.5);
-      background: linear-gradient(145deg, rgba(108, 124, 255, 0.18), rgba(29, 211, 248, 0.11));
     }
 
     .menu-top {
@@ -454,13 +403,13 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      margin-bottom: 9px;
+      margin-bottom: 8px;
     }
 
     .menu-icon {
       width: 36px;
       height: 36px;
-      border-radius: 11px;
+      border-radius: 10px;
       background: rgba(29, 211, 248, 0.14);
       border: 1px solid rgba(29, 211, 248, 0.35);
       color: var(--accent);
@@ -472,25 +421,26 @@
     }
 
     .menu-badge {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
-      background: var(--success-bg);
+      background: rgba(16, 185, 129, 0.14);
       color: #6ee7b7;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.32);
       white-space: nowrap;
     }
 
     .menu-title {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 2px;
+      line-height: 1.3;
     }
 
     .menu-sub {
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--muted);
       margin-bottom: 10px;
     }
@@ -500,8 +450,8 @@
       align-items: center;
       justify-content: space-between;
       padding-top: 8px;
-      border-top: 1px solid rgba(148, 163, 184, 0.12);
-      font-size: 11px;
+      border-top: 1px solid rgba(124, 145, 200, 0.14);
+      font-size: 10.5px;
     }
 
     .menu-ready {
@@ -514,22 +464,23 @@
       font-weight: 700;
     }
 
-    /* MEPASS REFERRAL BANNER */
     .mepass-reg-banner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 11px 13px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, rgba(108, 124, 255, 0.15), rgba(29, 211, 248, 0.11));
+      padding: 10px 12px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, rgba(108, 124, 255, 0.14), rgba(29, 211, 248, 0.11));
       border: 1px solid rgba(29, 211, 248, 0.34);
       color: var(--text);
+      min-width: 0;
     }
 
     .mepass-reg-banner:hover {
       border-color: var(--accent);
-      box-shadow: 0 6px 18px rgba(29, 211, 248, 0.14);
+      box-shadow: 0 6px 16px rgba(29, 211, 248, 0.14);
+      transform: translateY(-1px);
     }
 
     .mepass-reg-left {
@@ -540,9 +491,9 @@
     }
 
     .mepass-reg-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
       background: rgba(29, 211, 248, 0.15);
       border: 1px solid rgba(29, 211, 248, 0.38);
       color: var(--accent);
@@ -553,22 +504,27 @@
       flex-shrink: 0;
     }
 
+    .mepass-reg-text {
+      min-width: 0;
+      line-height: 1.35;
+    }
+
     .mepass-reg-title {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text);
       display: block;
     }
 
     .mepass-reg-sub {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--muted);
       display: block;
       overflow-wrap: anywhere;
     }
 
     .mepass-reg-cta {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent);
       white-space: nowrap;
@@ -578,9 +534,9 @@
     .selected-banner {
       display: none;
       margin-bottom: 12px;
-      padding: 10px 13px;
-      border-radius: var(--radius-md);
-      background: var(--success-bg);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.38);
       font-size: 12px;
       color: #a7f3d0;
@@ -590,95 +546,117 @@
       display: block;
     }
 
-    /* SUMMARY BOX */
     .summary-box {
-      background: var(--surface-3);
+      background: rgba(8, 12, 20, 0.65);
       border: 1px solid rgba(108, 124, 255, 0.25);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 12px 14px;
       font-size: 13px;
+      line-height: 1.72;
       margin-bottom: 14px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
 
     .summary-row {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      gap: 12px;
-      padding: 5px 0;
-      border-bottom: 1px dashed rgba(148, 163, 184, 0.1);
-    }
-
-    .summary-row:last-child {
-      border-bottom: none;
-      padding-top: 8px;
-      margin-top: 3px;
-      border-top: 1px solid rgba(29, 211, 248, 0.22);
-      font-size: 14px;
+      gap: 8px;
+      min-width: 0;
     }
 
     .summary-row > span:first-child {
-      color: var(--muted);
-      font-size: 12.5px;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .summary-row > :last-child {
       text-align: right;
-      font-variant-numeric: tabular-nums;
+      min-width: 0;
       overflow-wrap: anywhere;
     }
 
-    /* PAYMENT METHOD & QR */
+    .utility-note {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(124, 145, 200, 0.22);
+      font-size: 11px;
+      color: #6ee7b7;
+      line-height: 1.45;
+    }
+
     .method-tabs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 12px;
+      width: 100%;
+      min-width: 0;
     }
 
     .method-btn {
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
+      padding: 10px 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      background: var(--surface-2);
+      background: var(--card-2);
       color: var(--muted);
       font-size: 12px;
       text-align: center;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .method-btn.active {
       border-color: var(--accent);
-      background: linear-gradient(135deg, rgba(108, 124, 255, 0.2), rgba(29, 211, 248, 0.16));
+      background: linear-gradient(135deg, rgba(108, 124, 255, 0.18), rgba(29, 211, 248, 0.15));
       color: var(--text);
-      box-shadow: 0 4px 14px rgba(29, 211, 248, 0.12);
     }
 
     .qr-panel {
-      background: var(--surface-3);
+      background: rgba(8, 12, 20, 0.72);
       border: 1px solid rgba(108, 124, 255, 0.28);
-      border-radius: var(--radius-lg);
+      border-radius: 14px;
       padding: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .jalur2-box {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: rgba(21, 30, 51, 0.72);
+      border: 1px dashed rgba(29, 211, 248, 0.35);
+      font-size: 11.5px;
+      color: #cbd5e1;
+      line-height: 1.5;
     }
 
     .qr-flex {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 14px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .qr-box {
-      width: 124px;
-      height: 124px;
-      background: #060911;
+      width: 122px;
+      height: 122px;
+      background: #070a10;
       padding: 7px;
       border-radius: 14px;
       border: 1.5px solid rgba(29, 211, 248, 0.45);
+      box-shadow: 0 0 0 1px rgba(108, 124, 255, 0.25);
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       overflow: hidden;
     }
 
@@ -691,8 +669,9 @@
     }
 
     .qr-info {
-      flex: 1 1 200px;
+      flex: 1 1 180px;
       min-width: 0;
+      max-width: 100%;
       font-size: 12px;
       line-height: 1.55;
       color: var(--muted);
@@ -703,19 +682,20 @@
       align-items: stretch;
       gap: 6px;
       min-width: 0;
+      max-width: 100%;
     }
 
     .addr-row {
-      margin-top: 7px;
-      margin-bottom: 9px;
+      margin-top: 6px;
+      margin-bottom: 8px;
     }
 
     .addr-code {
       flex: 1 1 auto;
       min-width: 0;
-      background: var(--surface-2);
+      background: var(--card-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
       padding: 7px 9px;
       font-size: 11px;
       color: var(--text);
@@ -731,13 +711,14 @@
       min-width: 0;
       font-size: 12px;
       padding: 8px 10px;
+      border-radius: 10px;
     }
 
     .btn-copy {
-      min-width: 68px;
-      padding: 7px 12px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(90deg, rgba(108, 124, 255, 0.25), rgba(29, 211, 248, 0.22));
+      min-width: 64px;
+      padding: 7px 11px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(108, 124, 255, 0.24), rgba(29, 211, 248, 0.22));
       border: 1px solid rgba(29, 211, 248, 0.45);
       color: var(--accent);
       font-size: 11px;
@@ -751,19 +732,19 @@
 
     .btn-copy:hover {
       border-color: var(--accent);
-      background: rgba(29, 211, 248, 0.2);
     }
 
-    /* RECEIPT */
     .receipt {
       margin-top: 16px;
-      padding: 15px;
-      border-radius: var(--radius-lg);
-      background: var(--success-bg);
-      border: 1px solid rgba(16, 185, 129, 0.42);
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.4);
       display: none;
       font-size: 13px;
-      line-height: 1.7;
+      line-height: 1.65;
+      max-width: 100%;
+      min-width: 0;
       overflow-wrap: anywhere;
     }
 
@@ -772,8 +753,8 @@
     }
 
     .receipt.sim-mode {
-      background: var(--warning-bg);
-      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.09);
+      border-color: rgba(245, 158, 11, 0.42);
     }
 
     .receipt a {
@@ -782,11 +763,11 @@
     }
 
     .token-highlight {
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      background: rgba(16, 185, 129, 0.16);
-      border: 1px solid rgba(16, 185, 129, 0.52);
+      margin-top: 8px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.55);
       color: #ecfdf5;
       font-size: 12.5px;
     }
@@ -796,13 +777,12 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
-    /* HISTORY & LOOKUP */
     .history-box {
-      margin-top: 18px;
-      padding-top: 16px;
+      margin-top: 16px;
+      padding-top: 14px;
       border-top: 1px solid var(--border);
     }
 
@@ -810,10 +790,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-size: 12px;
-      font-weight: 600;
-      color: var(--text-soft);
+      color: var(--muted);
     }
 
     .history-clear {
@@ -824,10 +803,6 @@
       padding: 2px 4px;
     }
 
-    .history-clear:hover {
-      color: var(--text);
-    }
-
     .history-list {
       display: flex;
       flex-direction: column;
@@ -835,10 +810,10 @@
     }
 
     .history-item {
-      background: var(--surface-3);
+      background: rgba(8, 12, 20, 0.65);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 10px 12px;
+      border-radius: 11px;
+      padding: 9px 11px;
       font-size: 11.5px;
       line-height: 1.5;
     }
@@ -848,18 +823,19 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-top: 7px;
+      margin-top: 6px;
       flex-wrap: wrap;
     }
 
     .history-token-preview {
       color: #6ee7b7;
       font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       overflow-wrap: anywhere;
     }
 
     .btn-history-view {
-      padding: 5px 10px;
+      padding: 5px 9px;
       border-radius: 8px;
       background: rgba(29, 211, 248, 0.14);
       border: 1px solid rgba(29, 211, 248, 0.35);
@@ -876,7 +852,7 @@
     }
 
     .lookup-row input {
-      padding: 8px 11px;
+      padding: 8px 10px;
       font-size: 12px;
       flex: 1 1 auto;
     }
@@ -888,57 +864,187 @@
       min-height: 15px;
     }
 
-    /* RIGHT COLUMN PARAMETERS */
-    .param-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .param-grid .field-full {
-      grid-column: 1 / -1;
-    }
-
     .note {
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.58;
+      line-height: 1.55;
       margin-top: 10px;
       overflow-wrap: anywhere;
     }
 
-    .tag-poc {
+    .live-badge {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(29, 211, 248, 0.12);
+      border: 1px solid rgba(29, 211, 248, 0.36);
+      padding: 3px 9px;
+      border-radius: 999px;
+      vertical-align: middle;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+      flex: 1 1 auto;
+    }
+
+    .contact-card {
+      padding: 12px 13px;
+      border-radius: 13px;
+      background: rgba(21, 30, 51, 0.78);
+      border: 1px solid rgba(29, 211, 248, 0.24);
+    }
+
+    .contact-head {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 9px;
+    }
+
+    .contact-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .contact-sub {
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+
+    .contact-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 480px) {
+      .contact-links {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 36px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      color: var(--text);
       font-size: 11.5px;
-      color: #fde68a;
-      background: var(--warning-bg);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      padding: 9px 12px;
-      border-radius: var(--radius-md);
-      line-height: 1.5;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .contact-btn i {
+      font-size: 14px;
+    }
+
+    .contact-btn.is-wa i { color: #25D366; }
+    .contact-btn.is-tg i { color: #2AABEE; }
+    .contact-btn.is-yt i { color: #FF3B30; }
+    .contact-btn.is-fb i { color: #3B82F6; }
+
+    .contact-btn.is-wa:hover {
+      border-color: rgba(37, 211, 102, 0.65);
+      color: #6ee7b7;
+    }
+
+    .contact-btn.is-tg:hover {
+      border-color: rgba(42, 171, 238, 0.65);
+      color: #7dd3fc;
+    }
+
+    .contact-btn.is-yt:hover {
+      border-color: rgba(255, 59, 48, 0.65);
+      color: #fca5a5;
+    }
+
+    .contact-btn.is-fb:hover {
+      border-color: rgba(59, 130, 246, 0.65);
+      color: #93c5fd;
     }
 
     .community-card {
       font-size: 11.5px;
-      color: var(--text-soft);
+      color: #cbd5e1;
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.11), rgba(29, 211, 248, 0.08));
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      padding: 11px 12px;
+      border-radius: 13px;
       line-height: 1.52;
+      overflow-wrap: anywhere;
+    }
+
+    .community-heading {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+
+    .security-card {
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: rgba(21, 30, 51, 0.78);
+      border: 1px solid rgba(29, 211, 248, 0.24);
+      font-size: 11.5px;
+      line-height: 1.52;
+      color: #cbd5e1;
+    }
+
+    .security-heading {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .security-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .security-list li strong {
+      color: #fde68a;
     }
 
     .playstore-note {
-      padding: 11px 13px;
-      border-radius: var(--radius-md);
-      background: var(--surface-3);
-      border: 1px solid rgba(29, 211, 248, 0.24);
+      margin-top: auto;
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: rgba(21, 30, 51, 0.82);
+      border: 1px solid rgba(29, 211, 248, 0.26);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
       font-size: 11.5px;
-      color: var(--text-soft);
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 720px) {
+      .playstore-note {
+        margin-top: 2px;
+      }
     }
 
     .playstore-badge {
@@ -951,7 +1057,6 @@
       white-space: nowrap;
     }
 
-    /* MODAL */
     @keyframes modalPopIn {
       0% { opacity: 0; transform: translateY(10px) scale(0.96); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -964,10 +1069,9 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
-      background: rgba(3, 6, 12, 0.78);
+      padding: 18px;
+      background: rgba(4, 7, 13, 0.78);
       backdrop-filter: blur(7px);
-      overflow-y: auto;
     }
 
     .els-modal-backdrop.show {
@@ -977,13 +1081,11 @@
     .els-modal-card {
       width: 100%;
       max-width: 420px;
-      max-height: calc(100dvh - 28px);
-      overflow-y: auto;
-      background: linear-gradient(180deg, rgba(22, 32, 54, 0.98), rgba(10, 15, 27, 0.99));
-      border: 1px solid var(--border-accent);
-      border-radius: var(--radius-xl);
-      padding: 18px;
-      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.68);
+      background: linear-gradient(180deg, rgba(21, 30, 51, 0.98), rgba(10, 15, 27, 0.99));
+      border: 1px solid rgba(29, 211, 248, 0.36);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(108, 124, 255, 0.22);
       animation: modalPopIn 0.18s ease-out;
     }
 
@@ -994,7 +1096,7 @@
       gap: 10px;
       margin-bottom: 12px;
       padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(124, 145, 200, 0.16);
     }
 
     .els-modal-brand {
@@ -1009,7 +1111,7 @@
       height: 34px;
       border-radius: 10px;
       object-fit: cover;
-      border: 1px solid var(--border-accent);
+      border: 1px solid rgba(29, 211, 248, 0.45);
       flex-shrink: 0;
     }
 
@@ -1027,10 +1129,10 @@
     }
 
     .els-modal-close {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 999px;
-      background: var(--surface-2);
+      background: rgba(21, 30, 51, 0.9);
       border: 1px solid var(--border);
       color: var(--muted);
       font-size: 13px;
@@ -1046,7 +1148,7 @@
     }
 
     .els-modal-title {
-      font-size: 15.5px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--text);
       margin-bottom: 6px;
@@ -1055,16 +1157,22 @@
       gap: 8px;
     }
 
+    .els-modal-title i {
+      color: var(--warning);
+      font-size: 16px;
+    }
+
     .els-modal-body {
       font-size: 13px;
       line-height: 1.6;
-      color: var(--text-soft);
+      color: #cbd5e1;
       margin-bottom: 16px;
+      overflow-wrap: anywhere;
     }
 
     .els-modal-actions {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       justify-content: flex-end;
       flex-wrap: wrap;
     }
@@ -1072,108 +1180,47 @@
     .els-modal-btn-ghost {
       padding: 10px 14px;
       border-radius: 999px;
-      background: var(--surface-2);
-      border: 1px solid var(--border-accent);
+      background: var(--card-2);
+      border: 1px solid rgba(29, 211, 248, 0.35);
       color: var(--accent);
       font-size: 12.5px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .els-modal-btn-primary {
       padding: 10px 20px;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--accent-2), var(--accent));
-      color: #04101d;
+      color: #050b14;
       font-size: 13px;
       font-weight: 800;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 780px) {
-      .grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 14px;
-      }
-      .stack {
-        gap: 14px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 14px 10px 36px; }
-      .topbar { padding: 14px; border-radius: 16px; }
-      .brand h1 { font-size: 16px; }
-      .wallet-box {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .status-pill {
-        font-size: 11px;
-        padding: 6px 10px;
-        min-width: 0;
-        flex: 1 1 auto;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .btn-secondary {
-        padding: 8px 11px;
-        font-size: 11.5px;
-      }
-      .card {
-        padding: 15px 14px;
-        border-radius: 16px;
-      }
-      .param-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .els-modal-actions .els-modal-btn-ghost,
-      .els-modal-actions .els-modal-btn-primary {
-        flex: 1 1 auto;
-      }
-    }
-
-    @media (max-width: 460px) {
-      .service-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      box-shadow: 0 6px 18px rgba(29, 211, 248, 0.25);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- HEADER -->
-    <header class="topbar">
+    <div class="topbar">
       <div class="brand">
         <div class="logo-card">
           <img src="./logo-els.jpg" alt="Logo ELS" />
         </div>
         <div class="brand-text">
           <h1>ElsGlobal × Meta Earth</h1>
-          <p>Web3 PPOB &amp; Digital Checkout • HARBOR Hackathon 2026 (Prototype)</p>
-          <span class="early-badge"><i class="fa-solid fa-sparkles"></i> Built by Early ME Pass &amp; MEC Community • Real Utility</span>
+          <p>Layanan Digital, PPOB &amp; Penukaran MEC</p>
+          <span class="early-badge">✦ Built by Early ME Pass &amp; MEC Community • Real Utility</span>
         </div>
       </div>
 
       <div class="wallet-box">
         <span id="walletStatus" class="status-pill">Wallet Belum Terhubung</span>
-        <button id="connectBtn" class="btn-secondary" type="button" onclick="connectWallet()">
-          <i class="fa-solid fa-wallet"></i> Hubungkan Wallet
-        </button>
+        <button id="connectBtn" class="btn-secondary" type="button" onclick="connectWallet()">Hubungkan Wallet</button>
       </div>
-    </header>
+    </div>
 
-    <main class="grid">
-      <!-- KOLOM KIRI: KASIR PPOB -->
-      <section class="card">
-        <div class="card-header">
-          <h2><span class="step-chip">1</span> Kasir Digital ElsGlobal</h2>
-          <div class="rate-meta">
-            <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span>
-            <span class="sync-subbadge" id="rateSyncTime">Sinkron: menunggu...</span>
-          </div>
-        </div>
+    <div class="grid">
+      <!-- KOLOM 1 (KIRI): KASIR PPOB -->
+      <div class="card">
+        <h2>1. Kasir Digital ElsGlobal <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span></h2>
 
         <div id="customerIdField" class="field">
           <label for="customerId">Nomor HP / ID Pelanggan PLN / Nomor E-Wallet Tujuan</label>
@@ -1182,7 +1229,7 @@
         </div>
 
         <div class="field">
-          <label>Pilih Layanan Digital &amp; PPOB</label>
+          <label>Layanan Digital &amp; PPOB</label>
           <div class="service-grid">
             <a href="pulsa.html" class="menu-card featured">
               <div>
@@ -1248,7 +1295,7 @@
           <a href="https://i.mec.me/?c=dhtnecap" target="_blank" rel="noopener noreferrer" class="mepass-reg-banner">
             <div class="mepass-reg-left">
               <div class="mepass-reg-icon"><i class="fa-solid fa-user-plus"></i></div>
-              <div>
+              <div class="mepass-reg-text">
                 <span class="mepass-reg-title">Daftar Meta Earth ME Pass</span>
                 <span class="mepass-reg-sub">Belum punya akun ME Pass? Daftar lewat tautan referral resmi</span>
               </div>
@@ -1259,35 +1306,53 @@
 
         <div id="selectedFromCatalogBanner" class="selected-banner"></div>
 
-        <!-- RINGKASAN HARGA & KONVERSI MEC -->
         <div id="checkoutSummary" class="summary-box">
           <div class="summary-row">
-            <span>Produk Dipilih</span>
-            <strong id="sumProduct">PAKET DEMO (Live API)</strong>
+            <span>Produk Dipilih:</span>
+            <strong id="sumProduct">Pulsa Reguler</strong>
           </div>
-          <div class="summary-row">
-            <span>Harga Produk (IDR)</span>
-            <strong id="sumBaseIdr">Rp45.500</strong>
+
+          <div class="summary-row hidden-ui">
+            <span>Harga Produk:</span>
+            <span id="sumBaseIdr">Rp45.500</span>
           </div>
-          <div class="summary-row">
-            <span>Harga MEC (<span id="sumMecDate">24 Nov 2026</span>)</span>
-            <strong id="sumMecUsd">USD 9.91</strong>
+          <div class="summary-row hidden-ui">
+            <span>Buffer Pengaman (<span id="sumBufferLabel">6%</span>):</span>
+            <span id="sumBufferIdr">Rp2.730</span>
           </div>
+          <div class="summary-row hidden-ui">
+            <span>Total Tagihan Efektif (Buffer 6%):</span>
+            <span id="sumEffectiveIdr">Rp48.230</span>
+          </div>
+
+          <!-- Menampilkan harga asli produk di layar, sementara buffer 6% tetap dipakai di perhitungan MEC -->
           <div class="summary-row">
-            <span>Kurs USD–IDR Acuan</span>
+            <span>Harga Produk (IDR):</span>
+            <strong id="sumDisplayPriceIdr">Rp45.500</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Harga MEC (<span id="sumMecDate">-</span>):</span>
+            <strong id="sumMecUsd">USD 9.87</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Kurs USD–IDR Acuan:</span>
             <span id="sumUsdIdr">Memuat...</span>
           </div>
           <div class="summary-row">
-            <span>Estimasi Nilai 1 MEC</span>
+            <span>Harga 1 MEC (IDR):</span>
             <span id="sumMecIdr">-</span>
           </div>
           <div class="summary-row">
-            <span>Jumlah Penukaran MEC</span>
+            <span>Jumlah Penukaran MEC:</span>
             <strong id="sumToken" style="color: var(--accent);">-</strong>
+          </div>
+          <div class="utility-note">
+            ✓ Harga mengikuti pembaruan real-time pasar &amp; dapat terlihat lebih tinggi dibanding acuan dasar.
           </div>
         </div>
 
-        <!-- METODE PEMBAYARAN -->
         <div class="field" style="margin-bottom: 10px;">
           <label>Metode Pembayaran MEC</label>
           <div class="method-tabs">
@@ -1295,7 +1360,7 @@
               ME Pass QR / Internal
             </button>
             <button type="button" id="tabWeb3" class="method-btn" onclick="setPaymentMethod('web3')">
-              Direct Web3 Wallet (EVM)
+              Jalur 2 (Web3 / Lanjutan)
             </button>
           </div>
 
@@ -1306,7 +1371,7 @@
               </div>
               <div class="qr-info">
                 <strong style="color: var(--text); display: block; margin-bottom: 2px;">MEC payment address (ME Pass)</strong>
-                <span>Kirim tepat <strong id="qrAmountLabel" style="color: var(--accent);">0.2663 MEC</strong> ke alamat merchant ElsGlobal di jaringan ME Network:</span>
+                <span>Kirim tepat <strong id="qrAmountLabel" style="color: var(--accent);">0.5850 MEC</strong> ke alamat merchant ElsGlobal di jaringan ME Network:</span>
                 <div class="addr-row">
                   <code id="merchantAddrDisplay" class="addr-code">me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc</code>
                   <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
@@ -1318,18 +1383,24 @@
               </div>
             </div>
           </div>
+
+          <div id="jalur2Panel" class="qr-panel" style="display: none;">
+            <strong style="color: var(--text); display: block; margin-bottom: 4px;">Jalur 2 — Konfirmasi &amp; Pemrosesan Lanjutan</strong>
+            <div class="jalur2-box">
+              Blok persiapan untuk alur <strong>Jalur 2</strong> (bisa disesuaikan saat detail alur/tautan/verifikasi finalnya sudah ditetapkan).
+            </div>
+          </div>
         </div>
 
         <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Konfirmasi &amp; Proses Penukaran MEC
+          Konfirmasi &amp; Proses Transaksi
         </button>
 
         <div id="receiptBox" class="receipt"></div>
 
-        <!-- RIWAYAT & CEK ORDER -->
         <div class="history-box">
           <div class="history-header">
-            <span>Riwayat Checkout Demo Terbaru</span>
+            <span>Riwayat Pesanan Terbaru</span>
             <button type="button" class="history-clear" onclick="clearOrderHistory()">Bersihkan</button>
           </div>
           <div id="historyList" class="history-list">
@@ -1342,95 +1413,119 @@
           </div>
           <div id="lookupStatusMsg" class="lookup-msg"></div>
         </div>
-      </section>
+      </div>
 
-      <!-- KOLOM KANAN: PARAMETER JARINGAN, KURS & INFO EKOSISTEM -->
-      <aside class="stack">
-        <section class="card">
-          <div class="card-header">
-            <h2><span class="step-chip">2</span> Parameter Kurs &amp; Jaringan</h2>
+      <!-- KOLOM 2 (KANAN): PARAMETER JARINGAN, KURS & INFO PENDUKUNG -->
+      <div class="card">
+        <h2>2. Parameter Jaringan &amp; Kurs</h2>
+        <p class="note" style="margin-top: 0; margin-bottom: 12px;">
+          Parameter jaringan <strong>Meta Earth</strong> dikunci pada konfigurasi resmi agar tidak diubah manual oleh pengguna, sedangkan kurs <strong>USD–IDR</strong> dan nilai <strong>MEC</strong> diperbarui otomatis.
+        </p>
+
+        <div class="field">
+          <label id="mecDailyIdrLabel" for="mecDailyIdrValue">Harga MEC hari ini (<span id="mecDailyDateLabel">-</span>)</label>
+          <input id="mecDailyIdrValue" type="text" value="Memuat..." readonly aria-readonly="true" />
+        </div>
+
+        <div class="field hidden-ui">
+          <label for="merchantAddress">Alamat Wallet Merchant</label>
+          <input id="merchantAddress" type="text" value="me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field hidden-ui">
+          <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC)</label>
+          <input id="mecBaseUsd" type="text" value="USD 9.87" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field hidden-ui">
+          <label for="mecDailyStep">Kenaikan Harian MEC (USD / hari)</label>
+          <input id="mecDailyStep" type="text" value="USD 0.01" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field">
+          <label for="usdIdrOverride">Kurs USD–IDR (Live API)</label>
+          <input id="usdIdrOverride" type="text" value="Rp18.292" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field hidden-ui">
+          <label for="bufferPercent">Buffer Pengaman Harga (Tetap 6%)</label>
+          <input id="bufferPercent" type="text" value="6%" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field">
+          <label for="rpcUrl">RPC URL Mainnet</label>
+          <input id="rpcUrl" type="text" value="https://rpc-mainnet.metaearth.example" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field">
+          <label for="chainId">Chain ID Mainnet</label>
+          <input id="chainId" type="text" value="mechain-mainnet" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field">
+          <label for="explorerUrl">Block Explorer Mainnet</label>
+          <input id="explorerUrl" type="text" value="https://explorer.metaearth.example" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field">
+          <label for="symbol">Simbol Koin</label>
+          <input id="symbol" type="text" value="MEC" readonly aria-readonly="true" />
+        </div>
+
+        <div class="field hidden-ui">
+          <label for="modeSelect">Mode Eksekusi</label>
+          <select id="modeSelect">
+            <option value="auto" selected>Otomatis</option>
+          </select>
+        </div>
+
+        <div class="right-stack">
+          <div class="security-card">
+            <span class="security-heading">Keamanan &amp; Verifikasi Transaksi</span>
+            <ul class="security-list">
+              <li>Pastikan alamat merchant, nominal MEC &amp; nomor tujuan sudah benar sebelum mengirim.</li>
+              <li>Simpan <strong>Order ID</strong> dan <strong>Tx Hash</strong> untuk memantau status atau memulihkan struk.</li>
+              <li><strong>Peringatan:</strong> ElsGlobal tidak pernah meminta <em>Seed Phrase</em> atau <em>Private Key</em> Anda dengan alasan apapun.</li>
+            </ul>
           </div>
 
-          <p class="note" style="margin-top: 0; margin-bottom: 14px;">
-            Kurs <strong>USD–IDR</strong> ditarik otomatis secara berkala dengan cadangan lokal dan dikunci agar tidak diubah pengguna (beberapa API gratis bisa baru memperbarui kurs harian/berkala, jadi tunggu sinkronisasi berikutnya jika belum bergeser). Harga <strong>MEC</strong> naik harian (+USD 0.01/hari sejak 20 Nov 2026 = USD 9.87) pada jaringan <strong>Meta Earth</strong>, dengan buffer <strong>6%</strong> untuk fluktuasi kurs &amp; estimasi <em>gas fee</em> MEC (~2%).
-          </p>
-
-          <div class="param-grid">
-            <div class="field field-full">
-              <label for="merchantAddress">Alamat Wallet Merchant (ME Pass / EVM)</label>
-              <input id="merchantAddress" type="text" value="me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc" placeholder="Masukkan alamat ME Pass atau 0x..." />
-            </div>
-
-            <div class="field">
-              <label for="mecBaseUsd">Harga Dasar MEC</label>
-              <input id="mecBaseUsd" type="text" value="USD 9.87" readonly aria-readonly="true" />
-            </div>
-
-            <div class="field">
-              <label for="mecDailyStep">Kenaikan Harian MEC</label>
-              <input id="mecDailyStep" type="text" value="USD 0.01" readonly aria-readonly="true" />
-            </div>
-
-            <div class="field">
-              <label for="usdIdrOverride">Kurs USD–IDR (Live)</label>
-              <input id="usdIdrOverride" type="text" value="Memuat..." readonly aria-readonly="true" />
-            </div>
-
-            <div class="field">
-              <label for="bufferPercent">Buffer Harga (6%)</label>
-              <input id="bufferPercent" type="text" value="6%" readonly aria-readonly="true" />
-            </div>
-
-            <div class="field field-full">
-              <label for="rpcUrl">RPC URL (Meta Earth Testnet)</label>
-              <input id="rpcUrl" type="text" value="https://beta-hub-26657.explorer-testnet.me" placeholder="https://..." />
-            </div>
-
-            <div class="field">
-              <label for="chainId">Chain ID</label>
-              <input id="chainId" type="text" value="mechain_400-1" placeholder="mechain_400-1 atau 0x141f" />
-            </div>
-
-            <div class="field">
-              <label for="symbol">Simbol Koin</label>
-              <input id="symbol" type="text" value="MEC" placeholder="Contoh: MEC" />
-            </div>
-
-            <div class="field field-full">
-              <label for="explorerUrl">Block Explorer (Opsional)</label>
-              <input id="explorerUrl" type="text" value="https://www.explorer-testnet.me/" placeholder="https://explorer..." />
-            </div>
-
-            <div class="field field-full">
-              <label for="modeSelect">Mode Eksekusi Prototipe</label>
-              <select id="modeSelect">
-                <option value="auto">Otomatis (Wallet Web3 &amp; Pemrosesan Pesanan)</option>
-                <option value="simulation">Uji Coba Alur (Presentasi &amp; Evaluasi Hackathon)</option>
-              </select>
-            </div>
-          </div>
-        </section>
-
-        <section class="card" style="display: flex; flex-direction: column; gap: 10px;">
           <div class="community-card">
-            <strong>Komitmen Ekosistem Jangka Panjang:</strong> Dikembangkan dari operasional nyata aplikasi &amp; layanan PPOB ElsGlobal serta komunitas pengguna awal ME Pass / pemegang MEC untuk menghadirkan pembayaran utilitas nyata sehari-hari di jaringan Meta Earth.
+            <span class="community-heading">Komitmen Ekosistem Jangka Panjang</span>
+            Dikembangkan oleh ElsGlobal dari operasional nyata layanan &amp; PPOB ElsGlobal serta komunitas pengguna ME Pass / pemegang MEC untuk utilitas harian di jaringan Meta Earth.
           </div>
 
-          <div class="tag-poc">
-            <strong>Catatan Prototipe HARBOR Hackathon:</strong> Pesanan masuk ke antrean pemrosesan merchant &amp; layar pembeli memantau pembaruan status SELESAI / Kode Token secara real-time.
+          <div class="contact-card">
+            <div class="contact-head">
+              <span class="contact-title">Kanal &amp; Kontak Resmi ElsGlobal</span>
+              <span class="contact-sub">Bantuan transaksi, konfirmasi &amp; informasi komunitas</span>
+            </div>
+            <div class="contact-links">
+              <a href="https://wa.me/6282195041517" target="_blank" rel="noopener noreferrer" class="contact-btn is-wa">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+              </a>
+              <a href="https://t.me/elsglobal" target="_blank" rel="noopener noreferrer" class="contact-btn is-tg">
+                <i class="fa-brands fa-telegram"></i> Telegram
+              </a>
+              <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="contact-btn is-yt">
+                <i class="fa-brands fa-youtube"></i> YouTube
+              </a>
+              <a href="https://www.facebook.com/Elsglobal.store" target="_blank" rel="noopener noreferrer" class="contact-btn is-fb">
+                <i class="fa-brands fa-facebook"></i> Facebook
+              </a>
+            </div>
           </div>
 
           <div class="playstore-note">
             <span>Bagian dari layanan digital &amp; PPOB <strong>ELSGLOBAL</strong> yang berjalan di Android (Play Store) dan jalur referral.</span>
             <span class="playstore-badge"><i class="fa-brands fa-google-play"></i> ELSGLOBAL di Play Store</span>
           </div>
-        </section>
-      </aside>
-    </main>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL POP-UP KUSTOM ELSGLOBAL -->
-  <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitleText">
+  <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitle">
     <div class="els-modal-card" onclick="event.stopPropagation()">
       <div class="els-modal-head">
         <div class="els-modal-brand">
@@ -1445,7 +1540,7 @@
         </button>
       </div>
       <div id="elsModalTitle" class="els-modal-title">
-        <i id="elsModalIcon" class="fa-solid fa-circle-info" style="color: #f59e0b;"></i>
+        <i id="elsModalIcon" class="fa-solid fa-circle-info"></i>
         <span id="elsModalTitleText">Informasi</span>
       </div>
       <div id="elsModalBody" class="els-modal-body"></div>
@@ -1464,38 +1559,32 @@
       return DEFAULT_SHEETS_WEBHOOK_URL;
     })();
 
+    const LOCKED_MERCHANT_ADDRESS = "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
+    const LOCKED_RPC_URL = "https://rpc-mainnet.metaearth.example";
+    const LOCKED_CHAIN_ID = "mechain-mainnet";
+    const LOCKED_EXPLORER_URL = "https://explorer.metaearth.example";
+    const LOCKED_SYMBOL = "MEC";
+
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
-    const FALLBACK_USD_IDR = 18200;
+    const FALLBACK_USD_IDR = 18292;
     const FIXED_BUFFER_RATE = 0.06;
     const FIXED_MEC_BASE_USD = 9.87;
     const FIXED_MEC_DAILY_STEP = 0.01;
-    const CACHE_KEY = "elsglobal_usd_idr_cache_v4";
+    const CACHE_KEY = "elsglobal_usd_idr_cache_v3";
     const HISTORY_KEY = "elsglobal_checkout_history_v1";
 
     let liveUsdIdr = null;
-    let usdIdrSourceLabel = "Memuat...";
-    let lastRateSyncTime = "";
+    let usdIdrSourceLabel = "Cadangan";
     let connectedAccount = null;
     let activePaymentMethod = "mepass";
     let statusPollTimer = null;
     let currentOrderContext = null;
-    let lastModalTrigger = null;
-    let isFetchingRate = false;
 
     let selectedProduct = {
-      id: "pulsa-reguler",
+      id: "paket-demo",
       name: "PAKET DEMO (Live API)",
       baseIdr: 45500
     };
-
-    function formatSyncClock(ts) {
-      if (!ts) return "menunggu...";
-      try {
-        return new Date(ts).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
-      } catch (e) {
-        return "terkini";
-      }
-    }
 
     function showElsAlert(title, message, options = {}) {
       const overlay = document.getElementById("elsModalOverlay");
@@ -1503,9 +1592,6 @@
       const iconEl = document.getElementById("elsModalIcon");
       const bodyEl = document.getElementById("elsModalBody");
       const actionsEl = document.getElementById("elsModalActions");
-      if (!overlay || !titleEl || !iconEl || !bodyEl || !actionsEl) return;
-
-      lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
       const type = options.type || "warning";
       const iconMap = {
@@ -1526,7 +1612,6 @@
         linkBtn.href = options.secondaryHref;
         linkBtn.className = "els-modal-btn-ghost";
         linkBtn.textContent = options.secondaryLabel;
-        linkBtn.onclick = closeElsModal;
         actionsEl.appendChild(linkBtn);
       }
 
@@ -1543,12 +1628,8 @@
 
     function closeElsModal() {
       const overlay = document.getElementById("elsModalOverlay");
-      if (overlay && overlay.classList.contains("show")) {
+      if (overlay) {
         overlay.classList.remove("show");
-        if (lastModalTrigger && typeof lastModalTrigger.focus === "function") {
-          try { lastModalTrigger.focus(); } catch (e) {}
-        }
-        lastModalTrigger = null;
       }
     }
 
@@ -1569,6 +1650,16 @@
         return { rate: liveUsdIdr, source: usdIdrSourceLabel };
       }
       return { rate: FALLBACK_USD_IDR, source: "Fallback" };
+    }
+
+    function getOrderHistoryList() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list : [];
+      } catch (e) {
+        return [];
+      }
     }
 
     function getLatestSavedTargetInfo() {
@@ -1617,14 +1708,25 @@
     function enforceLockedInputs() {
       syncCustomerFieldVisibility();
 
-      const bufferInput = document.getElementById("bufferPercent");
-      if (bufferInput) { bufferInput.type = "text"; bufferInput.value = "6%"; bufferInput.readOnly = true; }
+      const lockedMap = {
+        merchantAddress: LOCKED_MERCHANT_ADDRESS,
+        rpcUrl: LOCKED_RPC_URL,
+        chainId: LOCKED_CHAIN_ID,
+        explorerUrl: LOCKED_EXPLORER_URL,
+        symbol: LOCKED_SYMBOL,
+        bufferPercent: "6%",
+        mecBaseUsd: `USD ${FIXED_MEC_BASE_USD.toFixed(2)}`,
+        mecDailyStep: `USD ${FIXED_MEC_DAILY_STEP.toFixed(2)}`
+      };
 
-      const baseInput = document.getElementById("mecBaseUsd");
-      if (baseInput) { baseInput.type = "text"; baseInput.value = `USD ${FIXED_MEC_BASE_USD.toFixed(2)}`; baseInput.readOnly = true; }
-
-      const stepInput = document.getElementById("mecDailyStep");
-      if (stepInput) { stepInput.type = "text"; stepInput.value = `USD ${FIXED_MEC_DAILY_STEP.toFixed(2)}`; stepInput.readOnly = true; }
+      Object.entries(lockedMap).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.type = "text";
+          el.value = val;
+          el.readOnly = true;
+        }
+      });
 
       const rateInput = document.getElementById("usdIdrOverride");
       if (rateInput) {
@@ -1633,16 +1735,23 @@
         rateInput.value = formatIdr(rate);
         rateInput.readOnly = true;
       }
+
+      const mecDailyInput = document.getElementById("mecDailyIdrValue");
+      if (mecDailyInput) {
+        const { rate: usdIdr } = getActiveUsdIdr();
+        const mecIdrRate = getMecUsdPrice() * usdIdr;
+        mecDailyInput.type = "text";
+        mecDailyInput.value = formatIdr(mecIdrRate);
+        mecDailyInput.readOnly = true;
+      }
     }
 
     function getTokenSymbol() {
-      const customSymbol = document.getElementById("symbol").value.trim();
-      return customSymbol || "MEC";
+      return LOCKED_SYMBOL || "MEC";
     }
 
     function getMerchantAddress() {
-      const val = document.getElementById("merchantAddress").value.trim();
-      return val || "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
+      return LOCKED_MERCHANT_ADDRESS;
     }
 
     function getBufferRate() {
@@ -1668,12 +1777,15 @@
         .replace(/"/g, "&quot;");
     }
 
+    // Harga asli dipakai untuk tampilan IDR; effectiveIdr (dengan buffer 6%) dipakai untuk perhitungan MEC & pengaman harga
     function calculateMecFromIdr(baseIdr, mecIdrRate, bufferRate) {
-      const effectiveIdr = baseIdr * (1 + bufferRate);
+      const displayPriceIdr = Math.round(Number(baseIdr));
+      const effectiveIdr = Math.round(displayPriceIdr * (1 + bufferRate));
       const mecAmount = effectiveIdr / mecIdrRate;
       return {
-        effectiveIdr: Math.round(effectiveIdr),
-        bufferIdr: Math.round(baseIdr * bufferRate),
+        displayPriceIdr,
+        effectiveIdr,
+        bufferIdr: Math.max(0, effectiveIdr - displayPriceIdr),
         mecAmount: Number(mecAmount.toFixed(4)).toString()
       };
     }
@@ -1714,7 +1826,7 @@
         };
 
         const banner = document.getElementById("selectedFromCatalogBanner");
-        banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
+        banner.innerHTML = `Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
         banner.classList.add("show");
       }
 
@@ -1723,23 +1835,55 @@
 
     function setPaymentMethod(method) {
       activePaymentMethod = method;
-      document.getElementById("tabMepass").classList.toggle("active", method === "mepass");
-      document.getElementById("tabWeb3").classList.toggle("active", method === "web3");
-      document.getElementById("mepassQrPanel").style.display = method === "mepass" ? "block" : "none";
-      document.getElementById("payBtn").textContent = method === "mepass"
+      const isMepass = method === "mepass";
+      document.getElementById("tabMepass").classList.toggle("active", isMepass);
+      document.getElementById("tabWeb3").classList.toggle("active", !isMepass);
+      document.getElementById("mepassQrPanel").style.display = isMepass ? "block" : "none";
+      document.getElementById("jalur2Panel").style.display = !isMepass ? "block" : "none";
+      document.getElementById("payBtn").textContent = isMepass
         ? "Konfirmasi & Proses Pesanan MEC"
-        : "Proses Pembayaran & Checkout MEC";
+        : "Proses Pesanan via Jalur 2";
+    }
+
+    function fallbackCopyText(text) {
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function copyTextSafe(text) {
+      const cleanText = String(text || "");
+      if (!cleanText) return false;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(cleanText);
+          return true;
+        }
+      } catch (e) {}
+      return fallbackCopyText(cleanText);
     }
 
     async function copyMerchantAddress() {
       const addr = getMerchantAddress();
       const btn = document.getElementById("copyAddrBtn");
-      try {
-        await navigator.clipboard.writeText(addr);
-        btn.textContent = "Tersalin!";
-        setTimeout(() => { btn.textContent = "Salin"; }, 1800);
-      } catch (e) {
-        btn.textContent = "Salin";
+      const ok = await copyTextSafe(addr);
+      if (btn) {
+        const prevText = btn.textContent;
+        btn.textContent = ok ? "Tersalin!" : "Gagal Salin";
+        setTimeout(() => { btn.textContent = prevText || "Salin"; }, 1800);
       }
     }
 
@@ -1755,8 +1899,9 @@
             inputEl.value = text.trim();
             inputEl.dispatchEvent(new Event("input", { bubbles: true }));
             if (btn) {
+              const prevText = btn.textContent;
               btn.textContent = "Tertempel!";
-              setTimeout(() => { btn.textContent = "Tempel"; }, 1800);
+              setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
             }
             return;
           }
@@ -1767,8 +1912,9 @@
       try {
         if (document.execCommand("paste")) {
           if (btn) {
+            const prevText = btn.textContent;
             btn.textContent = "Tertempel!";
-            setTimeout(() => { btn.textContent = "Tempel"; }, 1800);
+            setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
           }
           return;
         }
@@ -1783,14 +1929,12 @@
 
     async function copyTokenValue(tokenText, btnEl) {
       if (!tokenText || tokenText === "-") return;
-      try {
-        await navigator.clipboard.writeText(tokenText);
-        if (btnEl) {
-          const prevText = btnEl.textContent;
-          btnEl.textContent = "Tersalin!";
-          setTimeout(() => { btnEl.textContent = prevText; }, 1800);
-        }
-      } catch (e) {}
+      const ok = await copyTextSafe(tokenText);
+      if (btnEl) {
+        const prevText = btnEl.textContent;
+        btnEl.textContent = ok ? "Tersalin!" : "Gagal Salin";
+        setTimeout(() => { btnEl.textContent = prevText; }, 1800);
+      }
     }
 
     function updateSummary() {
@@ -1802,18 +1946,24 @@
       const { rate: usdIdr, source } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
       const merchantAddr = getMerchantAddress();
-
-      const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
-
-      document.getElementById("rateSourceBadge").textContent = `USD-IDR: ${source}`;
-      document.getElementById("rateSyncTime").textContent = lastRateSyncTime ? `Sinkron: ${lastRateSyncTime}` : "Sinkron: menunggu...";
-      document.getElementById("sumProduct").textContent = selectedProduct.name;
-      document.getElementById("sumBaseIdr").textContent = formatIdr(selectedProduct.baseIdr);
-      document.getElementById("sumMecDate").textContent = new Date().toLocaleDateString("id-ID", {
+      const formattedToday = new Date().toLocaleDateString("id-ID", {
         day: "2-digit",
         month: "short",
         year: "numeric"
       });
+
+      const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
+
+      document.getElementById("rateSourceBadge").textContent = `USD-IDR: ${source}`;
+      document.getElementById("sumProduct").textContent = selectedProduct.name;
+      document.getElementById("sumBaseIdr").textContent = formatIdr(calc.displayPriceIdr);
+      document.getElementById("sumBufferLabel").textContent = "6%";
+      document.getElementById("sumBufferIdr").textContent = formatIdr(calc.bufferIdr);
+      document.getElementById("sumEffectiveIdr").textContent = formatIdr(calc.effectiveIdr);
+      document.getElementById("sumDisplayPriceIdr").textContent = formatIdr(calc.displayPriceIdr);
+      document.getElementById("sumMecDate").textContent = formattedToday;
+      document.getElementById("mecDailyDateLabel").textContent = formattedToday;
+      document.getElementById("mecDailyIdrValue").value = formatIdr(mecIdrRate);
       document.getElementById("sumMecUsd").textContent = `USD ${mecUsd.toFixed(2)}`;
       document.getElementById("sumUsdIdr").textContent = `${formatIdr(usdIdr)} (${source})`;
       document.getElementById("sumMecIdr").textContent = `≈ ${formatIdr(mecIdrRate)} / ${sym}`;
@@ -1828,9 +1978,8 @@
     async function fetchFromSource(url, parser) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 5000);
-      const bustUrl = `${url}${url.includes("?") ? "&" : "?"}_t=${Date.now()}`;
       try {
-        const res = await fetch(bustUrl, { signal: controller.signal, cache: "no-store" });
+        const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
         if (!res.ok) return null;
         const data = await res.json();
         const rate = parser(data);
@@ -1842,57 +1991,8 @@
       }
     }
 
-    async function fetchLiveUsdToIdr(forceFresh = true) {
-      if (isFetchingRate) return;
-      isFetchingRate = true;
-      document.getElementById("rateSyncTime").textContent = "Sinkron: mengecek...";
-
-      try {
-        if (!forceFresh) {
-          try {
-            const rawCache = localStorage.getItem(CACHE_KEY);
-            if (rawCache) {
-              const parsed = JSON.parse(rawCache);
-              if (parsed && typeof parsed.rate === "number" && parsed.rate > 1000 && (Date.now() - Number(parsed.updatedAt || 0)) < 5 * 60 * 1000) {
-                liveUsdIdr = parsed.rate;
-                usdIdrSourceLabel = parsed.source || "Live API";
-                lastRateSyncTime = formatSyncClock(parsed.updatedAt);
-                updateSummary();
-                return;
-              }
-            }
-          } catch (e) {}
-        }
-
-        const [erApiRate, frankfurterRate, jsDelivrRate] = await Promise.all([
-          fetchFromSource("https://open.er-api.com/v6/latest/USD", d => d?.rates?.IDR),
-          fetchFromSource("https://api.frankfurter.app/latest?from=USD&to=IDR", d => d?.rates?.IDR),
-          fetchFromSource("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json", d => d?.usd?.idr)
-        ]);
-
-        const sources = [
-          { label: "Live API", rate: erApiRate },
-          { label: "Frankfurter", rate: frankfurterRate },
-          { label: "JSDelivr", rate: jsDelivrRate }
-        ];
-
-        const validSource = sources.find(s => typeof s.rate === "number" && s.rate > 1000);
-        if (validSource) {
-          const nowTs = Date.now();
-          liveUsdIdr = validSource.rate;
-          usdIdrSourceLabel = validSource.label;
-          lastRateSyncTime = formatSyncClock(nowTs);
-          try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({
-              rate: validSource.rate,
-              source: validSource.label,
-              updatedAt: nowTs
-            }));
-          } catch (e) {}
-          updateSummary();
-          return;
-        }
-
+    async function fetchLiveUsdToIdr(forceFresh = false) {
+      if (!forceFresh) {
         try {
           const rawCache = localStorage.getItem(CACHE_KEY);
           if (rawCache) {
@@ -1900,27 +2000,44 @@
             if (parsed && typeof parsed.rate === "number" && parsed.rate > 1000) {
               liveUsdIdr = parsed.rate;
               usdIdrSourceLabel = "Cache";
-              lastRateSyncTime = formatSyncClock(parsed.updatedAt);
               updateSummary();
-              return;
             }
           }
         } catch (e) {}
+      }
 
+      const sources = [
+        {
+          label: "Live API",
+          rate: await fetchFromSource("https://open.er-api.com/v6/latest/USD", d => d?.rates?.IDR)
+        },
+        {
+          label: "Frankfurter",
+          rate: await fetchFromSource("https://api.frankfurter.app/latest?from=USD&to=IDR", d => d?.rates?.IDR)
+        }
+      ];
+
+      const validSource = sources.find(s => typeof s.rate === "number" && s.rate > 1000);
+      if (validSource) {
+        liveUsdIdr = validSource.rate;
+        usdIdrSourceLabel = validSource.label;
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            rate: validSource.rate,
+            source: validSource.label,
+            updatedAt: Date.now()
+          }));
+        } catch (e) {}
+        updateSummary();
+        return;
+      }
+
+      if (!liveUsdIdr) {
         liveUsdIdr = FALLBACK_USD_IDR;
         usdIdrSourceLabel = "Fallback";
-        lastRateSyncTime = formatSyncClock(Date.now());
-        updateSummary();
-      } finally {
-        isFetchingRate = false;
       }
+      updateSummary();
     }
-
-    ["merchantAddress", "symbol"].forEach(id => {
-      document.getElementById(id).addEventListener("input", updateSummary);
-    });
-
-    document.getElementById("usdIdrOverride").addEventListener("input", enforceLockedInputs);
 
     function toEvmHexChainId(rawChainId) {
       if (!rawChainId) return null;
@@ -1934,13 +2051,13 @@
     }
 
     async function connectWallet() {
-      const mode = document.getElementById("modeSelect").value;
       const statusEl = document.getElementById("walletStatus");
-
-      if (mode === "simulation" || !window.ethereum) {
-        connectedAccount = "0xEls...48C2";
-        statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
-        statusEl.classList.add("connected");
+      if (!window.ethereum) {
+        showElsAlert(
+          "Wallet Web3 Tidak Terdeteksi",
+          "Buka halaman ini melalui browser yang memiliki ekstensi/wallet Web3 atau gunakan jalur <strong>ME Pass QR / Internal</strong>.",
+          { type: "info", okLabel: "Mengerti" }
+        );
         return;
       }
 
@@ -1952,47 +2069,23 @@
           statusEl.textContent = `Terhubung: ${shortAddr}`;
           statusEl.classList.add("connected");
 
-          const rpcUrl = document.getElementById("rpcUrl").value.trim();
-          const rawChainId = document.getElementById("chainId").value.trim();
-          const explorerUrl = document.getElementById("explorerUrl").value.trim();
-          const sym = getTokenSymbol();
-          const hexChainId = toEvmHexChainId(rawChainId);
-
-          if (rpcUrl && hexChainId) {
+          const hexChainId = toEvmHexChainId(LOCKED_CHAIN_ID);
+          if (LOCKED_RPC_URL && hexChainId) {
             try {
-              const chainParams = {
-                chainId: hexChainId,
-                chainName: "Meta Earth Network",
-                nativeCurrency: { name: sym, symbol: sym, decimals: 18 },
-                rpcUrls: [rpcUrl]
-              };
-              if (explorerUrl) {
-                chainParams.blockExplorerUrls = [explorerUrl];
-              }
               await window.ethereum.request({
                 method: "wallet_addEthereumChain",
-                params: [chainParams]
+                params: [{
+                  chainId: hexChainId,
+                  chainName: "Meta Earth Mainnet",
+                  nativeCurrency: { name: LOCKED_SYMBOL, symbol: LOCKED_SYMBOL, decimals: 18 },
+                  rpcUrls: [LOCKED_RPC_URL],
+                  blockExplorerUrls: [LOCKED_EXPLORER_URL]
+                }]
               });
-            } catch (chainErr) {
-              console.warn("Penambahan jaringan EVM dilewati:", chainErr);
-            }
+            } catch (chainErr) {}
           }
         }
-      } catch (err) {
-        connectedAccount = "0xEls...48C2";
-        statusEl.textContent = `Wallet Uji Coba: ${connectedAccount}`;
-        statusEl.classList.add("connected");
-      }
-    }
-
-    function getOrderHistoryList() {
-      try {
-        const raw = localStorage.getItem(HISTORY_KEY);
-        const list = raw ? JSON.parse(raw) : [];
-        return Array.isArray(list) ? list : [];
-      } catch (e) {
-        return [];
-      }
+      } catch (err) {}
     }
 
     function saveOrderHistory(entry) {
@@ -2029,11 +2122,11 @@
         methodLabel: "ME Pass QR / Transfer ME Network",
         customerId: item.customerId || "-",
         productName: item.product || "Produk Digital",
-        effectiveIdr: 0,
+        displayPriceIdr: 0,
         mecAmount: (item.mecPaid || "").split(" ")[0] || "-",
         sym: (item.mecPaid || "").split(" ")[1] || getTokenSymbol(),
         merchantAddr: getMerchantAddress(),
-        explorerUrl: document.getElementById("explorerUrl").value.trim(),
+        explorerUrl: LOCKED_EXPLORER_URL,
         txHash: "-"
       };
 
@@ -2058,18 +2151,7 @@
         return;
       }
 
-      if (!isSheetsConfigured()) {
-        const localItem = getOrderHistoryList().find(x => String(x.orderId).toUpperCase() === orderId);
-        if (localItem) {
-          openHistoryReceipt(localItem.orderId);
-          msgEl.style.color = "#6ee7b7";
-          msgEl.textContent = `Data ${orderId} dipulihkan dari riwayat perangkat ini.`;
-        } else {
-          msgEl.style.color = "#fde68a";
-          msgEl.textContent = "Endpoint belum dikonfigurasi dan Order ID tidak ada di riwayat lokal.";
-        }
-        return;
-      }
+      if (!isSheetsConfigured()) return;
 
       btnEl.disabled = true;
       btnEl.textContent = "Mengecek...";
@@ -2092,11 +2174,11 @@
             methodLabel: data.metodePembayaran || existing.ctx?.methodLabel || "ME Pass QR / Transfer ME Network",
             customerId: data.nomorTujuan || existing.customerId || "-",
             productName: data.produk || existing.product || "Produk Digital",
-            effectiveIdr: Number(data.totalEfektifIdr || existing.ctx?.effectiveIdr || 0),
+            displayPriceIdr: Number(data.hargaTagihanIdr || existing.ctx?.displayPriceIdr || 0),
             mecAmount: String(data.nominalMec || existing.mecPaid || "-").replace(/\s+[A-Z0-9]+$/i, ""),
             sym: String(data.nominalMec || "").split(/\s+/)[1] || existing.ctx?.sym || getTokenSymbol(),
             merchantAddr: getMerchantAddress(),
-            explorerUrl: document.getElementById("explorerUrl").value.trim(),
+            explorerUrl: LOCKED_EXPLORER_URL,
             txHash: data.txHash || existing.ctx?.txHash || "-"
           };
 
@@ -2122,15 +2204,8 @@
           msgEl.textContent = `Order ID ${orderId} belum ditemukan atau belum berstatus SELESAI.`;
         }
       } catch (e) {
-        const localItem = getOrderHistoryList().find(x => String(x.orderId).toUpperCase() === orderId);
-        if (localItem) {
-          openHistoryReceipt(localItem.orderId);
-          msgEl.style.color = "#6ee7b7";
-          msgEl.textContent = `Koneksi terganggu, menampilkan data tersimpan untuk ${orderId}.`;
-        } else {
-          msgEl.style.color = "#fde68a";
-          msgEl.textContent = "Gagal mengambil data pesanan. Coba beberapa saat lagi.";
-        }
+        msgEl.style.color = "#fde68a";
+        msgEl.textContent = "Gagal mengambil data pesanan. Coba beberapa saat lagi.";
       } finally {
         btnEl.disabled = false;
         btnEl.textContent = "Cek / Pulihkan";
@@ -2149,7 +2224,7 @@
       container.innerHTML = list.map(item => {
         const hasToken = item.kodeToken && item.kodeToken !== "-";
         const tokenPreview = hasToken
-          ? `<span class="history-token-preview mono">Token/SN: ${escapeHtml(item.kodeToken)}</span>`
+          ? `<span class="history-token-preview">Token/SN: ${escapeHtml(item.kodeToken)}</span>`
           : `<span style="color: var(--muted); font-size: 11px;">Status: ${escapeHtml(item.statusLabel || "-")}</span>`;
 
         return `
@@ -2200,12 +2275,8 @@
         : "⏳ Memverifikasi Transaksi & Memproses Pesanan";
       const titleColor = isCompleted ? "#6ee7b7" : "#fde68a";
 
-      const effectiveIdrText = (typeof ctx.effectiveIdr === "number" && ctx.effectiveIdr > 0)
-        ? `<span>Total Efektif (Buffer 6%): <strong>${formatIdr(ctx.effectiveIdr)}</strong></span><br/>`
-        : "";
-
-      const explorerLinkHtml = (ctx.txHash && !ctx.txHash.startsWith("SIM-") && ctx.txHash !== "-" && ctx.explorerUrl)
-        ? ` • <a href="${escapeHtml(ctx.explorerUrl)}" target="_blank" rel="noopener noreferrer">Cek Explorer</a>`
+      const priceText = (typeof ctx.displayPriceIdr === "number" && ctx.displayPriceIdr > 0)
+        ? `<span>Harga Produk: <strong>${formatIdr(ctx.displayPriceIdr)}</strong></span><br/>`
         : "";
 
       const cleanToken = kodeToken && kodeToken !== "-" ? String(kodeToken).trim() : "";
@@ -2222,7 +2293,7 @@
              </div>
              <code style="font-size:13px; color:#6ee7b7; word-break:break-all;">${escapeHtml(tokenDisplay)}</code>
            </div>`
-        : `<div class="note" style="margin-top:8px; color:#fde68a;">Pesanan tercatat otomatis ke sistem dan status dicek berkala setiap 5 detik. Begitu status berubah menjadi <strong>SELESAI</strong>, bukti &amp; kode token/SN tampil otomatis di layar ini.</div>`;
+        : `<div class="note" style="margin-top:8px; color:#fde68a;">Pesanan tercatat ke sistem dan status dicek berkala setiap 5 detik.</div>`;
 
       receiptBox.innerHTML = `
         <strong style="color: ${titleColor};">${statusTitle}</strong><br/>
@@ -2230,10 +2301,10 @@
         <span>Metode: <strong>${escapeHtml(ctx.methodLabel)}</strong></span><br/>
         <span>Tujuan: <strong>${escapeHtml(ctx.customerId)}</strong></span><br/>
         <span>Produk: <strong>${escapeHtml(ctx.productName)}</strong></span><br/>
-        ${effectiveIdrText}
+        ${priceText}
         <span>Nominal Penukaran: <strong>${escapeHtml(ctx.mecAmount)} ${escapeHtml(ctx.sym)}</strong></span><br/>
         <span>Merchant Tujuan: <code style="word-break: break-all;">${escapeHtml(ctx.merchantAddr)}</code></span><br/>
-        <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(ctx.txHash)}</code>${explorerLinkHtml}</span>
+        <span>Ref Tx: <code style="word-break: break-all;">${escapeHtml(ctx.txHash)}</code></span>
         ${tokenBlockHtml}
         <button type="button" class="btn-reset" onclick="resetCheckoutForm()">Buat Pesanan Baru</button>
       `;
@@ -2316,32 +2387,17 @@
       const { rate: usdIdr } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
       const merchantAddr = getMerchantAddress();
-      const explorerUrl = document.getElementById("explorerUrl").value.trim();
       const manualTx = document.getElementById("manualTxHash").value.trim();
 
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
-      let methodLabel = "ME Pass QR / Transfer ME Network";
-      let txHash = manualTx || ("SIM-" + Array.from({ length: 14 }, () =>
+      const methodLabel = activePaymentMethod === "web3"
+        ? "Jalur 2 (Web3 / Lanjutan)"
+        : "ME Pass QR / Transfer ME Network";
+
+      const txHash = manualTx || ("TX-" + Array.from({ length: 14 }, () =>
         Math.floor(Math.random() * 16).toString(16)
       ).join("").toUpperCase());
-
-      if (activePaymentMethod === "web3") {
-        methodLabel = "Direct Web3 Wallet (EVM)";
-        if (!connectedAccount) {
-          await connectWallet();
-        }
-        if (!manualTx) {
-          txHash = "SIM-EVM-" + Array.from({ length: 12 }, () =>
-            Math.floor(Math.random() * 16).toString(16)
-          ).join("").toUpperCase();
-        }
-      } else if (!connectedAccount) {
-        const statusEl = document.getElementById("walletStatus");
-        connectedAccount = "ME-Pass-User";
-        statusEl.textContent = "Metode: ME Pass QR";
-        statusEl.classList.add("connected");
-      }
 
       const refOrderId = "ORD-" + Date.now().toString().slice(-8);
       const waktuStr = new Date().toLocaleString("id-ID", {
@@ -2354,7 +2410,7 @@
         waktu: waktuStr,
         nomorTujuan: customerId,
         produk: selectedProduct.name,
-        hargaTagihanIdr: selectedProduct.baseIdr,
+        hargaTagihanIdr: calc.displayPriceIdr,
         totalEfektifIdr: calc.effectiveIdr,
         hargaMecUsd: mecUsd,
         kursUsdIdr: Math.round(usdIdr),
@@ -2370,11 +2426,12 @@
         methodLabel,
         customerId,
         productName: selectedProduct.name,
+        displayPriceIdr: calc.displayPriceIdr,
         effectiveIdr: calc.effectiveIdr,
         mecAmount: calc.mecAmount,
         sym,
         merchantAddr,
-        explorerUrl,
+        explorerUrl: LOCKED_EXPLORER_URL,
         txHash
       };
 
@@ -2409,18 +2466,12 @@
     window.addEventListener("pageshow", () => {
       applyUrlCatalogParams();
       updateSummary();
-      fetchLiveUsdToIdr(true);
-    });
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        fetchLiveUsdToIdr(true);
-      }
     });
     updateSummary();
     updateSavedTargetCaption();
     renderOrderHistory();
-    fetchLiveUsdToIdr(true);
-    setInterval(() => fetchLiveUsdToIdr(true), 5 * 60 * 1000);
+    fetchLiveUsdToIdr(false);
+    setInterval(() => fetchLiveUsdToIdr(true), 15 * 60 * 1000);
   </script>
 </body>
 </html>
