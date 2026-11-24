@@ -990,7 +990,7 @@
       white-space: nowrap;
     }
 
-    /* BILAH SOSIAL MEDIA DATAR PALING BAWAH */
+    /* BILAH SOSIAL MEDIA 2 BARIS (YOUTUBE PENUH DI ATAS, FB/TELE/X/WA DI BAWAH) */
     .bottom-social-bar {
       margin-top: 20px;
       padding: 12px 14px;
@@ -998,11 +998,23 @@
       background: linear-gradient(180deg, rgba(17, 25, 43, 0.9), rgba(11, 16, 28, 0.96));
       border: 1px solid var(--border);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .social-row-top {
+      display: flex;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .social-row-bottom {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
     }
 
     a.social-pill {
@@ -1011,9 +1023,8 @@
       align-items: center;
       justify-content: center;
       gap: 3px;
-      flex: 1 1 0;
-      min-width: 68px;
-      padding: 7px 6px;
+      min-width: 0;
+      padding: 8px 6px;
       border-radius: 11px;
       background: rgba(21, 30, 51, 0.72);
       border: 1px solid rgba(124, 145, 200, 0.16);
@@ -1022,21 +1033,70 @@
       font-weight: 500;
       line-height: 1.15;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    a.social-pill.social-pill-yt-full {
+      width: 100%;
+      flex-direction: row;
+      gap: 8px;
+      padding: 9px 12px;
+      font-size: 11px;
+      font-weight: 600;
     }
 
     a.social-pill i {
       font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .x-mark-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: #0b0f19;
+      border: 1px solid rgba(248, 250, 252, 0.28);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #f8fafc;
+    }
+
+    .x-mark-badge svg {
+      width: 10px;
+      height: 10px;
+      display: block;
+      fill: currentColor;
     }
 
     a.social-pill.is-fb i { color: #3B82F6; }
+    a.social-pill.is-tg i { color: #2AABEE; }
     a.social-pill.is-wa i { color: #25D366; }
     a.social-pill.is-yt i { color: #FF3B30; }
-    a.social-pill.is-tg i { color: #2AABEE; }
 
     a.social-pill.is-fb:hover {
       border-color: rgba(59, 130, 246, 0.65);
       color: #93c5fd;
       transform: translateY(-1px);
+    }
+
+    a.social-pill.is-tg:hover {
+      border-color: rgba(42, 171, 238, 0.65);
+      color: #7dd3fc;
+      transform: translateY(-1px);
+    }
+
+    a.social-pill.is-x:hover {
+      border-color: rgba(248, 250, 252, 0.55);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    a.social-pill.is-x:hover .x-mark-badge {
+      border-color: rgba(29, 211, 248, 0.6);
+      box-shadow: 0 0 8px rgba(29, 211, 248, 0.22);
     }
 
     a.social-pill.is-wa:hover {
@@ -1051,10 +1111,29 @@
       transform: translateY(-1px);
     }
 
-    a.social-pill.is-tg:hover {
-      border-color: rgba(42, 171, 238, 0.65);
-      color: #7dd3fc;
-      transform: translateY(-1px);
+    @media (max-width: 420px) {
+      .bottom-social-bar {
+        padding: 10px;
+        gap: 6px;
+      }
+      .social-row-bottom {
+        gap: 6px;
+      }
+      a.social-pill {
+        padding: 7px 4px;
+        font-size: 9px;
+      }
+      a.social-pill i {
+        font-size: 15px;
+      }
+      .x-mark-badge {
+        width: 17px;
+        height: 17px;
+      }
+      .x-mark-badge svg {
+        width: 9px;
+        height: 9px;
+      }
     }
 
     @keyframes modalPopIn {
@@ -1502,24 +1581,36 @@
       </div>
     </div>
 
-    <!-- SOSIAL MEDIA DATAR PALING BAWAH -->
+    <!-- SOSIAL MEDIA 2 BARIS PALING BAWAH -->
     <nav class="bottom-social-bar" aria-label="Sosial media resmi ElsGlobal">
-      <a href="https://www.facebook.com/Elsglobal.store" target="_blank" rel="noopener noreferrer" class="social-pill is-fb" title="Facebook">
-        <i class="fa-brands fa-facebook"></i>
-        <span>Facebook</span>
-      </a>
-      <a href="https://wa.me/6282195041517" target="_blank" rel="noopener noreferrer" class="social-pill is-wa" title="WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-        <span>WhatsApp</span>
-      </a>
-      <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="social-pill is-yt" title="YouTube">
-        <i class="fa-brands fa-youtube"></i>
-        <span>YouTube</span>
-      </a>
-      <a href="https://t.me/elsglobal" target="_blank" rel="noopener noreferrer" class="social-pill is-tg" title="Telegram">
-        <i class="fa-brands fa-telegram"></i>
-        <span>Telegram</span>
-      </a>
+      <div class="social-row-top">
+        <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="social-pill social-pill-yt-full is-yt" title="YouTube">
+          <i class="fa-brands fa-youtube"></i>
+          <span>YouTube</span>
+        </a>
+      </div>
+      <div class="social-row-bottom">
+        <a href="https://www.facebook.com/Elsglobal.store" target="_blank" rel="noopener noreferrer" class="social-pill is-fb" title="Facebook">
+          <i class="fa-brands fa-facebook"></i>
+          <span>Facebook</span>
+        </a>
+        <a href="https://t.me/elsglobal" target="_blank" rel="noopener noreferrer" class="social-pill is-tg" title="Telegram">
+          <i class="fa-brands fa-telegram"></i>
+          <span>Telegram</span>
+        </a>
+        <a href="https://x.com/Elsglobalstore" target="_blank" rel="noopener noreferrer" class="social-pill is-x" title="X">
+          <span class="x-mark-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </span>
+          <span>X</span>
+        </a>
+        <a href="https://wa.me/6282195041517" target="_blank" rel="noopener noreferrer" class="social-pill is-wa" title="WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>WhatsApp</span>
+        </a>
+      </div>
     </nav>
   </div>
 
