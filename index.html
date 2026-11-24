@@ -898,11 +898,14 @@
       border-radius: 13px;
       background: rgba(21, 30, 51, 0.78);
       border: 1px solid rgba(29, 211, 248, 0.24);
+      text-align: left;
     }
 
     .contact-head {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
       gap: 2px;
       margin-bottom: 9px;
     }
@@ -911,32 +914,32 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--text);
+      text-align: left;
     }
 
     .contact-sub {
       font-size: 10.5px;
       color: var(--muted);
+      text-align: left;
     }
 
     .contact-links {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
       gap: 8px;
-    }
-
-    @media (max-width: 480px) {
-      .contact-links {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      text-align: left;
     }
 
     .contact-btn {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      min-height: 36px;
-      padding: 8px 10px;
+      justify-content: flex-start;
+      text-align: left;
+      width: 100%;
+      gap: 10px;
+      min-height: 38px;
+      padding: 8px 12px;
       border-radius: 10px;
       background: var(--card-2);
       border: 1px solid var(--border);
@@ -948,6 +951,9 @@
 
     .contact-btn i {
       font-size: 14px;
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .contact-btn.is-wa i { color: #25D366; }
@@ -1341,7 +1347,7 @@
             <span id="sumUsdIdr">Memuat...</span>
           </div>
           <div class="summary-row">
-            <span>Harga 1 MEC (IDR):</span>
+            <span>Estimasi Nilai 1 MEC:</span>
             <span id="sumMecIdr">-</span>
           </div>
           <div class="summary-row">
@@ -1393,7 +1399,7 @@
         </div>
 
         <button id="payBtn" class="btn-primary" type="button" onclick="processPayment()">
-          Konfirmasi &amp; Proses Transaksi
+          Konfirmasi &amp; Proses Pesanan MEC
         </button>
 
         <div id="receiptBox" class="receipt"></div>
@@ -1501,16 +1507,16 @@
             </div>
             <div class="contact-links">
               <a href="https://wa.me/6282195041517" target="_blank" rel="noopener noreferrer" class="contact-btn is-wa">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp Resmi ElsGlobal
               </a>
               <a href="https://t.me/elsglobal" target="_blank" rel="noopener noreferrer" class="contact-btn is-tg">
-                <i class="fa-brands fa-telegram"></i> Telegram
+                <i class="fa-brands fa-telegram"></i> Telegram Resmi ElsGlobal
               </a>
               <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="contact-btn is-yt">
-                <i class="fa-brands fa-youtube"></i> YouTube
+                <i class="fa-brands fa-youtube"></i> YouTube Resmi ElsGlobal
               </a>
               <a href="https://www.facebook.com/Elsglobal.store" target="_blank" rel="noopener noreferrer" class="contact-btn is-fb">
-                <i class="fa-brands fa-facebook"></i> Facebook
+                <i class="fa-brands fa-facebook"></i> Facebook Resmi ElsGlobal
               </a>
             </div>
           </div>
