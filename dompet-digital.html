@@ -65,6 +65,19 @@
             background: #fff;
         }
 
+        #inputNominalBebas {
+            font-size: 11px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        #inputNominalBebas::placeholder {
+            font-size: 11px;
+            font-weight: 400;
+            color: #94a3b8;
+            opacity: 1;
+        }
+
         .d-grid-1 {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
@@ -660,7 +673,7 @@
                         <label class="text-secondary fw-semibold mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
                         <div class="d-flex align-items-center form-inp bg-white p-0 overflow-hidden">
                             <span class="px-2.5 py-2 bg-light border-end fw-bold text-secondary" style="font-size: 13px;">Rp</span>
-                            <input type="tel" class="px-2.5 py-2 fw-bold text-dark" style="font-size: 13px;" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih dari daftar" oninput="formatInputNominalBebas(this)">
+                            <input type="tel" class="px-2.5 py-2" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih dari daftar" oninput="formatInputNominalBebas(this)">
                         </div>
                         <div class="d-flex flex-wrap gap-1 mt-1.5">
                             <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(50000)">50.000</span>
