@@ -1327,7 +1327,6 @@
     </div>
 
     <div class="grid">
-      <!-- KOLOM 1 (KIRI): KASIR PPOB -->
       <div class="card" id="kasirCard">
         <h2>
           1. Kasir Digital ElsGlobal
@@ -1416,7 +1415,6 @@
           </a>
         </div>
 
-        <!-- BLOK RINGKASAN & PEMBAYARAN (OTOMATIS NAIK KE ATAS SAAT PRODUK DIPILIH DARI KATALOG) -->
         <div id="checkoutActiveArea">
           <div id="selectedFromCatalogBanner" class="selected-banner"></div>
 
@@ -1529,7 +1527,6 @@
         </div>
       </div>
 
-      <!-- KOLOM 2 (KANAN): PARAMETER JARINGAN, KURS & INFO PENDUKUNG -->
       <div class="card">
         <h2>2. Parameter Jaringan &amp; Kurs</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
@@ -1576,12 +1573,12 @@
 
         <div class="field">
           <label for="chainId">Chain ID Mainnet</label>
-          <input id="chainId" type="text" value="mechain-mainnet" readonly aria-readonly="true" />
+          <input id="chainId" type="text" value="me-chain" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
           <label for="explorerUrl">Block Explorer Mainnet</label>
-          <input id="explorerUrl" type="text" value="https://explorer.metaearth.example" readonly aria-readonly="true" />
+          <input id="explorerUrl" type="text" value="https://explorer.mec.me" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1619,7 +1616,6 @@
       </div>
     </div>
 
-    <!-- SOSIAL MEDIA 2 BARIS PALING BAWAH -->
     <nav class="bottom-social-bar" aria-label="Sosial media resmi ElsGlobal">
       <div class="social-row-top">
         <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="social-pill social-pill-top-wide is-yt" title="YouTube">
@@ -1656,7 +1652,6 @@
     </nav>
   </div>
 
-  <!-- MODAL POP-UP KUSTOM ELSGLOBAL -->
   <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitle">
     <div class="els-modal-card" onclick="event.stopPropagation()">
       <div class="els-modal-head">
@@ -1693,8 +1688,8 @@
 
     const LOCKED_MERCHANT_ADDRESS = "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
     const LOCKED_RPC_URL = "https://rpc-mainnet.metaearth.example";
-    const LOCKED_CHAIN_ID = "mechain-mainnet";
-    const LOCKED_EXPLORER_URL = "https://explorer.metaearth.example";
+    const LOCKED_CHAIN_ID = "me-chain";
+    const LOCKED_EXPLORER_URL = "https://explorer.mec.me";
     const LOCKED_SYMBOL = "MEC";
 
     const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
@@ -2166,7 +2161,6 @@
       }
     }
 
-    // Multi-sumber API kurs harian USD-IDR otomatis tanpa tombol manual
     async function fetchLiveUsdToIdr(forceFresh = false) {
       if (isFetchingUsdIdr) return;
       const todayKey = getLocalDateKey();
@@ -2253,7 +2247,6 @@
       updateSummary();
     }
 
-    // Sinkronisasi otomatis saat ganti hari/pagi, tab kembali aktif, atau berkala
     function scheduleAutomaticRateSync() {
       setInterval(() => {
         const now = new Date();
@@ -2287,7 +2280,7 @@
       if (!window.ethereum) {
         showElsAlert(
           "Wallet Web3 Tidak Terdeteksi",
-          "Buka halaman ini melalui browser yang memiliki ekstensi/wallet Web3 atau gunakan jalur <strong>ME Pass QR / Internal</strong>.",
+          `Jaringan aktif menggunakan Chain ID <strong>${escapeHtml(LOCKED_CHAIN_ID)}</strong>. Buka halaman ini melalui browser yang memiliki ekstensi/wallet Web3 atau gunakan jalur <strong>ME Pass QR / Internal</strong>.`,
           { type: "info", okLabel: "Mengerti" }
         );
         return;
@@ -2298,7 +2291,7 @@
         if (accounts && accounts.length > 0) {
           connectedAccount = accounts[0];
           const shortAddr = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
-          statusEl.textContent = `Terhubung: ${shortAddr}`;
+          statusEl.textContent = `Terhubung: ${shortAddr} (${LOCKED_CHAIN_ID})`;
           statusEl.classList.add("connected");
 
           const hexChainId = toEvmHexChainId(LOCKED_CHAIN_ID);
