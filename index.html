@@ -346,32 +346,6 @@
       font-size: 10.5px;
       color: var(--muted);
       line-height: 1.4;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn-refresh-rate {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(29, 211, 248, 0.12);
-      border: 1px solid rgba(29, 211, 248, 0.35);
-      color: var(--accent);
-      font-size: 10.5px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .btn-refresh-rate:hover {
-      border-color: var(--accent);
-    }
-
-    .btn-refresh-rate:disabled {
-      opacity: 0.6;
-      cursor: wait;
     }
 
     label {
@@ -1348,9 +1322,6 @@
         <h2>
           1. Kasir Digital ElsGlobal
           <span class="live-badge" id="rateSourceBadge">USD-IDR: Memuat...</span>
-          <button type="button" id="refreshRateBtnTop" class="btn-refresh-rate" onclick="manualRefreshUsdIdr()" title="Perbarui kurs USD-IDR sekarang">
-            <i class="fa-solid fa-rotate"></i> Update Kurs
-          </button>
         </h2>
 
         <div id="customerIdField" class="field">
@@ -1458,7 +1429,6 @@
               <span id="sumEffectiveIdr">Rp48.230</span>
             </div>
 
-            <!-- Menampilkan harga asli produk di layar, sementara buffer 6% tetap dipakai di perhitungan MEC -->
             <div class="summary-row">
               <span>Harga Produk (IDR):</span>
               <strong id="sumDisplayPriceIdr">Rp45.500</strong>
@@ -1470,9 +1440,9 @@
             </div>
 
             <div class="summary-row">
-  <span style="white-space: nowrap;">Kurs USD–IDR Acuan:</span>
-  <span id="sumUsdIdr" style="white-space: nowrap;">Memuat...</span>
-</div>
+              <span style="white-space: nowrap;">Kurs USD–IDR Acuan:</span>
+              <span id="sumUsdIdr" style="white-space: nowrap;">Memuat...</span>
+            </div>
             <div class="summary-row">
               <span>Harga 1 MEC (IDR):</span>
               <span id="sumMecIdr">-</span>
@@ -1580,10 +1550,7 @@
           <label for="usdIdrOverride">Kurs USD–IDR (Auto Harian Multi-API)</label>
           <input id="usdIdrOverride" type="text" value="Memuat..." readonly aria-readonly="true" />
           <div class="rate-meta-caption">
-            <span id="rateLastSyncText">Sinkronisasi kurs harian: memeriksa...</span>
-            <button type="button" id="refreshRateBtnSide" class="btn-refresh-rate" onclick="manualRefreshUsdIdr()">
-              <i class="fa-solid fa-rotate"></i> Segarkan
-            </button>
+            <span id="rateLastSyncText">Sinkronisasi kurs otomatis: memeriksa...</span>
           </div>
         </div>
 
@@ -2157,9 +2124,9 @@
           const dt = new Date(usdIdrLastUpdatedAt);
           const timeStr = dt.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
           const dateStr = dt.toLocaleDateString("id-ID", { day: "2-digit", month: "short" });
-          syncInfoEl.innerHTML = `Sumber: <strong>${escapeHtml(source)}</strong> • Update: ${escapeHtml(dateStr)} ${escapeHtml(timeStr)}`;
+          syncInfoEl.innerHTML = `Otomatis • ${escapeHtml(source)} • ${escapeHtml(dateStr)} ${escapeHtml(timeStr)}`;
         } else {
-          syncInfoEl.innerHTML = `Sumber: <strong>${escapeHtml(source)}</strong>`;
+          syncInfoEl.innerHTML = `Otomatis • ${escapeHtml(source)}`;
         }
       }
 
@@ -2171,7 +2138,7 @@
 
     async function fetchFromSource(url, parser) {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 5500);
+      const timer = setTimeout(() => controller.abort(), 3000);
       try {
         const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
         if (!res.ok) return null;
@@ -2185,12 +2152,11 @@
       }
     }
 
-    // Multi-sumber API kurs harian USD-IDR agar tetap update setiap pagi
+    // Multi-sumber API kurs harian USD-IDR otomatis tanpa tombol manual
     async function fetchLiveUsdToIdr(forceFresh = false) {
       if (isFetchingUsdIdr) return;
       const todayKey = getLocalDateKey();
 
-      // 1. Cek cache lokal terlebih dahulu (hanya dianggap segar jika tanggal hari ini sama)
       let hasTodayCache = false;
       try {
         const rawCache = localStorage.getItem(CACHE_KEY);
@@ -2201,47 +2167,45 @@
             usdIdrLastUpdatedAt = parsed.updatedAt || null;
             usdIdrDateKey = parsed.dateKey || "";
             hasTodayCache = parsed.dateKey === todayKey;
-            usdIdrSourceLabel = hasTodayCache ? `${parsed.source || "Harian"}` : "Cache Kemarin";
+            usdIdrSourceLabel = hasTodayCache ? `${parsed.source || "Live API"}` : "Cache Kemarin";
             updateSummary();
           }
         }
       } catch (e) {}
 
-      // Jika sudah ada kurs valid hari ini dan tidak dipaksa refresh, cukup pakai cache hari ini
       if (hasTodayCache && !forceFresh) {
         return;
       }
 
       isFetchingUsdIdr = true;
-      setRefreshButtonsState(true);
 
       const providers = [
-  {
-    label: "Live API",
-    url: "https://open.er-api.com/v6/latest/USD",
-    parser: d => Number(d?.rates?.IDR)
-  },
-  {
-    label: "Live API",
-    url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json",
-    parser: d => Number(d?.usd?.idr)
-  },
-  {
-    label: "Live API",
-    url: "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
-    parser: d => Number(d?.usd?.idr)
-  },
-  {
-    label: "Live API",
-    url: "https://api.frankfurter.app/latest?from=USD&to=IDR",
-    parser: d => Number(d?.rates?.IDR)
-  },
-  {
-    label: "Live API",
-    url: "https://www.floatrates.com/daily/usd.json",
-    parser: d => Number(d?.idr?.rate)
-  }
-];
+        {
+          label: "Live API",
+          url: "https://open.er-api.com/v6/latest/USD",
+          parser: d => Number(d?.rates?.IDR)
+        },
+        {
+          label: "Live API",
+          url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json",
+          parser: d => Number(d?.usd?.idr)
+        },
+        {
+          label: "Live API",
+          url: "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
+          parser: d => Number(d?.usd?.idr)
+        },
+        {
+          label: "Live API",
+          url: "https://api.frankfurter.app/latest?from=USD&to=IDR",
+          parser: d => Number(d?.rates?.IDR)
+        },
+        {
+          label: "Live API",
+          url: "https://www.floatrates.com/daily/usd.json",
+          parser: d => Number(d?.idr?.rate)
+        }
+      ];
 
       let validSource = null;
       for (const provider of providers) {
@@ -2272,44 +2236,24 @@
       }
 
       isFetchingUsdIdr = false;
-      setRefreshButtonsState(false);
       updateSummary();
     }
 
-    function setRefreshButtonsState(loading) {
-      ["refreshRateBtnTop", "refreshRateBtnSide"].forEach(id => {
-        const btn = document.getElementById(id);
-        if (btn) {
-          btn.disabled = loading;
-          const icon = btn.querySelector("i");
-          if (icon) {
-            icon.classList.toggle("fa-spin", loading);
-          }
-        }
-      });
-    }
-
-    async function manualRefreshUsdIdr() {
-      await fetchLiveUsdToIdr(true);
-    }
-
-    // Jadwal pengecekan otomatis setiap pagi (pukul 06:05, 07:05, 08:05) & saat ganti hari
-    function scheduleDailyMorningRateCheck() {
+    // Sinkronisasi otomatis saat ganti hari/pagi, tab kembali aktif, atau berkala
+    function scheduleAutomaticRateSync() {
       setInterval(() => {
         const now = new Date();
         const todayKey = getLocalDateKey(now);
-        const isMorningWindow = now.getHours() >= 6 && now.getHours() <= 9;
+        const isMorningWindow = now.getHours() >= 5 && now.getHours() <= 10;
         if (usdIdrDateKey !== todayKey && (isMorningWindow || now.getHours() >= 0)) {
           fetchLiveUsdToIdr(true);
         }
-      }, 10 * 60 * 1000);
+      }, 5 * 60 * 1000);
 
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
           const todayKey = getLocalDateKey();
-          if (usdIdrDateKey !== todayKey) {
-            fetchLiveUsdToIdr(true);
-          }
+          fetchLiveUsdToIdr(usdIdrDateKey !== todayKey);
         }
       });
     }
@@ -2743,13 +2687,13 @@
     window.addEventListener("pageshow", () => {
       applyUrlCatalogParams();
       updateSummary();
-      fetchLiveUsdToIdr(false);
+      fetchLiveUsdToIdr(usdIdrDateKey !== getLocalDateKey());
     });
     updateSummary();
     updateSavedTargetCaption();
     renderOrderHistory();
-    fetchLiveUsdToIdr(false);
-    scheduleDailyMorningRateCheck();
+    fetchLiveUsdToIdr(usdIdrDateKey !== getLocalDateKey());
+    scheduleAutomaticRateSync();
   </script>
 </body>
 </html>
