@@ -1024,7 +1024,9 @@
     }
 
     .social-row-top {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
       width: 100%;
       min-width: 0;
     }
@@ -1057,7 +1059,7 @@
       text-overflow: ellipsis;
     }
 
-    a.social-pill.social-pill-yt-full {
+    a.social-pill.social-pill-top-wide {
       width: 100%;
       flex-direction: row;
       gap: 8px;
@@ -1095,6 +1097,7 @@
     a.social-pill.is-tg i { color: #2AABEE; }
     a.social-pill.is-wa i { color: #25D366; }
     a.social-pill.is-yt i { color: #FF3B30; }
+    a.social-pill.is-tt i { color: #22d3ee; }
 
     a.social-pill.is-fb:hover {
       border-color: rgba(59, 130, 246, 0.65);
@@ -1131,11 +1134,18 @@
       transform: translateY(-1px);
     }
 
+    a.social-pill.is-tt:hover {
+      border-color: rgba(34, 211, 238, 0.65);
+      color: #67e8f9;
+      transform: translateY(-1px);
+    }
+
     @media (max-width: 420px) {
       .bottom-social-bar {
         padding: 10px;
         gap: 6px;
       }
+      .social-row-top,
       .social-row-bottom {
         gap: 6px;
       }
@@ -1612,9 +1622,13 @@
     <!-- SOSIAL MEDIA 2 BARIS PALING BAWAH -->
     <nav class="bottom-social-bar" aria-label="Sosial media resmi ElsGlobal">
       <div class="social-row-top">
-        <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="social-pill social-pill-yt-full is-yt" title="YouTube">
+        <a href="https://youtube.com/@elsglobalofficial?si=aR6tmEzOcUQ2dpws" target="_blank" rel="noopener noreferrer" class="social-pill social-pill-top-wide is-yt" title="YouTube">
           <i class="fa-brands fa-youtube"></i>
           <span>YouTube</span>
+        </a>
+        <a href="https://www.tiktok.com/@elsglobalstore" target="_blank" rel="noopener noreferrer" class="social-pill social-pill-top-wide is-tt" title="TikTok @elsglobalstore">
+          <i class="fa-brands fa-tiktok"></i>
+          <span>TikTok</span>
         </a>
       </div>
       <div class="social-row-bottom">
@@ -2252,8 +2266,7 @@
 
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
-          const todayKey = getLocalDateKey();
-          fetchLiveUsdToIdr(usdIdrDateKey !== todayKey);
+          fetchLiveUsdToIdr(true);
         }
       });
     }
@@ -2687,12 +2700,12 @@
     window.addEventListener("pageshow", () => {
       applyUrlCatalogParams();
       updateSummary();
-      fetchLiveUsdToIdr(usdIdrDateKey !== getLocalDateKey());
+      fetchLiveUsdToIdr(true);
     });
     updateSummary();
     updateSavedTargetCaption();
     renderOrderHistory();
-    fetchLiveUsdToIdr(usdIdrDateKey !== getLocalDateKey());
+    fetchLiveUsdToIdr(true);
     scheduleAutomaticRateSync();
   </script>
 </body>
