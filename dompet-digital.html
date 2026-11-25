@@ -136,6 +136,47 @@
             transform: none;
         }
 
+        .swal-els-popup {
+            border-radius: 16px !important;
+            padding: 20px 18px !important;
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.22) !important;
+            max-width: 360px !important;
+        }
+
+        .swal-els-title {
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            margin: 0 !important;
+        }
+
+        .swal-els-html {
+            margin: 10px 0 0 !important;
+            font-size: 12px !important;
+            color: #475569 !important;
+            line-height: 1.5 !important;
+        }
+
+        .swal-els-confirm {
+            background: linear-gradient(135deg, #0066ff 0%, #3385ff 100%) !important;
+            color: #ffffff !important;
+            font-size: 12.5px !important;
+            font-weight: 600 !important;
+            border-radius: 10px !important;
+            padding: 9px 22px !important;
+            box-shadow: 0 6px 14px rgba(0, 102, 255, 0.25) !important;
+        }
+
+        .swal-min-box {
+            margin-top: 10px;
+            background: #fffbeb;
+            border: 1px dashed #f59e0b;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+            color: #92400e;
+        }
+
         .badge-terlaris-modern {
             display: inline-flex; align-items: center; background-color: #fef08a !important; color: #854d0e !important; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #facc15; white-space: nowrap;
         }
@@ -316,7 +357,7 @@
         var data_page = 50;
 
         // Biaya Admin untuk E-Wallet Bebas Nominal
-        const BIAYA_ADMIN_BEBAS = 500;
+        const BIAYA_ADMIN_BEBAS = 1000;
         const MINIMAL_NOMINAL_BEBAS = 10000;
 
         const daftarKategoriEwallet = [
@@ -362,6 +403,40 @@
 
         function isKategoriBebasJumlah(idKat, namaKat) {
             return String(idKat) === "623267" || String(namaKat || "").toUpperCase().includes("BEBAS JUMLAH");
+        }
+
+        function getEwalletSaldoLabel(namaProduk, kategoriNama) {
+            const sumber = `${namaProduk || ""} ${kategoriNama || ""}`.toUpperCase();
+            const pola = [
+                { key: "DANA", label: "Saldo DANA" },
+                { key: "GOPAY", label: "Saldo GoPay" },
+                { key: "OVO", label: "Saldo OVO" },
+                { key: "SHOPEEPAY", label: "Saldo ShopeePay" },
+                { key: "SHOPEE PAY", label: "Saldo ShopeePay" },
+                { key: "LINKAJA", label: "Saldo LinkAja" },
+                { key: "LINK AJA", label: "Saldo LinkAja" },
+                { key: "GRAB", label: "Saldo Grab" },
+                { key: "TAPCASH", label: "Saldo TapCash BNI" },
+                { key: "BRIZZI", label: "Saldo BRI Brizzi" },
+                { key: "MAXIM", label: "Saldo Maxim" },
+                { key: "DOKU", label: "Saldo DOKU" },
+                { key: "INDRIVER", label: "Saldo InDriver" },
+                { key: "IN DRIVER", label: "Saldo InDriver" },
+                { key: "BIBIT", label: "Saldo Mitra Bibit" },
+                { key: "KAS PRO", label: "Saldo Kas Pro" },
+                { key: "ASTRAPAY", label: "Saldo AstraPay" },
+                { key: "ASTRA PAY", label: "Saldo AstraPay" },
+                { key: "SHOPEEFOOD", label: "Saldo ShopeeFood" },
+                { key: "SHOPEE FOOD", label: "Saldo ShopeeFood" },
+                { key: "M TIX", label: "Saldo M-Tix" },
+                { key: "MTIX", label: "Saldo M-Tix" },
+                { key: "I-SAKU", label: "Saldo I-Saku" },
+                { key: "ISAKU", label: "Saldo I-Saku" }
+            ];
+            for (const item of pola) {
+                if (sumber.includes(item.key)) return item.label;
+            }
+            return "Saldo E-Wallet";
         }
 
         function toggleFilterMenu() {
@@ -554,7 +629,7 @@
         }
 
         /* ==============================================================
-           FITUR KHUSUS E-WALLET NOMINAL BEBAS (+ ADMIN RP 500)
+           FITUR KHUSUS E-WALLET NOMINAL BEBAS (+ ADMIN RP 1.000)
            ============================================================== */
         function tampilkanFormNominalBebas() {
             $("#dataProduk").html(`
@@ -582,10 +657,10 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="text-secondary fw-semibold mb-1 d-block" style="font-size: 11px;">Nominal Saldo (Minimal Rp 10.000)</label>
+                        <label class="text-secondary fw-semibold mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
                         <div class="d-flex align-items-center form-inp bg-white p-0 overflow-hidden">
                             <span class="px-2.5 py-2 bg-light border-end fw-bold text-secondary" style="font-size: 13px;">Rp</span>
-                            <input type="tel" class="px-2.5 py-2 fw-bold text-dark" style="font-size: 15px;" id="inputNominalBebas" placeholder="Contoh: 250.000" oninput="formatInputNominalBebas(this)">
+                            <input type="tel" class="px-2.5 py-2 fw-bold text-dark" style="font-size: 13px;" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih dari daftar" oninput="formatInputNominalBebas(this)">
                         </div>
                         <div class="d-flex flex-wrap gap-1 mt-1.5">
                             <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(50000)">50.000</span>
@@ -602,7 +677,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
                             <span class="text-secondary">Biaya Admin :</span>
-                            <span class="fw-bold text-dark">Rp 500</span>
+                            <span class="fw-bold text-dark">${formatRupiah(BIAYA_ADMIN_BEBAS)}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12.5px;">
                             <span class="text-dark fw-bold">Total Bayar :</span>
@@ -612,7 +687,7 @@
 
                     <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="bukaKonfirmasiBebas()">
                         <i class="fa-solid fa-coins"></i>
-                        <span>Lanjut Bayar Pakai MEC</span>
+                        <span>Tukar MEC jadi Saldo</span>
                     </div>
                 </div>
             `);
@@ -656,17 +731,48 @@
             let jenis = $("#jenisEwalletBebas").val() || "E-WALLET";
 
             if (no === "") {
-                Swal.fire("Nomor Kosong", "Silakan masukkan nomor tujuan e-wallet terlebih dahulu.", "warning");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Nomor Tujuan Kosong",
+                    text: "Silakan masukkan nomor tujuan e-wallet terlebih dahulu.",
+                    confirmButtonText: "Mengerti",
+                    customClass: {
+                        popup: "swal-els-popup",
+                        title: "swal-els-title",
+                        htmlContainer: "swal-els-html",
+                        confirmButton: "swal-els-confirm"
+                    },
+                    buttonsStyling: false
+                });
                 return;
             }
             if (nominal < MINIMAL_NOMINAL_BEBAS) {
-                Swal.fire("Nominal Terlalu Kecil", "Minimal topup saldo e-wallet adalah Rp 10.000.", "warning");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Nominal Terlalu Kecil",
+                    html: `
+                        <div>Nominal yang Anda masukkan belum memenuhi batas minimum topup.</div>
+                        <div class="swal-min-box">
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            Minimal topup saldo e-wallet adalah <strong>${formatRupiah(MINIMAL_NOMINAL_BEBAS)}</strong>.
+                        </div>
+                    `,
+                    confirmButtonText: "Perbaiki Nominal",
+                    customClass: {
+                        popup: "swal-els-popup",
+                        title: "swal-els-title",
+                        htmlContainer: "swal-els-html",
+                        confirmButton: "swal-els-confirm"
+                    },
+                    buttonsStyling: false
+                });
                 return;
             }
 
             let totalBayar = nominal + BIAYA_ADMIN_BEBAS;
             let namaProdukCustom = `Topup ${jenis} Bebas Nominal ${formatRupiah(nominal)}`;
             let idProdukBebas = "623267";
+            let saldoLabel = getEwalletSaldoLabel(jenis, currentKategoriNama);
 
             $("#bodyCanv").html(`
                 <div class="text-start">
@@ -696,7 +802,7 @@
                 <div class="mt-2">
                     <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="getBayarMEC('${idProdukBebas}', \`${encodeURIComponent(namaProdukCustom)}\`, '${totalBayar}')">
                         <i class="fa-solid fa-coins"></i>
-                        <span>Bayar Pakai MEC (${formatRupiah(totalBayar)})</span>
+                        <span>Tukar MEC jadi ${saldoLabel} (${formatRupiah(totalBayar)})</span>
                     </div>
                     <div class="mt-2">
                         <div class="w-100 bg-light border p-2.5 borad-10 text-center shadow-sm" data-bs-dismiss="offcanvas" aria-label="Close" style="cursor: pointer;">
@@ -812,6 +918,7 @@
             var harga_produk = formatRupiah(v.harga_produk);
             var no = $("#nomoId").val();
             let nomor = (no == "") ? `<span class="text-danger">Masukkan nomor tujuan dahulu...</span>` : no;
+            let saldoLabel = getEwalletSaldoLabel(nama_produk, currentKategoriNama);
 
             let rawDesk = decodeURIComponent(encodedDesk);
             let cleanDesk = bersihkanDeskripsi(rawDesk);
@@ -819,7 +926,7 @@
             let btn = (no != "") ? `
             <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')">
                 <i class="fa-solid fa-coins"></i>
-                <span>Bayar Pakai MEC (${harga_produk})</span>
+                <span>Tukar MEC jadi ${saldoLabel} (${harga_produk})</span>
             </div>` : ``;
 
             $("#bodyCanv").html(`
