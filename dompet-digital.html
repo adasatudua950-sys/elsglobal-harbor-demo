@@ -65,16 +65,21 @@
             background: #fff;
         }
 
+        .label-nominal-bebas {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+
         #inputNominalBebas {
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             color: #0f172a;
         }
 
         #inputNominalBebas::placeholder {
             font-size: 11px;
-            font-weight: 400;
-            color: #94a3b8;
+            font-weight: 600;
+            color: #64748b;
             opacity: 1;
         }
 
@@ -670,7 +675,7 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="text-secondary fw-semibold mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
+                        <label class="label-nominal-bebas mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
                         <div class="d-flex align-items-center form-inp bg-white p-0 overflow-hidden">
                             <span class="px-2.5 py-2 bg-light border-end fw-bold text-secondary" style="font-size: 13px;">Rp</span>
                             <input type="tel" class="px-2.5 py-2" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih dari daftar" oninput="formatInputNominalBebas(this)">
@@ -939,7 +944,7 @@
             let btn = (no != "") ? `
             <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')">
                 <i class="fa-solid fa-coins"></i>
-                <span>Tukar MEC jadi ${saldoLabel} (${harga_produk})</span>
+                <span>Tukar MEC jadi ${saldoLabel}</span>
             </div>` : ``;
 
             $("#bodyCanv").html(`
