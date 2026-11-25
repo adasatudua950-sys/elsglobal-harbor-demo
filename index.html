@@ -1470,9 +1470,9 @@
             </div>
 
             <div class="summary-row">
-              <span>Kurs USD–IDR Acuan:</span>
-              <span id="sumUsdIdr">Memuat...</span>
-            </div>
+  <span style="white-space: nowrap;">Kurs USD–IDR Acuan:</span>
+  <span id="sumUsdIdr" style="white-space: nowrap;">Memuat...</span>
+</div>
             <div class="summary-row">
               <span>Harga 1 MEC (IDR):</span>
               <span id="sumMecIdr">-</span>
@@ -2216,32 +2216,32 @@
       setRefreshButtonsState(true);
 
       const providers = [
-        {
-          label: "ExchangeRate API",
-          url: "https://open.er-api.com/v6/latest/USD",
-          parser: d => Number(d?.rates?.IDR)
-        },
-        {
-          label: "CurrencyAPI CDN",
-          url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json",
-          parser: d => Number(d?.usd?.idr)
-        },
-        {
-          label: "CurrencyAPI Pages",
-          url: "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
-          parser: d => Number(d?.usd?.idr)
-        },
-        {
-          label: "Frankfurter ECB",
-          url: "https://api.frankfurter.app/latest?from=USD&to=IDR",
-          parser: d => Number(d?.rates?.IDR)
-        },
-        {
-          label: "FloatRates",
-          url: "https://www.floatrates.com/daily/usd.json",
-          parser: d => Number(d?.idr?.rate)
-        }
-      ];
+  {
+    label: "Live API",
+    url: "https://open.er-api.com/v6/latest/USD",
+    parser: d => Number(d?.rates?.IDR)
+  },
+  {
+    label: "Live API",
+    url: "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json",
+    parser: d => Number(d?.usd?.idr)
+  },
+  {
+    label: "Live API",
+    url: "https://latest.currency-api.pages.dev/v1/currencies/usd.json",
+    parser: d => Number(d?.usd?.idr)
+  },
+  {
+    label: "Live API",
+    url: "https://api.frankfurter.app/latest?from=USD&to=IDR",
+    parser: d => Number(d?.rates?.IDR)
+  },
+  {
+    label: "Live API",
+    url: "https://www.floatrates.com/daily/usd.json",
+    parser: d => Number(d?.idr?.rate)
+  }
+];
 
       let validSource = null;
       for (const provider of providers) {
