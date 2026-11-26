@@ -313,12 +313,9 @@
       display: none !important;
     }
 
-    #customerIdField {
-      display: none !important;
-    }
-
+    #customerIdField,
     #customerIdField.show {
-      display: block !important;
+      display: none !important;
     }
 
     .saved-target-caption {
@@ -1867,12 +1864,12 @@
     function syncCustomerFieldVisibility() {
       const fieldEl = document.getElementById("customerIdField");
       const inputEl = document.getElementById("customerId");
-      if (!fieldEl || !inputEl) return;
-
-      inputEl.readOnly = true;
-      const hasTarget = inputEl.value.trim().length > 0;
-      fieldEl.classList.toggle("show", hasTarget);
-      updateSavedTargetCaption();
+      if (inputEl) {
+        inputEl.readOnly = true;
+      }
+      if (fieldEl) {
+        fieldEl.classList.remove("show");
+      }
     }
 
     function setCheckoutPlacement(isCatalogSelected) {
