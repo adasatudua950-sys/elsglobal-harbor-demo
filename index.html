@@ -2088,23 +2088,8 @@
       const btn = document.getElementById("pasteHashBtn");
       if (!inputEl) return;
 
-      try {
-        if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
-          const text = await navigator.clipboard.readText();
-          if (text && text.trim()) {
-            inputEl.value = text.trim();
-            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-            if (btn) {
-              const prevText = btn.textContent;
-              btn.textContent = "Tertempel!";
-              setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
-            }
-            return;
-          }
-        }
-      } catch (e) {}
-
       inputEl.focus();
+
       try {
         if (document.execCommand("paste")) {
           if (btn) {
@@ -2117,9 +2102,9 @@
       } catch (e) {}
 
       showElsAlert(
-        "Tempel Tx Hash Secara Manual",
-        "Browser membatasi akses clipboard otomatis. Silakan tekan dan tahan di kolom Tx Hash lalu pilih <strong>Tempel</strong> (atau tekan <strong>Ctrl+V / Cmd+V</strong>).",
-        { type: "info", okLabel: "Siap" }
+        "Siap Tempel Tx Hash / ID Transfer",
+        "Kolom <strong>Tx Hash / ID Transfer ME Pass</strong> sudah aktif. Tekan dan tahan pada kolom input lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
+        { type: "info", okLabel: "Lanjutkan" }
       );
     }
 
