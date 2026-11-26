@@ -1515,7 +1515,7 @@
                     <button type="button" id="copyAddrBtn" class="btn-copy" onclick="copyMerchantAddress()">Salin</button>
                   </div>
                   <div class="hash-row">
-                    <input id="manualTxHash" type="text" placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib untuk verifikasi cepat)" />
+                    <input id="manualTxHash" type="text" required placeholder="Tempel Tx Hash / ID Transfer ME Pass (wajib diisi)" />
                     <button type="button" id="pasteHashBtn" class="btn-copy" onclick="pasteTxHash()">Tempel</button>
                   </div>
                 </div>
@@ -1706,7 +1706,7 @@
   </div>
 
   <script>
-    const DEFAULT_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyVY006CmPldoUHDnWf2WyjMhDVraBTIVGRXjG1y_rekXkggaKTOMQYk4s3Kc4pfM1M/exec";
+    const DEFAULT_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzNtonpvh-9skXXvgZJlW6vcYSIOpS--uDQbY40gjPguYI4fCOA6KQSYHCWXj8HXScz/exec";
     const GOOGLE_SHEETS_WEBHOOK_URL = (function() {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -2642,6 +2642,28 @@
         return;
       }
 
+      const txHashInput = document.getElementById("manualTxHash");
+      const manualTx = (txHashInput ? txHashInput.value : "").trim();
+      if (!manualTx) {
+        showElsAlert(
+          "Tx Hash / ID Transfer Wajib Diisi",
+          "Silakan kirim MEC ke alamat merchant terlebih dahulu, lalu salin dan tempel <strong>Tx Hash / ID Transfer ME Pass</strong> asli pada kolom yang tersedia agar transaksi Anda dapat dilacak dan diverifikasi.",
+          { type: "warning", okLabel: "Isi Tx Hash" }
+        );
+        if (txHashInput) txHashInput.focus();
+        return;
+      }
+
+      if (manualTx.length < 10 || /\s/.test(manualTx)) {
+        showElsAlert(
+          "Format Tx Hash Tidak Valid",
+          "Pastikan Anda menempelkan <strong>Tx Hash / ID Transfer ME Pass</strong> yang valid (minimal 10 karakter tanpa spasi) dari riwayat pengiriman aplikasi ME Pass.",
+          { type: "warning", okLabel: "Perbaiki" }
+        );
+        if (txHashInput) txHashInput.focus();
+        return;
+      }
+
       const payBtn = document.getElementById("payBtn");
       payBtn.disabled = true;
       payBtn.textContent = "Mengirim Data Pesanan...";
@@ -2652,7 +2674,6 @@
       const { rate: usdIdr } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
       const merchantAddr = getMerchantAddress();
-      const manualTx = document.getElementById("manualTxHash").value.trim();
 
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
@@ -2660,9 +2681,7 @@
         ? "Jalur 2 (Web3 / Lanjutan)"
         : "ME Pass QR / Transfer ME Network";
 
-      const txHash = manualTx || ("TX-" + Array.from({ length: 14 }, () =>
-        Math.floor(Math.random() * 16).toString(16)
-      ).join("").toUpperCase());
+      const txHash = manualTx;
 
       const refOrderId = "ORD-" + Date.now().toString().slice(-8);
       const waktuStr = new Date().toLocaleString("id-ID", {
