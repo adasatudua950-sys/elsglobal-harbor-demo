@@ -1896,11 +1896,15 @@
       okBtn.type = "button";
       okBtn.className = "els-modal-btn-primary";
       okBtn.textContent = options.okLabel || "Mengerti";
-      okBtn.onclick = closeElsModal;
+      okBtn.onclick = () => {
+        closeElsModal();
+        if (typeof options.onOk === "function") {
+          options.onOk();
+        }
+      };
       actionsEl.appendChild(okBtn);
 
       overlay.classList.add("show");
-      okBtn.focus();
     }
 
     function closeElsModal() {
@@ -2801,9 +2805,14 @@
         showElsAlert(
           "Tx Hash / ID Transfer Wajib Diisi",
           "Silakan kirim MEC ke alamat merchant terlebih dahulu, lalu salin dan tempel <strong>Tx Hash / ID Transfer ME Pass</strong> asli pada kolom yang tersedia agar transaksi Anda dapat dilacak dan diverifikasi.",
-          { type: "warning", okLabel: "Isi Tx Hash" }
+          {
+            type: "warning",
+            okLabel: "Isi Tx Hash",
+            onOk: () => {
+              if (txHashInput) txHashInput.focus();
+            }
+          }
         );
-        if (txHashInput) txHashInput.focus();
         return;
       }
 
@@ -2811,9 +2820,14 @@
         showElsAlert(
           "Format Tx Hash Tidak Valid",
           "Pastikan Anda menempelkan <strong>Tx Hash / ID Transfer ME Pass</strong> yang valid (minimal 10 karakter tanpa spasi) dari riwayat pengiriman aplikasi ME Pass.",
-          { type: "warning", okLabel: "Perbaiki" }
+          {
+            type: "warning",
+            okLabel: "Perbaiki",
+            onOk: () => {
+              if (txHashInput) txHashInput.focus();
+            }
+          }
         );
-        if (txHashInput) txHashInput.focus();
         return;
       }
 
