@@ -45,10 +45,10 @@
 
     /* Header hitam menyatu dengan bar/safe-area bawaan HP */
     .top-status-header {
-      width: 100%;
+      width: auto;
+      margin: 0 -14px 14px -14px;
       padding-top: calc(8px + env(safe-area-inset-top));
       padding-bottom: 12px;
-      margin-bottom: 14px;
       background: linear-gradient(180deg, #020305 0%, var(--top-black) 78%, rgba(4, 6, 10, 0.92) 100%);
       border-bottom: 1px solid rgba(29, 211, 248, 0.18);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
@@ -187,6 +187,7 @@
 
     @media (max-width: 640px) {
       body { padding: 0 10px 14px 10px; }
+      .top-status-header { margin: 0 -10px 14px -10px; }
       .top-status-inner { padding: 0 10px; }
       .greeting-title { font-size: 14px; }
       .greeting-sub { font-size: 11px; }
