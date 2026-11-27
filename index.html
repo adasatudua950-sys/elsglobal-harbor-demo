@@ -50,7 +50,11 @@
       overflow-x: clip;
     }
 
-    /* Header menyatu langsung dengan background utama index (tanpa kotak/garis pemisah) */
+    /* Splash screen dinonaktifkan agar tampilan HP konsisten seperti di PC */
+    .els-splash-screen {
+      display: none !important;
+    }
+
     .top-status-header {
       width: 100%;
       margin: 0 0 10px 0;
@@ -127,130 +131,6 @@
       gap: 12px;
       min-width: 0;
       flex: 1 1 260px;
-    }
-
-    @keyframes splashPulseGlow {
-      0%, 100% {
-        transform: translateY(0) scale(1);
-        box-shadow:
-          0 20px 44px rgba(0, 0, 0, 0.72),
-          0 0 28px rgba(29, 211, 248, 0.34),
-          0 0 0 1px rgba(126, 232, 255, 0.35),
-          inset 0 2px 3px rgba(255, 255, 255, 0.32),
-          inset 0 -3px 6px rgba(3, 6, 12, 0.85);
-      }
-      50% {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow:
-          0 24px 52px rgba(0, 0, 0, 0.78),
-          0 0 38px rgba(29, 211, 248, 0.52),
-          0 0 0 1px rgba(126, 232, 255, 0.55),
-          inset 0 2px 3px rgba(255, 255, 255, 0.42),
-          inset 0 -3px 6px rgba(3, 6, 12, 0.9);
-      }
-    }
-
-    @keyframes splashProgressSweep {
-      0% { transform: translateX(-110%); }
-      50% { transform: translateX(65%); }
-      100% { transform: translateX(220%); }
-    }
-
-    .els-splash-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 20px;
-      background:
-        radial-gradient(circle at 50% 42%, rgba(29, 211, 248, 0.14), transparent 44%),
-        radial-gradient(circle at 20% 18%, rgba(108, 124, 255, 0.14), transparent 42%),
-        linear-gradient(180deg, #070b14 0%, #04060b 100%);
-      transition: opacity 0.36s ease, visibility 0.36s ease;
-    }
-
-    .els-splash-screen.is-hiding {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .els-splash-emblem {
-      position: relative;
-      width: clamp(128px, 34vw, 156px);
-      aspect-ratio: 1 / 1;
-      border-radius: 36px;
-      padding: 3px;
-      background: linear-gradient(145deg, rgba(165, 243, 252, 0.85), rgba(29, 211, 248, 0.55) 38%, rgba(30, 41, 68, 0.92) 72%, rgba(108, 124, 255, 0.72));
-      animation: splashPulseGlow 2.8s ease-in-out infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .els-splash-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: 33px;
-      padding: 4px;
-      background: linear-gradient(180deg, #131d33 0%, #070b14 100%);
-      box-shadow:
-        inset 0 2px 4px rgba(255, 255, 255, 0.16),
-        inset 0 -3px 6px rgba(0, 0, 0, 0.85);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .els-splash-inner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 29px;
-      display: block;
-    }
-
-    .els-splash-caption {
-      margin-top: 18px;
-      text-align: center;
-    }
-
-    .els-splash-brand {
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
-
-    .els-splash-sub {
-      margin-top: 4px;
-      font-size: 11.5px;
-      color: var(--muted);
-    }
-
-    .els-splash-bar {
-      margin-top: 14px;
-      width: 132px;
-      height: 3px;
-      border-radius: 999px;
-      background: rgba(124, 145, 200, 0.2);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .els-splash-bar::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      width: 55%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent-2), var(--accent));
-      animation: splashProgressSweep 1.35s ease-in-out infinite;
     }
 
     .logo-card {
@@ -1522,19 +1402,6 @@
   </style>
 </head>
 <body>
-  <div id="elsSplashScreen" class="els-splash-screen" role="status" aria-live="polite" aria-label="Memuat ElsGlobal">
-    <div class="els-splash-emblem">
-      <div class="els-splash-inner">
-        <img src="./logo-els.jpg" alt="Logo ELSGLOBAL" />
-      </div>
-    </div>
-    <div class="els-splash-caption">
-      <div class="els-splash-brand">ELSGLOBAL × META EARTH</div>
-      <div class="els-splash-sub">Kasir Digital &amp; Penukaran MEC</div>
-    </div>
-    <div class="els-splash-bar" aria-hidden="true"></div>
-  </div>
-
   <header class="top-status-header" aria-label="Salam waktu lokal">
     <div class="top-status-inner">
       <div id="timeGreetingTitle" class="greeting-title">Selamat Datang</div>
@@ -1803,12 +1670,12 @@
 
         <div class="field">
           <label for="rpcUrl">RPC URL Mainnet</label>
-          <input id="rpcUrl" type="text" value="https://rpc-mainnet.metaearth.example" readonly aria-readonly="true" />
+          <input id="rpcUrl" type="text" value="https://rpc.mec.me" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
           <label for="chainId">Chain ID Mainnet</label>
-          <input id="chainId" type="text" value="me-chain" readonly aria-readonly="true" />
+          <input id="chainId" type="text" value="mechain-mainnet" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
@@ -1925,8 +1792,8 @@
     })();
 
     const LOCKED_MERCHANT_ADDRESS = "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
-    const LOCKED_RPC_URL = "https://rpc-mainnet.metaearth.example";
-    const LOCKED_CHAIN_ID = "me-chain";
+    const LOCKED_RPC_URL = "https://rpc.mec.me";
+    const LOCKED_CHAIN_ID = "mechain-mainnet";
     const LOCKED_EXPLORER_URL = "https://explorer.mec.me/";
     const LOCKED_SYMBOL = "MEC";
 
@@ -1956,6 +1823,26 @@
       name: "PAKET DEMO (Live API)",
       baseIdr: 45500
     };
+
+    function safeStorageGet(store, key) {
+      try {
+        return store ? store.getItem(key) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function safeStorageSet(store, key, value) {
+      try {
+        if (store) store.setItem(key, value);
+      } catch (e) {}
+    }
+
+    function safeStorageRemove(store, key) {
+      try {
+        if (store) store.removeItem(key);
+      } catch (e) {}
+    }
 
     function getLocalDateKey(dateObj = new Date()) {
       const y = dateObj.getFullYear();
@@ -2059,8 +1946,10 @@
     });
 
     function isSheetsConfigured() {
-      return GOOGLE_SHEETS_WEBHOOK_URL &&
-             GOOGLE_SHEETS_WEBHOOK_URL.startsWith("https://script.google.com/");
+      return Boolean(
+        GOOGLE_SHEETS_WEBHOOK_URL &&
+        GOOGLE_SHEETS_WEBHOOK_URL.startsWith("https://script.google.com/")
+      );
     }
 
     function getActiveUsdIdr() {
@@ -2072,7 +1961,7 @@
 
     function getOrderHistoryList() {
       try {
-        const raw = localStorage.getItem(HISTORY_KEY);
+        const raw = safeStorageGet(window.localStorage, HISTORY_KEY);
         const list = raw ? JSON.parse(raw) : [];
         return Array.isArray(list) ? list : [];
       } catch (e) {
@@ -2252,14 +2141,22 @@
 
     function cleanUrlQueryParams() {
       if (window.location.search) {
-        const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        window.history.replaceState({}, document.title, cleanUrl);
+        try {
+          const params = new URLSearchParams(window.location.search);
+          params.delete("id_produk");
+          params.delete("produk");
+          params.delete("harga");
+          params.delete("tujuan");
+          const qs = params.toString();
+          const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + (qs ? "?" + qs : "");
+          window.history.replaceState({}, document.title, cleanUrl);
+        } catch (e) {}
       }
     }
 
     function readSavedSelection() {
       try {
-        const raw = sessionStorage.getItem(ACTIVE_SELECTION_KEY);
+        const raw = safeStorageGet(window.sessionStorage, ACTIVE_SELECTION_KEY);
         return raw ? JSON.parse(raw) : null;
       } catch (e) {
         return null;
@@ -2268,14 +2165,12 @@
 
     function writeSavedSelection(data) {
       try {
-        sessionStorage.setItem(ACTIVE_SELECTION_KEY, JSON.stringify(data));
+        safeStorageSet(window.sessionStorage, ACTIVE_SELECTION_KEY, JSON.stringify(data));
       } catch (e) {}
     }
 
     function clearSavedSelection() {
-      try {
-        sessionStorage.removeItem(ACTIVE_SELECTION_KEY);
-      } catch (e) {}
+      safeStorageRemove(window.sessionStorage, ACTIVE_SELECTION_KEY);
     }
 
     function applyUrlCatalogParams() {
@@ -2328,8 +2223,8 @@
     }
 
     function setPaymentMethod(method) {
-      activePaymentMethod = method;
-      const isMepass = method === "mepass";
+      activePaymentMethod = method === "web3" ? "web3" : "mepass";
+      const isMepass = activePaymentMethod === "mepass";
       document.getElementById("tabMepass").classList.toggle("active", isMepass);
       document.getElementById("tabWeb3").classList.toggle("active", !isMepass);
       document.getElementById("mepassQrPanel").style.display = isMepass ? "block" : "none";
@@ -2482,7 +2377,7 @@
 
     async function fetchFromSource(url, parser) {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 3000);
+      const timer = setTimeout(() => controller.abort(), 3500);
       try {
         const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
         if (!res.ok) return null;
@@ -2502,7 +2397,7 @@
 
       let hasTodayCache = false;
       try {
-        const rawCache = localStorage.getItem(CACHE_KEY);
+        const rawCache = safeStorageGet(window.localStorage, CACHE_KEY);
         if (rawCache) {
           const parsed = JSON.parse(rawCache);
           if (parsed && typeof parsed.rate === "number" && parsed.rate > 1000) {
@@ -2565,14 +2460,12 @@
         usdIdrSourceLabel = validSource.label;
         usdIdrLastUpdatedAt = nowTs;
         usdIdrDateKey = todayKey;
-        try {
-          localStorage.setItem(CACHE_KEY, JSON.stringify({
-            rate: validSource.rate,
-            source: validSource.label,
-            dateKey: todayKey,
-            updatedAt: nowTs
-          }));
-        } catch (e) {}
+        safeStorageSet(window.localStorage, CACHE_KEY, JSON.stringify({
+          rate: validSource.rate,
+          source: validSource.label,
+          dateKey: todayKey,
+          updatedAt: nowTs
+        }));
       } else if (!liveUsdIdr) {
         liveUsdIdr = FALLBACK_USD_IDR;
         usdIdrSourceLabel = "Fallback";
@@ -2663,14 +2556,14 @@
         };
         const filtered = list.filter(x => x.orderId !== entry.orderId);
         filtered.unshift(merged);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 10)));
+        safeStorageSet(window.localStorage, HISTORY_KEY, JSON.stringify(filtered.slice(0, 10)));
       } catch (e) {}
       updateSavedTargetCaption();
       renderOrderHistory();
     }
 
     function clearOrderHistory() {
-      try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+      safeStorageRemove(window.localStorage, HISTORY_KEY);
       updateSavedTargetCaption();
       renderOrderHistory();
     }
@@ -2713,7 +2606,11 @@
         return;
       }
 
-      if (!isSheetsConfigured()) return;
+      if (!isSheetsConfigured()) {
+        msgEl.style.color = "#fde68a";
+        msgEl.textContent = "Webhook verifikasi pesanan belum dikonfigurasi.";
+        return;
+      }
 
       btnEl.disabled = true;
       btnEl.textContent = "Mengecek...";
@@ -3074,21 +2971,10 @@
       updateSummary();
       fetchLiveUsdToIdr(true);
     });
-    function hideSplashScreen() {
-      const splash = document.getElementById("elsSplashScreen");
-      if (!splash || splash.classList.contains("is-hiding")) return;
-      splash.classList.add("is-hiding");
-      setTimeout(() => {
-        if (splash && splash.parentNode) {
-          splash.parentNode.removeChild(splash);
-        }
-      }, 420);
-    }
 
-    window.addEventListener("load", () => {
-      setTimeout(hideSplashScreen, 450);
+    window.addEventListener("pagehide", () => {
+      stopStatusPolling();
     });
-    setTimeout(hideSplashScreen, 1800);
 
     updateSummary();
     updateSavedTargetCaption();
