@@ -1,24 +1,23 @@
 {
-  "name": "ElsGlobal x Meta Earth",
-  "short_name": "ElsGlobal MEC",
-  "description": "Layanan Digital, PPOB & Penukaran MEC oleh komunitas ElsGlobal dan Meta Earth.",
+  "name": "ElsGlobal × Meta Earth",
+  "short_name": "ElsGlobal",
+  "description": "Kasir Digital, PPOB & Penukaran MEC di Jaringan Meta Earth",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "any",
-  "dir": "ltr",
+  "orientation": "portrait",
+  "theme_color": "#0b111e",
   "background_color": "#080c14",
-  "theme_color": "#080c14",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "./logo-els.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "/icon-512.png",
+      "src": "./logo-els.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
