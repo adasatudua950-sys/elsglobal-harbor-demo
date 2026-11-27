@@ -2,14 +2,15 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>ElsGlobal × Meta Earth — Kasir Digital & Penukaran MEC</title>
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#080c14" />
+  <meta name="theme-color" content="#04060a" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
       --bg: #080c14;
+      --top-black: #04060a;
       --card: #11192b;
       --card-2: #151e33;
       --text: #f8fafc;
@@ -38,8 +39,46 @@
                   var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 20px 14px;
+      padding: 0 14px 20px 14px;
       overflow-x: clip;
+    }
+
+    /* Header hitam menyatu dengan bar/safe-area bawaan HP */
+    .top-status-header {
+      width: 100%;
+      padding-top: calc(8px + env(safe-area-inset-top));
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      background: linear-gradient(180deg, #020305 0%, var(--top-black) 78%, rgba(4, 6, 10, 0.92) 100%);
+      border-bottom: 1px solid rgba(29, 211, 248, 0.18);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .top-status-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 14px;
+      min-width: 0;
+    }
+
+    .greeting-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .greeting-sub {
+      margin-top: 3px;
+      font-size: 11.5px;
+      color: #cbd5e1;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
 
     .container {
@@ -147,7 +186,10 @@
     }
 
     @media (max-width: 640px) {
-      body { padding: 14px 10px; }
+      body { padding: 0 10px 14px 10px; }
+      .top-status-inner { padding: 0 10px; }
+      .greeting-title { font-size: 14px; }
+      .greeting-sub { font-size: 11px; }
       .topbar { padding: 14px; }
       .brand h1 { font-size: 16px; }
       .wallet-box { width: 100%; flex-wrap: nowrap; gap: 8px; }
@@ -1336,6 +1378,13 @@
   </style>
 </head>
 <body>
+  <header class="top-status-header" aria-label="Salam waktu lokal">
+    <div class="top-status-inner">
+      <div id="timeGreetingTitle" class="greeting-title">Selamat Datang</div>
+      <div id="timeGreetingSub" class="greeting-sub">Menyiapkan sapaan sesuai waktu perangkat Anda...</div>
+    </div>
+  </header>
+
   <div class="container">
     <div class="topbar">
       <div class="brand">
@@ -1754,6 +1803,36 @@
       const m = String(dateObj.getMonth() + 1).padStart(2, "0");
       const d = String(dateObj.getDate()).padStart(2, "0");
       return `${y}-${m}-${d}`;
+    }
+
+    function updateTimeGreeting() {
+      const titleEl = document.getElementById("timeGreetingTitle");
+      const subEl = document.getElementById("timeGreetingSub");
+      if (!titleEl || !subEl) return;
+
+      const now = new Date();
+      const hour = now.getHours();
+
+      let greeting = "Selamat Pagi";
+      let iconHtml = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>';
+      let quote = "Awali pagi dengan langkah ringan—utilitas MEC siap menemani kebutuhan harian Anda.";
+
+      if (hour >= 11 && hour < 15) {
+        greeting = "Selamat Siang";
+        iconHtml = '<i class="fa-solid fa-cloud-sun" style="color:#38bdf8;"></i>';
+        quote = "Tetap produktif di tengah hari—tukar MEC jadi pulsa, data, PLN, atau e-wallet tanpa ribet.";
+      } else if (hour >= 15 && hour < 18) {
+        greeting = "Selamat Sore";
+        iconHtml = '<i class="fa-solid fa-sunset" style="color:#fb923c;"></i>';
+        quote = "Jelang senja, pastikan kuota, pulsa, dan token listrik aman sebelum aktivitas berlanjut.";
+      } else if (hour >= 18 || hour < 4) {
+        greeting = "Selamat Malam";
+        iconHtml = '<i class="fa-solid fa-moon" style="color:#a5b4fc;"></i>';
+        quote = "Saat yang lain beristirahat, utilitas MEC terus bekerja nyata—selesaikan kebutuhan digital Anda malam ini dengan tenang.";
+      }
+
+      titleEl.innerHTML = `${iconHtml}<span>${greeting}</span>`;
+      subEl.textContent = quote;
     }
 
     function showElsAlert(title, message, options = {}) {
@@ -2781,8 +2860,12 @@
       setPaymentMethod(activePaymentMethod);
     }
 
+    updateTimeGreeting();
+    setInterval(updateTimeGreeting, 60 * 1000);
+
     applyUrlCatalogParams();
     window.addEventListener("pageshow", () => {
+      updateTimeGreeting();
       applyUrlCatalogParams();
       updateSummary();
       fetchLiveUsdToIdr(true);
