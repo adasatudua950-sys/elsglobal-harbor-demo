@@ -1731,6 +1731,7 @@
     const FIXED_MEC_DAILY_STEP = 0.01;
     const CACHE_KEY = "elsglobal_usd_idr_cache_v4";
     const HISTORY_KEY = "elsglobal_checkout_history_v1";
+    const ACTIVE_SELECTION_KEY = "elsglobal_active_selection_v1";
 
     let liveUsdIdr = null;
     let usdIdrSourceLabel = "Cadangan";
@@ -2000,6 +2001,27 @@
       }
     }
 
+    function readSavedSelection() {
+      try {
+        const raw = sessionStorage.getItem(ACTIVE_SELECTION_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeSavedSelection(data) {
+      try {
+        sessionStorage.setItem(ACTIVE_SELECTION_KEY, JSON.stringify(data));
+      } catch (e) {}
+    }
+
+    function clearSavedSelection() {
+      try {
+        sessionStorage.removeItem(ACTIVE_SELECTION_KEY);
+      } catch (e) {}
+    }
+
     function applyUrlCatalogParams() {
       resetCustomerInputState();
 
@@ -2008,34 +2030,44 @@
       const produkNama = (params.get("produk") || "").trim();
       const rawHarga = (params.get("harga") || "").trim();
       const tujuan = (params.get("tujuan") || "").trim();
+      const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
+      const hasUrlProduct = Boolean(produkNama && Number.isFinite(parsedHarga) && parsedHarga > 0);
 
-      if (tujuan) {
-        const customerInput = document.getElementById("customerId");
-        if (customerInput) {
-          customerInput.value = tujuan;
-        }
+      let activeSelection = null;
+      if (hasUrlProduct || tujuan) {
+        activeSelection = {
+          id: idProduk || "catalog-item",
+          name: hasUrlProduct ? produkNama : selectedProduct.name,
+          baseIdr: hasUrlProduct ? Math.round(parsedHarga) : selectedProduct.baseIdr,
+          tujuan
+        };
+        writeSavedSelection(activeSelection);
+      } else {
+        activeSelection = readSavedSelection();
       }
 
-      const parsedHarga = Number(rawHarga.replace(/[^\d.]/g, ""));
-      const hasCatalogProduct = Boolean(produkNama && Number.isFinite(parsedHarga) && parsedHarga > 0);
       const banner = document.getElementById("selectedFromCatalogBanner");
+      const customerInput = document.getElementById("customerId");
 
-      if (hasCatalogProduct) {
+      if (activeSelection && activeSelection.name && Number(activeSelection.baseIdr) > 0) {
         selectedProduct = {
-          id: idProduk || "catalog-item",
-          name: produkNama,
-          baseIdr: Math.round(parsedHarga)
+          id: activeSelection.id || "catalog-item",
+          name: activeSelection.name,
+          baseIdr: Math.round(Number(activeSelection.baseIdr))
         };
-
-        banner.innerHTML = `Produk aktif: <strong>${escapeHtml(produkNama)}</strong>${tujuan ? " • Tujuan: <strong>" + escapeHtml(tujuan) + "</strong>" : ""}`;
+        if (customerInput && activeSelection.tujuan) {
+          customerInput.value = activeSelection.tujuan;
+        }
+        banner.innerHTML = `Produk aktif: <strong>${escapeHtml(selectedProduct.name)}</strong>${activeSelection.tujuan ? " • Tujuan: <strong>" + escapeHtml(activeSelection.tujuan) + "</strong>" : ""}`;
         banner.classList.add("show");
       } else {
         banner.classList.remove("show");
         banner.innerHTML = "";
       }
 
+      const isCatalogSelected = Boolean(activeSelection && ((activeSelection.name && Number(activeSelection.baseIdr) > 0) || activeSelection.tujuan));
       syncCustomerFieldVisibility();
-      setCheckoutPlacement(hasCatalogProduct || Boolean(tujuan));
+      setCheckoutPlacement(isCatalogSelected);
       cleanUrlQueryParams();
     }
 
@@ -2515,13 +2547,21 @@
     function resetCheckoutForm() {
       stopStatusPolling();
       currentOrderContext = null;
+      clearSavedSelection();
+      selectedProduct = {
+        id: "paket-demo",
+        name: "PAKET DEMO (Live API)",
+        baseIdr: 45500
+      };
       resetCustomerInputState();
       setCheckoutPlacement(false);
       document.getElementById("selectedFromCatalogBanner").classList.remove("show");
+      document.getElementById("selectedFromCatalogBanner").innerHTML = "";
       document.getElementById("manualTxHash").value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
       receiptBox.innerHTML = "";
+      updateSummary();
     }
 
     function renderReceiptCard(ctx, orderStatus, kodeToken, syncLabel) {
