@@ -1,377 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#070b14">
     <title>E-Wallet Dompet Digital - Bayar MEC</title>
-    <link href="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-            user-select: none;
-        }
-
-        html {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: url('bg-kucing.png') !important;
-            background-size: 100% 100% !important;
-            background-position: center !important;
-            background-repeat: no-repeat !important;
-            background-attachment: fixed !important;
-            min-height: 100vh;
-            color: #212529;
-            margin: 0;
-            padding: 0;
-        }
-
-        p { margin: 0; font-size: 12px; }
-        input { border: none; transition: 0.3s; outline: none; width: 100%; background-color: transparent; }
-        a, a:focus, a:hover { text-decoration: none; color: inherit; }
-
-        .my-bg { background: linear-gradient(135deg, #0066ff 0%, #3385ff 100%) !important; }
-        .my-color { color: #0066ff !important; }
-        .borad-6 { border-radius: 6px; }
-        .borad-8 { border-radius: 8px; }
-        .borad-10 { border-radius: 10px; }
-        .borad-12 { border-radius: 12px; }
-        .borad-15 { border-radius: 15px; }
-
-        .my-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .bg-white { background-color: #fff !important; }
-        .text-white { color: #fff !important; }
-
-        .form-inp {
-            border: 1px solid #cbd5e1;
-            font-size: 13px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: #f8fafc;
-        }
-
-        .form-inp:focus {
-            border: 1px solid #0066ff;
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
-            background: #fff;
-        }
-
-        .label-nominal-bebas {
-            color: #0f172a !important;
-            font-weight: 700 !important;
-        }
-
-        #inputNominalBebas {
-            font-size: 11px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        #inputNominalBebas::placeholder {
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            opacity: 1;
-        }
-
-        .d-grid-1 {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 8px;
-        }
-
-        .card-kategori {
-            background: #0066ff;
-            border: 1.5px solid #0052cc;
-            border-radius: 12px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.2);
-        }
-
-        .card-kategori:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 102, 255, 0.35);
-            background: #0052cc;
-        }
-
-        .bg-produk {
-            background: linear-gradient(135deg, rgba(255, 238, 173, 0.65) 0%, rgba(184, 208, 255, 0.7) 50%, rgba(216, 191, 216, 0.65) 100%), #ffffff !important;
-            padding: 10px 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.03);
-            border-radius: 10px;
-            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
-            transition: all 0.25s ease-in-out;
-        }
-
-        .bg-produk:hover {
-            border-color: #0066ff !important;
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.2);
-        }
-
-        .bg-detail {
-            background: linear-gradient(135deg, #0066ff 0%, #0047b3 100%);
-            padding: 12px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .btn-pay-mec-wide {
-            width: 100%;
-            padding: 11px 16px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            box-shadow: 0 6px 16px rgba(0, 102, 255, 0.28);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .btn-pay-mec-wide:active {
-            transform: scale(0.99);
-        }
-
-        #detailCanv {
-            width: 100%;
-            max-width: 100%;
-            left: 0;
-            right: 0;
-            transform: none;
-        }
-
-        .swal-els-popup {
-            border-radius: 16px !important;
-            padding: 20px 18px !important;
-            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.22) !important;
-            max-width: 360px !important;
-        }
-
-        .swal-els-title {
-            font-size: 16px !important;
-            font-weight: 700 !important;
-            color: #0f172a !important;
-            margin: 0 !important;
-        }
-
-        .swal-els-html {
-            margin: 10px 0 0 !important;
-            font-size: 12px !important;
-            color: #475569 !important;
-            line-height: 1.5 !important;
-        }
-
-        .swal-els-confirm {
-            background: linear-gradient(135deg, #0066ff 0%, #3385ff 100%) !important;
-            color: #ffffff !important;
-            font-size: 12.5px !important;
-            font-weight: 600 !important;
-            border-radius: 10px !important;
-            padding: 9px 22px !important;
-            box-shadow: 0 6px 14px rgba(0, 102, 255, 0.25) !important;
-        }
-
-        .swal-min-box {
-            margin-top: 10px;
-            background: #fffbeb;
-            border: 1px dashed #f59e0b;
-            border-radius: 10px;
-            padding: 8px 10px;
-            font-size: 11.5px;
-            color: #92400e;
-        }
-
-        .badge-terlaris-modern {
-            display: inline-flex; align-items: center; background-color: #fef08a !important; color: #854d0e !important; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #facc15; white-space: nowrap;
-        }
-        .badge-gangguan-box {
-            display: inline-flex; align-items: center; justify-content: center; background: #fee2e2; color: #991b1b; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #f87171; white-space: nowrap;
-        }
-        .badge-berkualitas-modern {
-            display: inline-flex; align-items: center; background-color: #0066ff !important; color: #ffffff !important; font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap;
-        }
-
-        .product-price-box {
-            background: rgba(255, 255, 255, 0.95); color: #0f172a !important; font-size: 13px; font-weight: 700; padding: 3px 7px; border-radius: 6px; border: 1px solid #cbd5e1; white-space: nowrap;
-        }
-
-        .modal-content { border: none; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); overflow: hidden; }
-        .btn-aksi-top { font-size: 11px; font-weight: 600; padding: 5px 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center; width: 100%; height: 30px; white-space: nowrap; }
-
-        .ping {
-            --uib-size: 3.5rem; --uib-speed: 2s; --uib-color: #0066ff;
-            position: relative; height: var(--uib-size); width: var(--uib-size);
-        }
-        .ping::before, .ping::after {
-            content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 100%; border-radius: 50%; background-color: var(--uib-color); animation: pulse7132 var(--uib-speed) linear infinite; transform: scale(0); opacity: 0;
-        }
-        .ping::after { animation-delay: calc(var(--uib-speed) / -2); }
-        @keyframes pulse7132 {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(1); opacity: 0; }
-        }
-
-        #dataProduk { position: relative; z-index: 0; min-height: 85vh; padding-bottom: 60px; }
-    </style>
-</head>
-
-<body>
-
-    <div id="hiddenMemberLevel" class="d-none">{{nama_membership}}</div>
-
-    <!-- HALAMAN PILIH KATEGORI E-WALLET -->
-    <section class="p-3" id="pageKategori">
-        <div class="mb-3">
-            <input type="search" class="form-inp bg-white text-dark" placeholder="Cari Kategori E-Wallet..." id="searchKategori">
-        </div>
-        <div id="listKategoriContainer"></div>
-    </section>
-
-    <!-- HALAMAN UTAMA PRODUK E-WALLET -->
-    <div id="pageProdukUtama" class="d-none">
-
-        <section class="header px-3 pt-2" id="sectionInputForm">
-            <div class="bg-white p-3 borad-10 my-shadow" style="background: rgba(255, 255, 255, 0.95) !important;">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <div class="my-bg text-white d-flex align-items-center justify-content-center borad-6" style="width: 28px; height: 28px;">
-                            <i class="fa-solid fa-wallet" style="font-size: 12px;"></i>
-                        </div>
-                        <p class="fw-bold ms-2 text-dark" style="font-size: 13px;"><span id="textTop">E-Wallet Dompet Digital</span></p>
-                    </div>
-                    <div class="d-flex gap-2 align-items-center">
-                        <img src="" width="28" id="imgSavedContacts" class="my-bg p-1 borad-6 text-white shadow-sm" onclick="openSavedContactsModal()" style="cursor: pointer;" title="Pelanggan Tersimpan">
-                        <div class="btn btn-sm btn-light border text-primary fw-bold px-2 py-1" onclick="gantiKategori()" style="font-size: 11px; border-radius: 6px;">
-                            <i class="fa-solid fa-list-ul me-1"></i> Pilih Lain
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-2">
-                    <p class="text-secondary fw-semibold mb-1" style="font-size: 11px;">Nomor Rekening / Tujuan E-Wallet</p>
-                    <div class="d-flex align-items-center">
-                        <input type="tel" class="form-inp" id="nomoId" placeholder="Masukkan nomor tujuan e-wallet...">
-                        <img src="" width="38" id="imgContact" class="ms-1.5 my-bg p-2 borad-8 shadow-sm text-white" onclick="getContact()" style="cursor: pointer;">
-                    </div>
-                </div>
-
-                <div class="mt-2 pt-2 border-top">
-                    <div class="form-check ps-0 mb-0">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input ms-0 me-2" type="checkbox" value="" id="chkSimpanPelanggan" style="width: 16px; height: 16px; cursor: pointer;">
-                            <label class="form-check-label fw-semibold text-dark" for="chkSimpanPelanggan" style="cursor: pointer; font-size: 12px;">
-                                Simpan nama & nomor tujuan (Opsional)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mt-1.5 d-none animate__animated animate__fadeIn" id="boxInputNama">
-                        <input type="text" class="form-inp" style="font-size: 12px; padding: 6px 10px;" id="namaPelangganInput" placeholder="Masukkan nama pemilik / keterangan...">
-                    </div>
-                </div>
-
-                <div class="mt-2.5 d-none animate__animated animate__fadeIn" id="boxBtnLanjut">
-                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm fw-bold" style="font-size: 13px; cursor: pointer;" onclick="lanjutTampilkanProduk()">
-                        Lanjut Pilih Nominal E-Wallet
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="px-3 pt-2 d-none" id="boxPilihan" style="position: relative; z-index: 1020; background: transparent;">
-            <div class="bg-white p-2 borad-10 my-shadow" style="background: rgba(255, 255, 255, 0.95) !important;">
-                <div class="row g-1">
-                    <div class="col-6">
-                        <button class="btn btn-outline-primary btn-aksi-top" id="btnToggleFilter" onclick="toggleFilterMenu()">
-                            <span id="textToggleBtn">Sembunyikan Menu</span>
-                        </button>
-                    </div>
-                    <div class="col-6">
-                        <button class="btn btn-light border text-primary btn-aksi-top" onclick="gantiKategori()">
-                            Ganti E-Wallet
-                        </button>
-                    </div>
-                </div>
-
-                <div id="collapseFilterBody" class="mt-2 animate__animated animate__fadeIn">
-                    <div class="px-2 py-1 borad-6 bg-light border d-flex align-items-center justify-content-between mb-1.5" style="min-height: 22px;">
-                        <span class="text-secondary fw-bold" style="font-size: 10px;">Nomor Tujuan:</span>
-                        <span class="text-dark fw-bold font-monospace" id="displayNomorAktif" style="font-size: 11px;">-</span>
-                    </div>
-
-                    <div id="filterStandarContainer">
-                        <div class="px-2 py-1 borad-8 mb-1.5" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
-                            <div class="d-flex align-items-center">
-                                <i class="fa-solid fa-magnifying-glass text-secondary me-2" style="font-size: 12px;"></i>
-                                <input type="search" class="form-inp border-0 shadow-none bg-transparent p-0" style="font-size: 12px;" placeholder="Cari nominal e-wallet..." id="search">
-                            </div>
-                        </div>
-
-                        <div class="dropdown pt-1 border-top">
-                            <p class="fw-bold text-dark mb-0 d-flex justify-content-between align-items-center" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; font-size: 12px;">
-                                <span>Urutkan: <span id="namaPil" class="my-color">Termurah</span></span>
-                                <i class="fa-solid fa-caret-down text-secondary"></i>
-                            </p>
-                            <ul class="dropdown-menu shadow-sm border-0 borad-10 p-1">
-                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termurah" onclick="rubahData('Termurah')">Termurah</li>
-                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termahal" onclick="rubahData('Termahal')">Termahal</li>
-                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-A-Z" onclick="rubahData('A-Z')">A - Z</li>
-                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Z-A" onclick="rubahData('Z-A')">Z - A</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="p-3 position-relative" style="z-index: 0;" id="dataProduk">
-        </section>
-    </div>
-
-    <!-- POPUP DETAIL PEMBAYARAN -->
-    <section class="offcanvas offcanvas-bottom p-2 h-auto" style="background-color: transparent; border: none !important;" tabindex="-1" id="detailCanv" aria-labelledby="detailCanv">
-        <div class="px-3 bg-white borad-10 my-shadow pb-0">
-            <div class="bg-detail">
-                <p class="text-center text-white fw-bold" style="font-size: 13px;">Detail Transaksi E-Wallet</p>
-            </div>
-        </div>
-        <div class="offcanvas-body bg-white borad-10 my-shadow p-3" id="bodyCanv">
-        </div>
-    </section>
-
-    <!-- MODAL PELANGGAN TERSIMPAN -->
-    <section class="modal fade" id="modalPelangganTersimpan" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content borad-12">
-                <div class="my-bg p-2.5 text-white d-flex justify-content-between align-items-center">
-                    <p class="fw-bold mb-0" style="font-size: 13px;">Pelanggan Tersimpan</p>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-2.5 bg-white" id="listPelangganTersimpanBody">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript">
-        const token = "eyJhcHAiOiI5MzEyOSIsImF1dGgiOiIyMDIyMDExNyIsInNpZ24iOiJDbklZZHVXY2xOTVdSS0ZwdkdBaUF3PT0ifQ==";
+    <link href="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script>
         const urlToko = "https://elsglobal.asia";
+        var token = "eyJhcHAiOiI5MzEyOSIsImF1dGgiOiIyMDIyMDExNyIsInNpZ24iOiJDbklZZHVXY2xOTVdSS0ZwdkdBaUF3PT0ifQ==";
         var data_page = 50;
 
         // Biaya Admin untuk E-Wallet Bebas Nominal
@@ -406,10 +53,522 @@
                 "search": "https://cdn-icons-png.flaticon.com/128/151/151773.png",
                 "close": "https://cdn-icons-png.flaticon.com/128/9684/9684650.png",
             }
-        ];
+        ]
+    </script>
+    <style type="text/css">
+        :root {
+            --bg-top-bar: #070b14;
+            --bg-crypto: radial-gradient(circle at top, #132347 0%, #091122 55%, #060a13 100%);
+            --card-dark: rgba(15, 25, 48, 0.92);
+            --card-border: rgba(56, 189, 248, 0.24);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #0066ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
+        .ping {
+            --uib-size: 3.5rem;
+            --uib-speed: 2s;
+            --uib-color: #38bdf8;
+            position: relative;
+            height: var(--uib-size);
+            width: var(--uib-size);
+        }
+
+        .ping::before,
+        .ping::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            background-color: var(--uib-color);
+            animation: pulse7132 var(--uib-speed) linear infinite;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        .ping::after {
+            animation-delay: calc(var(--uib-speed) / -2);
+        }
+
+        @keyframes pulse7132 {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-top-bar);
+        }
+
+        body {
+            background: var(--bg-crypto) !important;
+            background-attachment: fixed !important;
+            color: var(--text-main);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .crypto-topbar {
+            background-color: var(--bg-top-bar);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            position: sticky;
+            top: 0;
+            z-index: 1040;
+            padding: 11px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .crypto-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #f8fafc;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .crypto-brand-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 3px 9px;
+            border-radius: 999px;
+        }
+
+        .crypto-card {
+            background: var(--card-dark) !important;
+            border: 1px solid var(--card-border) !important;
+            color: var(--text-main);
+        }
+
+        p {
+            margin: 0;
+        }
+
+        input {
+            border: none;
+            transition: 0.2s;
+            outline: none;
+            width: 100%;
+            background-color: transparent;
+            color: var(--text-main);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        a, a:focus, a:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .my-bg {
+            background: linear-gradient(135deg, #0066ff 0%, #0ea5e9 100%) !important;
+        }
+
+        .my-color {
+            color: var(--accent-cyan) !important;
+        }
+
+        .borad-6 { border-radius: 6px; }
+        .borad-8 { border-radius: 8px; }
+        .borad-10 { border-radius: 10px; }
+        .borad-12 { border-radius: 12px; }
+
+        .my-shadow {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .form-inp {
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(9, 17, 34, 0.85);
+            color: #f8fafc;
+        }
+
+        .form-inp:focus {
+            border: 1px solid var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+            background: rgba(15, 25, 48, 0.98);
+        }
+
+        /* Kartu biru pilihan banyak wallet dipertahankan */
+        .card-kategori {
+            background: #0066ff;
+            border: 1.5px solid #0052cc;
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.2);
+        }
+
+        .card-kategori:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 102, 255, 0.35);
+            background: #0052cc;
+        }
+
+        .d-grid-1 {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 8px;
+        }
+
+        .bg-produk {
+            background: linear-gradient(145deg, rgba(19, 34, 65, 0.95) 0%, rgba(11, 20, 40, 0.96) 100%) !important;
+            padding: 11px 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.2) !important;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .bg-produk:hover {
+            border-color: var(--accent-cyan) !important;
+            box-shadow: 0 8px 22px rgba(14, 165, 233, 0.22);
+        }
+
+        .bg-produk:active {
+            transform: scale(0.99);
+        }
+
+        .bg-detail {
+            background: linear-gradient(135deg, #0b1936 0%, #0066ff 100%);
+            padding: 12px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .badge-terlaris-modern {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(250, 204, 21, 0.16) !important;
+            color: #fde047 !important;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(250, 204, 21, 0.45);
+            white-space: nowrap;
+        }
+
+        .badge-gangguan-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(248, 113, 113, 0.16);
+            color: #fca5a5;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(248, 113, 113, 0.45);
+            white-space: nowrap;
+        }
+
+        .badge-berkualitas-modern {
+            display: inline-flex;
+            align-items: center;
+            background-color: rgba(56, 189, 248, 0.16) !important;
+            color: #7dd3fc !important;
+            font-size: 8.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            white-space: nowrap;
+        }
+
+        .product-price-box {
+            background: rgba(6, 11, 22, 0.85);
+            color: #38bdf8 !important;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            white-space: nowrap;
+        }
+
+        .modal-content {
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+            overflow: hidden;
+            background: #0d172c;
+            color: var(--text-main);
+        }
+
+        .dropdown-menu {
+            background-color: #0f1b33;
+            border: 1px solid var(--card-border) !important;
+        }
+
+        .dropdown-item {
+            color: #e2e8f0;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: rgba(56, 189, 248, 0.14);
+            color: #38bdf8;
+        }
+
+        .btn-aksi-top {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 30px;
+            white-space: nowrap;
+        }
+
+        .swal-els-popup {
+            border-radius: 12px !important;
+            padding: 18px 16px !important;
+            background: #0d172c !important;
+            color: #f8fafc !important;
+            border: 1px solid var(--card-border) !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55) !important;
+            max-width: 360px !important;
+        }
+
+        .swal-els-title {
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            color: #f8fafc !important;
+            margin: 0 !important;
+        }
+
+        .swal-els-html {
+            margin: 10px 0 0 !important;
+            font-size: 12px !important;
+            color: #94a3b8 !important;
+            line-height: 1.5 !important;
+        }
+
+        .swal-els-confirm {
+            background: linear-gradient(135deg, #0066ff 0%, #0ea5e9 100%) !important;
+            color: #ffffff !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            border-radius: 8px !important;
+            padding: 8px 20px !important;
+            box-shadow: 0 6px 14px rgba(0, 102, 255, 0.25) !important;
+        }
+
+        .swal-min-box {
+            margin-top: 10px;
+            background: rgba(250, 204, 21, 0.12);
+            border: 1px dashed rgba(250, 204, 21, 0.45);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+            color: #fde047;
+        }
+
+        #dataProduk {
+            position: relative;
+            z-index: 0;
+            min-height: 85vh;
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="crypto-topbar">
+        <a href="index.html" class="crypto-back-btn">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Kembali</span>
+        </a>
+        <span class="crypto-brand-tag">
+            <i class="fa-solid fa-wallet"></i>
+            <span>ELS × MEC · E-Wallet</span>
+        </span>
+    </nav>
+
+    <div id="hiddenMemberLevel" class="d-none">{{nama_membership}}</div>
+
+    <!-- HALAMAN PILIH KATEGORI E-WALLET (KARTU BIRU DIPERTAHANKAN) -->
+    <section class="p-3" id="pageKategori">
+        <div class="mb-3">
+            <input type="search" class="form-inp" placeholder="Cari Kategori E-Wallet..." id="searchKategori">
+        </div>
+        <div id="listKategoriContainer"></div>
+    </section>
+
+    <!-- HALAMAN UTAMA PRODUK E-WALLET -->
+    <div id="pageProdukUtama" class="d-none">
+
+        <section class="header px-3 pt-2" id="sectionInputForm">
+            <div class="crypto-card p-3 borad-10 my-shadow">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="my-bg text-white d-flex align-items-center justify-content-center borad-6 shadow-sm" style="width: 28px; height: 28px;">
+                            <i class="fa-solid fa-wallet" style="font-size: 12px;"></i>
+                        </div>
+                        <p class="f-13 fw-bold ms-2 text-white"><span id="textTop" class="my-color">E-Wallet Dompet Digital</span></p>
+                    </div>
+                    <div class="d-flex gap-1.5 align-items-center">
+                        <img src="" width="28" id="imgSavedContacts" class="my-bg p-1 borad-6 text-white shadow-sm" onclick="openSavedContactsModal()" style="cursor: pointer;" title="Pelanggan Tersimpan">
+                        <button type="button" class="btn btn-dark border btn-aksi-top px-2" style="width: auto; border-color: rgba(148, 163, 184, 0.28) !important; color: #38bdf8;" onclick="gantiKategori()">
+                            <i class="fa-solid fa-list-ul me-1"></i> Pilih Lain
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <p class="fw-semibold mb-1" style="font-size: 11px; color: var(--text-muted);">Nomor Rekening / Tujuan E-Wallet</p>
+                    <div class="d-flex align-items-center">
+                        <input type="tel" class="form-inp" id="nomoId" placeholder="Masukkan nomor tujuan e-wallet...">
+                        <img src="" width="38" id="imgContact" class="ms-1.5 my-bg p-2 borad-8 shadow-sm text-white" onclick="getContact()" style="cursor: pointer;">
+                    </div>
+                </div>
+
+                <div class="mt-2 pt-2" style="border-top: 1px solid rgba(148, 163, 184, 0.16);">
+                    <div class="form-check ps-0 mb-0">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input ms-0 me-2" type="checkbox" value="" id="chkSimpanPelanggan" style="width: 16px; height: 16px; cursor: pointer;">
+                            <label class="form-check-label fw-semibold text-white" for="chkSimpanPelanggan" style="cursor: pointer; font-size: 12px;">
+                                Simpan nama & nomor tujuan (Opsional)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-1.5 d-none animate__animated animate__fadeIn" id="boxInputNama">
+                        <input type="text" class="form-inp" style="font-size: 12px; padding: 6px 10px;" id="namaPelangganInput" placeholder="Masukkan nama pemilik / keterangan...">
+                    </div>
+                </div>
+
+                <div class="mt-2.5 d-none animate__animated animate__fadeIn" id="boxBtnLanjut">
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm fw-bold" style="font-size: 13px; cursor: pointer;" onclick="lanjutTampilkanProduk()">
+                        Lanjut Pilih Produk
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="px-3 pt-2 d-none" id="boxPilihan" style="position: relative; z-index: 1020; background-color: transparent;">
+            <div class="crypto-card p-2 borad-10 my-shadow">
+                <div class="row g-1">
+                    <div class="col-6">
+                        <button class="btn btn-outline-info btn-aksi-top" id="btnToggleFilter" onclick="toggleFilterMenu()">
+                            <span id="textToggleBtn">Sembunyikan Menu</span>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-dark border btn-aksi-top" style="border-color: rgba(148, 163, 184, 0.28) !important; color: #38bdf8;" onclick="gantiKategori()">
+                            Ganti E-Wallet
+                        </button>
+                    </div>
+                </div>
+
+                <div id="collapseFilterBody" class="mt-2 animate__animated animate__fadeIn">
+                    <div class="px-2 py-1 borad-6 d-flex align-items-center justify-content-between mb-1.5" style="min-height: 22px; background: rgba(9, 17, 34, 0.75); border: 1px solid rgba(148, 163, 184, 0.2);">
+                        <span class="fw-bold" style="font-size: 10px; color: var(--text-muted);">Nomor Tujuan:</span>
+                        <span class="text-white fw-bold font-monospace" id="displayNomorAktif" style="font-size: 11px;">-</span>
+                    </div>
+
+                    <div id="filterStandarContainer">
+                        <div class="px-2 py-1 borad-8 mb-1.5" style="background-color: rgba(9, 17, 34, 0.85); border: 1px solid rgba(148, 163, 184, 0.25);">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-magnifying-glass me-2" style="font-size: 12px; color: var(--text-muted);"></i>
+                                <input type="search" class="form-inp border-0 shadow-none bg-transparent p-0" style="font-size: 12px;" placeholder="Cari nama produk..." id="search">
+                            </div>
+                        </div>
+
+                        <div class="dropdown pt-1" style="border-top: 1px solid rgba(148, 163, 184, 0.16);">
+                            <p class="fw-bold text-white mb-0 d-flex justify-content-between align-items-center" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; font-size: 12px;">
+                                <span>Urutkan: <span id="namaPil" class="my-color">Termurah</span></span>
+                                <i class="fa-solid fa-caret-down" style="color: var(--text-muted);"></i>
+                            </p>
+                            <ul class="dropdown-menu shadow-sm borad-10 p-1">
+                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termurah" onclick="rubahData('Termurah')">Termurah</li>
+                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Termahal" onclick="rubahData('Termahal')">Termahal</li>
+                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-A-Z" onclick="rubahData('A-Z')">A - Z</li>
+                                <li class="dropdown-item fw-semibold borad-6 py-1.5" style="font-size: 12px; cursor: pointer;" id="pil-Z-A" onclick="rubahData('Z-A')">Z - A</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-3 position-relative" style="z-index: 0;" id="dataProduk">
+        </section>
+    </div>
+
+    <!-- POPUP DETAIL PEMBAYARAN -->
+    <section class="offcanvas offcanvas-bottom p-2 h-auto"
+        style="background-color: transparent; border: none !important;" tabindex="-1" id="detailCanv"
+        aria-labelledby="detailCanv">
+        <div class="px-3 borad-10 my-shadow pb-0" style="background: #0d172c;">
+            <div class="bg-detail">
+                <p class="text-center text-white fw-bold" style="font-size: 13px;">Detail Transaksi</p>
+            </div>
+        </div>
+        <div class="offcanvas-body borad-10 my-shadow pt-2.5" id="bodyCanv" style="background: #0d172c; color: #f8fafc; border: 1px solid var(--card-border);">
+        </div>
+    </section>
+
+    <!-- MODAL PELANGGAN TERSIMPAN -->
+    <section class="modal fade" id="modalPelangganTersimpan" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content borad-12">
+                <div class="my-bg p-2.5 text-white d-flex justify-content-between align-items-center">
+                    <p class="fw-bold mb-0" style="font-size: 13px;">Pelanggan Tersimpan</p>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2.5" id="listPelangganTersimpanBody" style="background: #0d172c;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://fastly.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        const loadAwal = ``;
         const loads = `<div class="d-flex justify-content-center py-4 align-items-center"><div class="ping"></div></div>`;
-        const produkNone = `<div class="text-center animate__animated animate__fadeIn"><img src="https://uki.my.id/assets/images/produk-none.webp" class="w-100 borad-10 shadow-sm"><p class="mt-2 fw-semibold text-secondary" style="font-size: 12px;">Produk e-wallet belum tersedia...</p></div>`;
+        const produkNone = `<div class="text-center animate__animated animate__fadeIn"><img src="https://uki.my.id/assets/images/produk-none.webp" class="w-100 borad-10 shadow-sm"><p class="mt-2 fw-semibold" style="font-size: 12px; color: var(--text-muted);">Produk tidak ditemukan...</p></div>`;
+
+        const daftarProdukTerlaris = [];
+        const daftarProdukGangguan = [];
 
         let dataProduk = null;
         let dataDesc = null;
@@ -469,9 +628,6 @@
             }
         }
 
-        const daftarProdukTerlaris = [];
-        const daftarProdukGangguan = [];
-
         function bersihkanDeskripsi(text) {
             if (!text) return "-";
             let temp = document.createElement("div");
@@ -486,9 +642,7 @@
         $("#imgContact").attr("src", iconPilihan[0].contact);
         $("#imgSavedContacts").attr("src", iconPilihan[0].contact);
 
-        function getContact() {
-            window.location.href = urlToko + "/ambil_kontak";
-        }
+        function getContact() { window.location.href = urlToko + "/ambil_kontak"; }
 
         function gantiKategori() {
             $("#pageProdukUtama").addClass("d-none");
@@ -496,11 +650,8 @@
         }
 
         $("#chkSimpanPelanggan").on("change", function () {
-            if ($(this).is(":checked")) {
-                $("#boxInputNama").removeClass("d-none");
-            } else {
-                $("#boxInputNama").addClass("d-none");
-            }
+            if ($(this).is(":checked")) { $("#boxInputNama").removeClass("d-none"); }
+            else { $("#boxInputNama").addClass("d-none"); }
         });
 
         function simpanDataPelangganKeLocal(nomorTujuan, namaPelanggan) {
@@ -526,14 +677,14 @@
             let listSimpan = JSON.parse(localStorage.getItem("ewallet_pelanggan") || "[]");
             let htmlList = "";
             if (listSimpan.length === 0) {
-                htmlList = `<p class="text-center text-secondary py-3" style="font-size: 12px;">Belum ada pelanggan tersimpan.</p>`;
+                htmlList = `<p class="text-center py-3" style="font-size: 12px; color: var(--text-muted);">Belum ada pelanggan tersimpan.</p>`;
             } else {
                 $.each(listSimpan, function (i, item) {
                     htmlList += `
-                        <div class="d-flex justify-content-between align-items-center p-2 mb-1.5 border borad-8 bg-light">
+                        <div class="d-flex justify-content-between align-items-center p-2 mb-1.5 borad-8" style="background: rgba(15, 25, 48, 0.9); border: 1px solid rgba(56, 189, 248, 0.2);">
                             <div style="cursor: pointer; flex-grow: 1;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">
-                                <p class="fw-bold text-dark" style="font-size: 12px;">${item.nama ? item.nama : 'Tanpa Nama'}</p>
-                                <p class="text-secondary" style="font-size: 11px;">${item.nomor}</p>
+                                <p class="fw-bold text-white" style="font-size: 12px;">${item.nama ? item.nama : 'Tanpa Nama'}</p>
+                                <p style="font-size: 11px; color: var(--text-muted);">${item.nomor}</p>
                             </div>
                             <div class="d-flex gap-1.5 align-items-center">
                                 <span class="badge bg-primary px-2 py-1" style="font-size: 10px; cursor: pointer;" onclick="pilihPelangganTersimpan('${item.nomor}', '${item.nama}')">Pilih</span>
@@ -562,7 +713,7 @@
         }
 
         $("#nomoId").on("input change paste", function () {
-            setTimeout(function() {
+            setTimeout(function () {
                 var val = $("#nomoId").val();
                 var cleanVal = val.replace(/[^\d]/g, '');
                 $('#nomoId').val(cleanVal);
@@ -642,7 +793,7 @@
                 $("#chkSimpanPelanggan").prop("checked", false);
                 $("#boxInputNama").addClass("d-none");
                 $("#boxBtnLanjut").addClass("d-none");
-                $("#dataProduk").html("");
+                $("#dataProduk").html(loadAwal);
             }
         }
 
@@ -651,17 +802,17 @@
            ============================================================== */
         function tampilkanFormNominalBebas() {
             $("#dataProduk").html(`
-                <div class="bg-white p-3 borad-10 my-shadow animate__animated animate__fadeIn" style="background: rgba(255, 255, 255, 0.96) !important;">
+                <div class="crypto-card p-3 borad-10 my-shadow animate__animated animate__fadeIn">
                     <div class="d-flex align-items-center mb-2">
-                        <div class="my-bg text-white d-flex align-items-center justify-content-center borad-6" style="width: 26px; height: 26px;">
-                            <i class="fa-solid fa-pen-to-square" style="font-size: 11px;"></i>
+                        <div class="my-bg text-white d-flex align-items-center justify-content-center borad-6 shadow-sm" style="width: 28px; height: 28px;">
+                            <i class="fa-solid fa-pen-to-square" style="font-size: 12px;"></i>
                         </div>
-                        <p class="fw-bold ms-2 text-dark" style="font-size: 13px;">Masukkan Nominal Topup</p>
+                        <p class="fw-bold ms-2 text-white" style="font-size: 13px;">Masukkan Nominal Topup</p>
                     </div>
 
                     <div class="mb-2">
-                        <label class="text-secondary fw-semibold mb-1 d-block" style="font-size: 11px;">Pilih Jenis E-Wallet Tujuan</label>
-                        <select class="form-inp w-100 fw-semibold text-dark" id="jenisEwalletBebas" onchange="hitungNominalBebas()">
+                        <label class="fw-semibold mb-1 d-block" style="font-size: 11px; color: var(--text-muted);">Pilih Jenis E-Wallet Tujuan</label>
+                        <select class="form-inp w-100 fw-semibold" id="jenisEwalletBebas" onchange="hitungNominalBebas()">
                             <option value="DANA">DANA</option>
                             <option value="GOPAY">GoPay</option>
                             <option value="OVO">OVO</option>
@@ -675,37 +826,36 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="label-nominal-bebas mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
-                        <div class="d-flex align-items-center form-inp bg-white p-0 overflow-hidden">
-                            <span class="px-2.5 py-2 bg-light border-end fw-bold text-secondary" style="font-size: 13px;">Rp</span>
-                            <input type="tel" class="px-2.5 py-2" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih dari daftar" oninput="formatInputNominalBebas(this)">
+                        <label class="fw-semibold text-white mb-1 d-block" style="font-size: 11px;">Nominal Penukaran (Minimal Rp 10.000)</label>
+                        <div class="d-flex align-items-center form-inp p-0 overflow-hidden">
+                            <span class="px-2.5 py-2 fw-bold" style="font-size: 12px; color: var(--accent-cyan); background: rgba(6, 11, 22, 0.75); border-right: 1px solid rgba(148, 163, 184, 0.2);">Rp</span>
+                            <input type="tel" class="px-2.5 py-2" style="font-size: 12px; font-weight: 600;" id="inputNominalBebas" placeholder="Ketik manual di sini atau pilih nominal" oninput="formatInputNominalBebas(this)">
                         </div>
                         <div class="d-flex flex-wrap gap-1 mt-1.5">
-                            <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(50000)">50.000</span>
-                            <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(100000)">100.000</span>
-                            <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(250000)">250.000</span>
-                            <span class="badge bg-light text-primary border px-2 py-1" style="cursor:pointer; font-size:10px;" onclick="setNominalCepat(500000)">500.000</span>
+                            <span class="badge px-2 py-1" style="cursor:pointer; font-size:10px; background: rgba(56, 189, 248, 0.14); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);" onclick="setNominalCepat(50000)">50.000</span>
+                            <span class="badge px-2 py-1" style="cursor:pointer; font-size:10px; background: rgba(56, 189, 248, 0.14); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);" onclick="setNominalCepat(100000)">100.000</span>
+                            <span class="badge px-2 py-1" style="cursor:pointer; font-size:10px; background: rgba(56, 189, 248, 0.14); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);" onclick="setNominalCepat(250000)">250.000</span>
+                            <span class="badge px-2 py-1" style="cursor:pointer; font-size:10px; background: rgba(56, 189, 248, 0.14); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);" onclick="setNominalCepat(500000)">500.000</span>
                         </div>
                     </div>
 
-                    <div class="bg-light p-2.5 borad-8 border mt-2.5 mb-2.5">
-                        <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
-                            <span class="text-secondary">Nominal Topup :</span>
-                            <span class="fw-bold text-dark" id="prevNominalTopup">Rp 0</span>
+                    <div class="p-2.5 borad-8 mt-2.5 mb-2.5" style="background: rgba(9, 17, 34, 0.75); border: 1px solid rgba(148, 163, 184, 0.2);">
+                        <div class="d-flex justify-content-between align-items-center py-1" style="font-size: 11.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span style="color: var(--text-muted);">Nominal Topup :</span>
+                            <span class="fw-bold text-white" id="prevNominalTopup">Rp 0</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
-                            <span class="text-secondary">Biaya Admin :</span>
-                            <span class="fw-bold text-dark">${formatRupiah(BIAYA_ADMIN_BEBAS)}</span>
+                        <div class="d-flex justify-content-between align-items-center py-1" style="font-size: 11.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.14);">
+                            <span style="color: var(--text-muted);">Biaya Admin :</span>
+                            <span class="fw-bold text-white">${formatRupiah(BIAYA_ADMIN_BEBAS)}</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12.5px;">
-                            <span class="text-dark fw-bold">Total Bayar :</span>
-                            <span class="fw-bold text-success" id="prevTotalBayar" style="font-size: 14px;">Rp 0</span>
+                        <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12px;">
+                            <span class="text-white fw-bold">Total Bayar :</span>
+                            <span class="fw-bold" id="prevTotalBayar" style="font-size: 13.5px; color: #38bdf8;">Rp 0</span>
                         </div>
                     </div>
 
-                    <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="bukaKonfirmasiBebas()">
-                        <i class="fa-solid fa-coins"></i>
-                        <span>Tukar MEC jadi Saldo</span>
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm fw-bold" style="font-size: 12px; cursor: pointer;" onclick="bukaKonfirmasiBebas()">
+                        <i class="fa-solid fa-coins me-1"></i> Tukar MEC jadi Saldo
                     </div>
                 </div>
             `);
@@ -794,37 +944,38 @@
 
             $("#bodyCanv").html(`
                 <div class="text-start">
-                    <p class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.3;">${namaProdukCustom}</p>
+                    <p class="fw-bold text-white" style="font-size: 13.5px; line-height: 1.3;">${namaProdukCustom}</p>
                 </div>
-                <div class="p-2.5 mt-2 mb-2.5 borad-8" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
-                    <p class="fw-semibold text-secondary" style="font-size: 10.5px;">Rincian Nominal :</p>
+                <div class="p-2 mt-2 mb-2 borad-8" style="background-color: rgba(9, 17, 34, 0.85); border: 1px dashed rgba(56, 189, 248, 0.35);">
+                    <p class="fw-semibold" style="font-size: 10px; color: var(--text-muted);">Rincian Nominal :</p>
                     <div class="mt-1">
-                        <p class="text-dark" style="font-size: 11.5px; line-height: 1.45;">
-                            • Saldo Masuk: <b>${formatRupiah(nominal)}</b><br>
-                            • Biaya Admin: <b>${formatRupiah(BIAYA_ADMIN_BEBAS)}</b>
-                        </p>
+                        <p class="text-white" style="font-size: 11px; white-space: pre-line; line-height: 1.35;">Saldo Masuk: ${formatRupiah(nominal)}
+Biaya Admin: ${formatRupiah(BIAYA_ADMIN_BEBAS)}</p>
                     </div>
                 </div>
 
-                <div class="bg-light p-2.5 borad-8 mb-3 border">
-                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
-                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-wallet me-1 text-primary"></i> Nomor Tujuan :</span>
-                        <span class="fw-bold text-dark font-monospace">${no}</span>
+                <div class="p-2.5 borad-8 mb-2" style="background: rgba(9, 17, 34, 0.75); border: 1px solid rgba(148, 163, 184, 0.2);">
+                    <div class="d-flex justify-content-between align-items-center py-1" style="font-size: 11.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.14);">
+                        <span class="fw-semibold" style="color: var(--text-muted);"><i class="fa-solid fa-wallet me-1 text-info"></i> Nomor Tujuan :</span>
+                        <span class="fw-bold text-white font-monospace">${no}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12px;">
-                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-tag me-1 text-success"></i> Total Bayar :</span>
-                        <span class="fw-bold f-14 text-success">${formatRupiah(totalBayar)}</span>
+                        <span class="fw-semibold" style="color: var(--text-muted);"><i class="fa-solid fa-tag me-1 text-info"></i> Harga Produk :</span>
+                        <span class="fw-bold f-14" style="color: #38bdf8;">${formatRupiah(totalBayar)}</span>
                     </div>
                 </div>
 
                 <div class="mt-2">
-                    <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="getBayarMEC('${idProdukBebas}', \`${encodeURIComponent(namaProdukCustom)}\`, '${totalBayar}')">
-                        <i class="fa-solid fa-coins"></i>
-                        <span>Tukar MEC jadi ${saldoLabel}</span>
+                    <div class="row g-1.5">
+                        <div class="col-12">
+                            <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm" onclick="getBayarMEC('${idProdukBebas}', \`${encodeURIComponent(namaProdukCustom)}\`, '${totalBayar}')" style="cursor: pointer;">
+                                <p class="text-white fw-bold" style="font-size: 12px;"><i class="fa-solid fa-coins me-1"></i> Tukar MEC jadi ${saldoLabel}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-2">
-                        <div class="w-100 bg-light border p-2.5 borad-10 text-center shadow-sm" data-bs-dismiss="offcanvas" aria-label="Close" style="cursor: pointer;">
-                            <p class="text-secondary fw-semibold" style="font-size: 12px;">Kembali</p>
+                    <div class="mt-1.5">
+                        <div class="w-100 p-2 borad-8 text-center shadow-sm" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(148, 163, 184, 0.22); cursor: pointer;" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <p class="fw-semibold" style="font-size: 12px; color: #cbd5e1;">Kembali</p>
                         </div>
                     </div>
                 </div>
@@ -836,34 +987,31 @@
         }
         /* ============================================================== */
 
-        function tarikDataTanpaCache(id_kategori, desc) {
+        async function tarikDataTanpaCache(id_kategori, desc) {
             $("#dataProduk").html(loads);
 
-            let xmlHttpRequest = new XMLHttpRequest();
-            let url = `https://openapi.bukaolshop.net/v1/app/produk?token=${token}&id_kategori=${id_kategori}&total_data=${data_page}`;
-            xmlHttpRequest.open("GET", url, true);
-            xmlHttpRequest.onreadystatechange = function () {
-                if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-                    let res = JSON.parse(xmlHttpRequest.responseText);
-                    if (res && res.data && res.data.length > 0) {
-                        dataProduk = res.data;
-                        resGetData(dataProduk, desc);
-                    } else {
-                        resGetData(null, desc);
-                    }
+            try {
+                let url = `https://openapi.bukaolshop.net/v1/app/produk?token=${token}&id_kategori=${id_kategori}&total_data=${data_page}`;
+                let response = await fetch(url);
+                let res = await response.json();
+                if (res && res.data && res.data.length > 0) {
+                    dataProduk = res.data;
+                    dataDesc = desc;
+                    resGetData(dataProduk, desc);
+                } else {
+                    resGetData(null, desc);
                 }
+            } catch (e) {
+                resGetData(null, desc);
             }
-            xmlHttpRequest.send();
         }
 
         function resGetData(data, desc) {
-            if (data == null) {
+            if (data == null || data.length === 0) {
                 $("#dataProduk").html(produkNone);
             } else {
                 $("#dataProduk").html(`<div class="animate__animated animate__fadeIn d-grid-1" id="isiProduk"></div>`);
                 loopProduk(data, desc);
-                dataProduk = data;
-                dataDesc = desc;
             }
         }
 
@@ -874,16 +1022,10 @@
             }
 
             let sortedData = [...data];
-
-            if (urutanProduk == "Termurah") {
-                sortedData.sort((a, b) => parseFloat(a.harga_produk) - parseFloat(b.harga_produk));
-            } else if (urutanProduk == "Termahal") {
-                sortedData.sort((a, b) => parseFloat(b.harga_produk) - parseFloat(a.harga_produk));
-            } else if (urutanProduk == "A-Z") {
-                sortedData.sort((a, b) => a.nama_produk.localeCompare(b.nama_produk));
-            } else if (urutanProduk == "Z-A") {
-                sortedData.sort((a, b) => b.nama_produk.localeCompare(a.nama_produk));
-            }
+            if (urutanProduk == "Termurah") sortedData.sort((a, b) => parseFloat(a.harga_produk) - parseFloat(b.harga_produk));
+            else if (urutanProduk == "Termahal") sortedData.sort((a, b) => parseFloat(b.harga_produk) - parseFloat(a.harga_produk));
+            else if (urutanProduk == "A-Z") sortedData.sort((a, b) => a.nama_produk.localeCompare(b.nama_produk));
+            else if (urutanProduk == "Z-A") sortedData.sort((a, b) => b.nama_produk.localeCompare(a.nama_produk));
 
             sortedData.sort((a, b) => {
                 let aTerlaris = daftarProdukTerlaris.includes(String(a.id_produk)) ? -1 : 0;
@@ -914,9 +1056,9 @@
                 $("#isiProduk").append(`
                 <div class="bg-produk animate__animated animate__fadeIn" id="bg-prod-${i}" onclick="nextDetail('${v.id_produk}', \`${encodeURIComponent(v.deskripsi_panjang || '')}\`)" data-bs-toggle="offcanvas" data-bs-target="#detailCanv" aria-controls="detailCanv" style="cursor: pointer;">
                     <div class="text-start">
-                        <p class="fw-bold text-dark mb-2" style="font-size: 12px; line-height: 1.35;">${nama_produk}</p>
+                        <p class="fw-bold text-white mb-2" style="font-size: 12px; line-height: 1.35;">${nama_produk}</p>
 
-                        <div class="d-flex align-items-center justify-content-between pt-1.5 border-top border-light">
+                        <div class="d-flex align-items-center justify-content-between pt-1.5" style="border-top: 1px solid rgba(148, 163, 184, 0.14);">
                             <div class="product-price-box">${harga_produk} ${hargaAsli}</div>
                             <div>
                                 ${statusBadgeHtml}
@@ -935,45 +1077,48 @@
             var nama_produk = v.nama_produk ? v.nama_produk : "";
             var harga_produk = formatRupiah(v.harga_produk);
             var no = $("#nomoId").val();
-            let nomor = (no == "") ? `<span class="text-danger">Masukkan nomor tujuan dahulu...</span>` : no;
+            let nomor = (no == "") ? `<span class="text-danger">Masukkan nomor dahulu...</span>` : no;
             let saldoLabel = getEwalletSaldoLabel(nama_produk, currentKategoriNama);
 
             let rawDesk = decodeURIComponent(encodedDesk);
             let cleanDesk = bersihkanDeskripsi(rawDesk);
 
             let btn = (no != "") ? `
-            <div class="btn-pay-mec-wide my-bg text-white fw-bold" style="font-size: 13px;" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')">
-                <i class="fa-solid fa-coins"></i>
-                <span>Tukar MEC jadi ${saldoLabel}</span>
+            <div class="row g-1.5">
+                <div class="col-12">
+                    <div class="w-100 my-bg p-2 borad-8 text-center text-white shadow-sm" onclick="getBayarMEC('${v.id_produk}', \`${encodeURIComponent(nama_produk)}\`, '${v.harga_produk}')" style="cursor: pointer;">
+                        <p class="text-white fw-bold" style="font-size: 12px;"><i class="fa-solid fa-coins me-1"></i> Tukar MEC jadi ${saldoLabel}</p>
+                    </div>
+                </div>
             </div>` : ``;
 
             $("#bodyCanv").html(`
                 <div class="text-start">
-                    <p class="fw-bold text-dark" style="font-size: 13.5px; line-height: 1.3;">${nama_produk}</p>
+                    <p class="fw-bold text-white" style="font-size: 13.5px; line-height: 1.3;">${nama_produk}</p>
                 </div>
-                <div class="p-2.5 mt-2 mb-2.5 borad-8" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
-                    <p class="fw-semibold text-secondary" style="font-size: 10.5px;">Deskripsi Produk :</p>
+                <div class="p-2 mt-2 mb-2 borad-8" style="background-color: rgba(9, 17, 34, 0.85); border: 1px dashed rgba(56, 189, 248, 0.35);">
+                    <p class="fw-semibold" style="font-size: 10px; color: var(--text-muted);">Deskripsi Produk :</p>
                     <div class="mt-1">
-                        <p class="text-dark" style="font-size: 11.5px; white-space: pre-line; line-height: 1.4;">${cleanDesk}</p>
+                        <p class="text-white" style="font-size: 11px; white-space: pre-line; line-height: 1.35;">${cleanDesk}</p>
                     </div>
                 </div>
 
-                <div class="bg-light p-2.5 borad-8 mb-3 border">
-                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom" style="font-size: 11.5px;">
-                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-wallet me-1 text-primary"></i> Nomor Tujuan :</span>
-                        <span class="fw-bold text-dark font-monospace">${nomor}</span>
+                <div class="p-2.5 borad-8 mb-2" style="background: rgba(9, 17, 34, 0.75); border: 1px solid rgba(148, 163, 184, 0.2);">
+                    <div class="d-flex justify-content-between align-items-center py-1" style="font-size: 11.5px; border-bottom: 1px solid rgba(148, 163, 184, 0.14);">
+                        <span class="fw-semibold" style="color: var(--text-muted);"><i class="fa-solid fa-wallet me-1 text-info"></i> Nomor Tujuan :</span>
+                        <span class="fw-bold text-white font-monospace">${nomor}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center pt-1.5" style="font-size: 12px;">
-                        <span class="text-secondary fw-semibold"><i class="fa-solid fa-tag me-1 text-success"></i> Harga Produk :</span>
-                        <span class="fw-bold f-14 text-success">${harga_produk}</span>
+                        <span class="fw-semibold" style="color: var(--text-muted);"><i class="fa-solid fa-tag me-1 text-info"></i> Harga Produk :</span>
+                        <span class="fw-bold f-14" style="color: #38bdf8;">${harga_produk}</span>
                     </div>
                 </div>
 
                 <div class="mt-2">
                     ${btn}
-                    <div class="mt-2">
-                        <div class="w-100 bg-light border p-2.5 borad-10 text-center shadow-sm" data-bs-dismiss="offcanvas" aria-label="Close" style="cursor: pointer;">
-                            <p class="text-secondary fw-semibold" style="font-size: 12px;">Kembali</p>
+                    <div class="mt-1.5">
+                        <div class="w-100 p-2 borad-8 text-center shadow-sm" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(148, 163, 184, 0.22); cursor: pointer;" data-bs-dismiss="offcanvas" aria-label="Close">
+                            <p class="fw-semibold" style="font-size: 12px; color: #cbd5e1;">Kembali</p>
                         </div>
                     </div>
                 </div>
@@ -1009,35 +1154,20 @@
             });
         });
 
-        function defaultData() {
-            urutanProduk = "Termurah";
-            $(".dropdown-item").removeClass("my-color");
-            $("#pil-" + urutanProduk).addClass("my-color");
-            $("#namaPil").html(urutanProduk);
-            $("#search").val("");
-        }
-
         function rubahData(nama) {
             $(".dropdown-item").removeClass("my-color");
             $("#pil-" + nama).addClass("my-color");
             $("#namaPil").html(nama);
             urutanProduk = nama;
-            if (dataProduk != null) {
-                loopProduk(dataProduk, dataDesc);
-            }
+            if (dataProduk != null) loopProduk(dataProduk, dataDesc);
         }
 
         function formatRupiah(angka) {
-            var formatter = new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                minimumFractionDigits: 0,
-            });
+            var formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
             return formatter.format(angka).replace(/IDR/g, "").trim();
         }
 
         renderDaftarKategori();
-        defaultData();
     </script>
 </body>
 </html>
