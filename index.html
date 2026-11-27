@@ -2249,23 +2249,36 @@
       const btn = document.getElementById("pasteHashBtn");
       if (!inputEl) return;
 
-      inputEl.focus();
-
-      try {
-        if (document.execCommand("paste")) {
-          if (btn) {
-            const prevText = btn.textContent;
-            btn.textContent = "Tertempel!";
-            setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
+      if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
+        try {
+          const clipText = await navigator.clipboard.readText();
+          if (clipText && clipText.trim()) {
+            inputEl.value = clipText.trim();
+            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+            if (btn) {
+              const prevText = btn.textContent;
+              btn.textContent = "Tertempel!";
+              setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
+            }
+            return;
           }
-          return;
-        }
-      } catch (e) {}
+        } catch (e) {}
+      }
+
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
 
       showElsAlert(
         "Siap Tempel Tx Hash / ID Transfer",
-        "Kolom <strong>Tx Hash / ID Transfer ME Pass</strong> sudah aktif. Tekan dan tahan pada kolom input lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
-        { type: "info", okLabel: "Lanjutkan" }
+        "Setelah menutup jendela ini, ketuk dan tahan pada kolom <strong>Tx Hash / ID Transfer ME Pass</strong> lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong>) agar pesanan Anda segera diproses.",
+        {
+          type: "info",
+          okLabel: "Lanjutkan",
+          onOk: () => {
+            if (inputEl) inputEl.focus();
+          }
+        }
       );
     }
 
