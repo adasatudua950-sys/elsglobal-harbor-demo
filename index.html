@@ -6,6 +6,7 @@
   <title>ElsGlobal × Meta Earth — Kasir Digital & Penukaran MEC</title>
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#04060a" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   <style>
     :root {
@@ -43,21 +44,28 @@
       overflow-x: clip;
     }
 
-    /* Header hitam menyatu dengan bar/safe-area bawaan HP */
+    /* Header menyatu langsung dengan background utama index (tanpa kotak/garis pemisah) */
     .top-status-header {
-      width: auto;
-      margin: 0 -14px 14px -14px;
-      padding-top: calc(8px + env(safe-area-inset-top));
-      padding-bottom: 12px;
-      background: linear-gradient(180deg, #020305 0%, var(--top-black) 78%, rgba(4, 6, 10, 0.92) 100%);
-      border-bottom: 1px solid rgba(29, 211, 248, 0.18);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      width: 100%;
+      margin: 0 0 10px 0;
+      padding-top: calc(10px + env(safe-area-inset-top));
+      padding-bottom: 6px;
+      background: transparent;
+      border-bottom: none;
+      box-shadow: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .top-status-header.is-malam {
+      background: transparent;
+      border-bottom: none;
+      box-shadow: none;
     }
 
     .top-status-inner {
       max-width: 1060px;
       margin: 0 auto;
-      padding: 0 14px;
+      padding: 0;
       min-width: 0;
     }
 
@@ -187,8 +195,8 @@
 
     @media (max-width: 640px) {
       body { padding: 0 10px 14px 10px; }
-      .top-status-header { margin: 0 -10px 14px -10px; }
-      .top-status-inner { padding: 0 10px; }
+      .top-status-header { margin: 0 0 8px 0; }
+      .top-status-inner { padding: 0; }
       .greeting-title { font-size: 14px; }
       .greeting-sub { font-size: 11px; }
       .topbar { padding: 14px; }
@@ -1523,7 +1531,7 @@
 
             <div class="summary-row">
               <span>Harga MEC (<span id="sumMecDate">-</span>):</span>
-              <strong id="sumMecUsd">USD 9.87</strong>
+              <strong id="sumMecUsd">USD 9.94</strong>
             </div>
 
             <div class="summary-row">
@@ -1539,7 +1547,7 @@
               <strong id="sumToken" style="color: var(--accent);">-</strong>
             </div>
             <div class="utility-note">
-              ✓ Harga mengikuti pembaruan harian pagi &amp; real-time pasar serta pergerakan kurs yang berlaku.
+              ✓ Harga mengikuti pembaruan harian 00:00 UTC &amp; real-time pasar serta pergerakan kurs yang berlaku.
             </div>
           </div>
 
@@ -1609,7 +1617,7 @@
       <div class="card">
         <h2>2. Parameter Jaringan &amp; Kurs</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px;">
-          Parameter jaringan <strong>Meta Earth</strong> dikunci pada konfigurasi resmi agar tidak diubah manual oleh pengguna, sedangkan kurs <strong>USD–IDR</strong> (multi-sumber harian) dan nilai <strong>MEC</strong> diperbarui otomatis setiap pagi.
+          Parameter jaringan <strong>Meta Earth</strong> dikunci pada konfigurasi resmi agar tidak diubah manual oleh pengguna, sedangkan kurs <strong>USD–IDR</strong> (multi-sumber harian) dan nilai <strong>MEC</strong> diperbarui otomatis setiap 00:00 UTC.
         </p>
 
         <div class="field">
@@ -1624,7 +1632,7 @@
 
         <div class="field hidden-ui">
           <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC)</label>
-          <input id="mecBaseUsd" type="text" value="USD 9.87" readonly aria-readonly="true" />
+          <input id="mecBaseUsd" type="text" value="USD 9.94" readonly aria-readonly="true" />
         </div>
 
         <div class="field hidden-ui">
@@ -1774,10 +1782,11 @@
     const LOCKED_EXPLORER_URL = "https://explorer.mec.me/";
     const LOCKED_SYMBOL = "MEC";
 
-    const BASE_LOCAL_MIDNIGHT = new Date(2026, 10, 20).getTime();
+    // Titik acuan kenaikan harian MEC berbasis 00:00 UTC (28 Nov 2026 00:00 UTC = $9.94)
+    const BASE_UTC_MIDNIGHT = Date.UTC(2026, 10, 28, 0, 0, 0, 0);
     const FALLBACK_USD_IDR = 18292;
     const FIXED_BUFFER_RATE = 0.06;
-    const FIXED_MEC_BASE_USD = 9.87;
+    const FIXED_MEC_BASE_USD = 9.94;
     const FIXED_MEC_DAILY_STEP = 0.01;
     const CACHE_KEY = "elsglobal_usd_idr_cache_v4";
     const HISTORY_KEY = "elsglobal_checkout_history_v1";
@@ -1792,6 +1801,7 @@
     let activePaymentMethod = "mepass";
     let statusPollTimer = null;
     let currentOrderContext = null;
+    let lastRenderedMecUsd = null;
 
     let selectedProduct = {
       id: "paket-demo",
@@ -1807,6 +1817,7 @@
     }
 
     function updateTimeGreeting() {
+      const headerEl = document.querySelector(".top-status-header");
       const titleEl = document.getElementById("timeGreetingTitle");
       const subEl = document.getElementById("timeGreetingSub");
       if (!titleEl || !subEl) return;
@@ -1817,6 +1828,7 @@
       let greeting = "Selamat Pagi";
       let iconHtml = '<i class="fa-solid fa-sun" style="color:#fbbf24;"></i>';
       let quote = "Awali pagi dengan langkah ringan—utilitas MEC siap menemani kebutuhan harian Anda.";
+      let isMalam = false;
 
       if (hour >= 11 && hour < 15) {
         greeting = "Selamat Siang";
@@ -1828,10 +1840,14 @@
         quote = "Jelang senja, pastikan kuota, pulsa, dan token listrik aman sebelum aktivitas berlanjut.";
       } else if (hour >= 18 || hour < 4) {
         greeting = "Selamat Malam";
-        iconHtml = '<i class="fa-solid fa-moon" style="color:#a5b4fc;"></i>';
+        isMalam = true;
+        iconHtml = '<i class="fa-solid fa-moon" style="color:#1dd3f8;"></i>';
         quote = "Saat yang lain beristirahat, utilitas MEC terus bekerja nyata—selesaikan kebutuhan digital Anda malam ini dengan tenang.";
       }
 
+      if (headerEl) {
+        headerEl.classList.toggle("is-malam", isMalam);
+      }
       titleEl.innerHTML = `${iconHtml}<span>${greeting}</span>`;
       subEl.textContent = quote;
     }
@@ -2034,9 +2050,17 @@
 
     function getMecUsdPrice() {
       const now = new Date();
-      const todayLocalMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-      const dayDiff = Math.max(0, Math.floor((todayLocalMidnight - BASE_LOCAL_MIDNIGHT) / (1000 * 60 * 60 * 24)));
+      const todayUtcMidnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0);
+      const dayDiff = Math.max(0, Math.floor((todayUtcMidnight - BASE_UTC_MIDNIGHT) / (1000 * 60 * 60 * 24)));
       return Number((FIXED_MEC_BASE_USD + dayDiff * FIXED_MEC_DAILY_STEP).toFixed(4));
+    }
+
+    function syncMecPriceByUtc() {
+      const currentMecUsd = getMecUsdPrice();
+      if (lastRenderedMecUsd !== null && currentMecUsd !== lastRenderedMecUsd) {
+        updateSummary();
+      }
+      lastRenderedMecUsd = currentMecUsd;
     }
 
     function formatIdr(num) {
@@ -2246,6 +2270,7 @@
       const sym = getTokenSymbol();
       const bufferRate = getBufferRate();
       const mecUsd = getMecUsdPrice();
+      lastRenderedMecUsd = mecUsd;
       const { rate: usdIdr, source } = getActiveUsdIdr();
       const mecIdrRate = mecUsd * usdIdr;
       const merchantAddr = getMerchantAddress();
@@ -2394,16 +2419,18 @@
 
     function scheduleAutomaticRateSync() {
       setInterval(() => {
+        syncMecPriceByUtc();
         const now = new Date();
         const todayKey = getLocalDateKey(now);
         const isMorningWindow = now.getHours() >= 5 && now.getHours() <= 10;
         if (usdIdrDateKey !== todayKey && (isMorningWindow || now.getHours() >= 0)) {
           fetchLiveUsdToIdr(true);
         }
-      }, 5 * 60 * 1000);
+      }, 60 * 1000);
 
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
+          syncMecPriceByUtc();
           fetchLiveUsdToIdr(true);
         }
       });
@@ -2868,6 +2895,7 @@
     window.addEventListener("pageshow", () => {
       updateTimeGreeting();
       applyUrlCatalogParams();
+      syncMecPriceByUtc();
       updateSummary();
       fetchLiveUsdToIdr(true);
     });
