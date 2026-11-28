@@ -1802,6 +1802,10 @@
                     <a href="https://www.explorer-testnet.me/" target="_blank" rel="noopener noreferrer">Explorer Testnet</a>
                   </span>
                 </div>
+                <div class="hash-row" style="margin-top: 10px;">
+                  <input id="jalur2TxHash" type="text" placeholder="Ketik atau tempel Tx Hash Testnet manual (min. 10 karakter, tanpa spasi)" oninput="syncTxHashFromJalur2(this.value)" />
+                  <button type="button" id="pasteJalur2HashBtn" class="btn-copy" onclick="pasteJalur2TxHash()">Tempel</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2447,6 +2451,39 @@
         : "Konfirmasi & Proses Pesanan (Testnet)";
     }
 
+    function syncTxHashFromJalur2(val) {
+      const mainInput = document.getElementById("manualTxHash");
+      if (mainInput) {
+        mainInput.value = val;
+      }
+    }
+
+    function pasteJalur2TxHash() {
+      const inputEl = document.getElementById("jalur2TxHash");
+      if (!inputEl) return;
+
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+      if (typeof inputEl.blur === "function") {
+        inputEl.blur();
+      }
+
+      showElsAlert(
+        "Siap Tempel Tx Hash Testnet",
+        "Setelah menutup pop-up ini, tekan dan tahan pada kolom <strong>Tx Hash Testnet</strong> di Jalur 2 lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
+        {
+          type: "info",
+          okLabel: "Lanjutkan",
+          onOk: () => {
+            if (inputEl) {
+              inputEl.focus({ preventScroll: true });
+            }
+          }
+        }
+      );
+    }
+
     function generateTestnetDemoHash() {
       const hexChars = "0123456789ABCDEF";
       let hashBody = "";
@@ -2457,6 +2494,10 @@
       const hashInput = document.getElementById("manualTxHash");
       if (hashInput) {
         hashInput.value = demoHash;
+      }
+      const jalur2Input = document.getElementById("jalur2TxHash");
+      if (jalur2Input) {
+        jalur2Input.value = demoHash;
       }
       showElsAlert(
         "Tx Hash Simulasi Testnet Dibuat",
@@ -2946,6 +2987,8 @@
       document.getElementById("selectedFromCatalogBanner").classList.remove("show");
       document.getElementById("selectedFromCatalogBanner").innerHTML = "";
       document.getElementById("manualTxHash").value = "";
+      const jalur2Input = document.getElementById("jalur2TxHash");
+      if (jalur2Input) jalur2Input.value = "";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
       receiptBox.innerHTML = "";
@@ -3063,7 +3106,11 @@
         return;
       }
 
+      const jalur2Input = document.getElementById("jalur2TxHash");
       const txHashInput = document.getElementById("manualTxHash");
+      if (activePaymentMethod === "web3" && jalur2Input && jalur2Input.value.trim() && txHashInput) {
+        txHashInput.value = jalur2Input.value.trim();
+      }
       const manualTx = (txHashInput ? txHashInput.value : "").trim();
       if (!manualTx) {
         showElsAlert(
@@ -3073,7 +3120,8 @@
             type: "warning",
             okLabel: "Isi Tx Hash",
             onOk: () => {
-              if (txHashInput) txHashInput.focus();
+              const targetFocus = (activePaymentMethod === "web3" && jalur2Input) ? jalur2Input : txHashInput;
+              if (targetFocus) targetFocus.focus();
             }
           }
         );
@@ -3088,7 +3136,8 @@
             type: "warning",
             okLabel: "Perbaiki",
             onOk: () => {
-              if (txHashInput) txHashInput.focus();
+              const targetFocus = (activePaymentMethod === "web3" && jalur2Input) ? jalur2Input : txHashInput;
+              if (targetFocus) targetFocus.focus();
             }
           }
         );
