@@ -849,13 +849,76 @@
 
     .jalur2-box {
       margin-top: 8px;
-      padding: 10px 12px;
+      padding: 11px 12px;
       border-radius: 11px;
-      background: rgba(21, 30, 51, 0.72);
-      border: 1px dashed rgba(29, 211, 248, 0.35);
+      background: rgba(21, 30, 51, 0.78);
+      border: 1px dashed rgba(29, 211, 248, 0.42);
       font-size: 11.5px;
       color: #cbd5e1;
-      line-height: 1.5;
+      line-height: 1.55;
+    }
+
+    .testnet-meta-grid {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+      font-size: 11px;
+      color: #bae6fd;
+    }
+
+    .testnet-meta-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(8, 12, 20, 0.75);
+      border: 1px solid rgba(124, 145, 200, 0.18);
+      overflow-wrap: anywhere;
+    }
+
+    .testnet-meta-item code {
+      color: #6ee7b7;
+      font-size: 10.5px;
+      word-break: break-all;
+      text-align: right;
+    }
+
+    .testnet-actions-row {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-testnet-sim {
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(108, 124, 255, 0.28), rgba(29, 211, 248, 0.25));
+      border: 1px solid rgba(29, 211, 248, 0.5);
+      color: #7ee8ff;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .btn-testnet-sim:hover {
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .testnet-links {
+      display: inline-flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      margin-left: auto;
+    }
+
+    .testnet-links a {
+      color: var(--accent);
+      text-decoration: underline;
     }
 
     .qr-flex {
@@ -1680,13 +1743,13 @@
           </div>
 
           <div id="paymentMethodSection" class="field" style="margin-bottom: 10px;">
-            <label>Metode Penukaran MEC (Mepass Internal &amp; Web3)</label>
+            <label>Metode Penukaran MEC (Mepass Internal &amp; Web3 / Testnet)</label>
             <div class="method-tabs">
               <button type="button" id="tabMepass" class="method-btn active" onclick="setPaymentMethod('mepass')">
                 ME Pass QR / Internal
               </button>
               <button type="button" id="tabWeb3" class="method-btn" onclick="setPaymentMethod('web3')">
-                Jalur 2 (Web3 / Lanjutan)
+                Jalur 2 (Testnet / Web3)
               </button>
             </div>
 
@@ -1711,9 +1774,34 @@
             </div>
 
             <div id="jalur2Panel" class="qr-panel" style="display: none;">
-              <strong style="color: var(--text); display: block; margin-bottom: 4px;">Jalur 2 — Konfirmasi &amp; Pemrosesan Lanjutan</strong>
+              <strong style="color: var(--text); display: block; margin-bottom: 4px;">
+                Jalur 2 — Mode Pengujian ME Hub Testnet
+              </strong>
               <div class="jalur2-box">
-                Blok persiapan untuk alur <strong>Jalur 2</strong> (bisa disesuaikan saat detail alur/tautan/verifikasi finalnya sudah ditetapkan).
+                Mode <strong>Testnet</strong> aktif untuk simulasi pengiriman &amp; penukaran <strong>MEC Testnet</strong> tanpa risiko dana asli. Klaim token uji coba lewat Faucet lalu tempel atau generate Tx Hash untuk uji alur tutorial.
+                <div class="testnet-meta-grid">
+                  <div class="testnet-meta-item">
+                    <span>Chain ID</span>
+                    <code>mechain_400-1</code>
+                  </div>
+                  <div class="testnet-meta-item">
+                    <span>RPC Endpoint</span>
+                    <code>https://beta-hub-26657.explorer-testnet.me</code>
+                  </div>
+                  <div class="testnet-meta-item">
+                    <span>REST API</span>
+                    <code>https://beta-hub-1317.explorer-testnet.me</code>
+                  </div>
+                </div>
+                <div class="testnet-actions-row">
+                  <button type="button" class="btn-testnet-sim" onclick="generateTestnetDemoHash()">
+                    <i class="fa-solid fa-flask-vial"></i> Buat Tx Hash Simulasi Testnet
+                  </button>
+                  <span class="testnet-links">
+                    <a href="https://www.mec.me/en-US/faucet" target="_blank" rel="noopener noreferrer">Faucet Testnet</a>
+                    <a href="https://www.explorer-testnet.me/" target="_blank" rel="noopener noreferrer">Explorer Testnet</a>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -1745,7 +1833,7 @@
       <div class="card">
         <h2>2. Parameter Jaringan &amp; Kurs</h2>
         <p class="note" style="margin-top: 0; margin-bottom: 12px; color: #cbd5e1;">
-          Parameter jaringan <strong>Meta Earth</strong> dikunci pada konfigurasi resmi agar tidak diubah manual oleh pengguna, sedangkan kurs <strong>USD–IDR</strong> (multi-sumber harian) dan nilai <strong>MEC</strong> diperbarui otomatis setiap 00:00 UTC.
+          Parameter jaringan <strong>Meta Earth Testnet</strong> dikonfigurasi untuk pengujian alur pengiriman &amp; penukaran <strong>MEC</strong>, sedangkan kurs <strong>USD–IDR</strong> (multi-sumber harian) dan nilai <strong>MEC</strong> diperbarui otomatis setiap 00:00 UTC.
         </p>
 
         <div class="field">
@@ -1782,19 +1870,19 @@
         </div>
 
         <div class="field">
-          <label for="rpcUrl">RPC URL Mainnet</label>
-          <input id="rpcUrl" type="text" value="https://rpc.mec.me.example" readonly aria-readonly="true" />
+          <label for="rpcUrl">RPC URL Testnet</label>
+          <input id="rpcUrl" type="text" value="https://beta-hub-26657.explorer-testnet.me" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
-          <label for="chainId">Chain ID Mainnet</label>
-          <input id="chainId" type="text" value="me-chain" readonly aria-readonly="true" />
+          <label for="chainId">Chain ID Testnet</label>
+          <input id="chainId" type="text" value="mechain_400-1" readonly aria-readonly="true" />
         </div>
 
         <div class="field">
-          <label for="explorerUrl">Block Explorer Mainnet</label>
-          <a id="explorerUrl" class="explorer-link-box" href="https://explorer.mec.me/" target="_blank" rel="noopener noreferrer" title="Buka Block Explorer Mainnet Meta Earth">
-            <span id="explorerUrlText">https://explorer.mec.me</span>
+          <label for="explorerUrl">Block Explorer Testnet</label>
+          <a id="explorerUrl" class="explorer-link-box" href="https://www.explorer-testnet.me/" target="_blank" rel="noopener noreferrer" title="Buka Block Explorer Testnet Meta Earth">
+            <span id="explorerUrlText">https://www.explorer-testnet.me</span>
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
           </a>
         </div>
@@ -1906,12 +1994,12 @@
     })();
 
     const LOCKED_MERCHANT_ADDRESS = "me1nrnq23purh95la5yfs9ghm5d9yxc0u5qzul4hc";
-    const LOCKED_RPC_URL = "https://rpc.mec.me.example";
-    const LOCKED_CHAIN_ID = "me-chain";
-    const LOCKED_EXPLORER_URL = "https://explorer.mec.me/";
+    const LOCKED_RPC_URL = "https://beta-hub-26657.explorer-testnet.me";
+    const LOCKED_CHAIN_ID = "mechain_400-1";
+    const LOCKED_EXPLORER_URL = "https://www.explorer-testnet.me/";
     const LOCKED_SYMBOL = "MEC";
 
-// Titik acuan kenaikan harian MEC berbasis 00:00 UTC (28 Nov 2026 00:00 UTC = $9.95)
+    // Titik acuan kenaikan harian MEC berbasis 00:00 UTC (28 Nov 2026 00:00 UTC = $9.95)
     const BASE_UTC_MIDNIGHT = Date.UTC(2026, 10, 28, 0, 0, 0, 0);
     const FALLBACK_USD_IDR = 18292;
     const FIXED_BUFFER_RATE = 0.06;
@@ -2356,7 +2444,25 @@
       document.getElementById("jalur2Panel").style.display = !isMepass ? "block" : "none";
       document.getElementById("payBtn").textContent = isMepass
         ? "Konfirmasi & Proses Pesanan MEC"
-        : "Proses Pesanan via Jalur 2";
+        : "Konfirmasi & Proses Pesanan (Testnet)";
+    }
+
+    function generateTestnetDemoHash() {
+      const hexChars = "0123456789ABCDEF";
+      let hashBody = "";
+      for (let i = 0; i < 64; i++) {
+        hashBody += hexChars[Math.floor(Math.random() * hexChars.length)];
+      }
+      const demoHash = "TESTNET_TX_" + hashBody;
+      const hashInput = document.getElementById("manualTxHash");
+      if (hashInput) {
+        hashInput.value = demoHash;
+      }
+      showElsAlert(
+        "Tx Hash Simulasi Testnet Dibuat",
+        `Hash uji coba <code>${escapeHtml(demoHash)}</code> telah diisikan ke kolom Tx Hash untuk kebutuhan perekaman tutorial di jaringan <strong>${escapeHtml(LOCKED_CHAIN_ID)}</strong>. Klik tombol konfirmasi di bawah untuk memproses.`,
+        { type: "info", okLabel: "Siap" }
+      );
     }
 
     function fallbackCopyText(text) {
@@ -2623,7 +2729,7 @@
       if (!window.ethereum) {
         showElsAlert(
           "Wallet Web3 Tidak Terdeteksi",
-          `Buka halaman ini melalui browser yang memiliki ekstensi/wallet Web3, Anda juga dapat menggunakan jalur <strong>ME Pass QR / Internal</strong> <span style="color:#1dd3f8;font-weight:600;">tanpa harus menghubungkan wallet:</span> cukup PILIH PRODUK lalu kirim nominal MEC (<span style="color:#34d399;font-weight:600;">sesuai jumlah yang tercantum</span>) ke alamat merchant di halaman ini (bisa dengan 2 cara: scan QR atau salin alamat wallet), lalu isi Tx Hash dan konfirmasi.`,
+          `Buka halaman ini melalui browser yang memiliki ekstensi/wallet Web3, atau gunakan jalur <strong>ME Pass QR / Internal</strong> maupun <strong>Jalur 2 (Testnet / Web3)</strong> untuk menguji alur pengiriman &amp; penukaran MEC.`,
           { type: "info", okLabel: "Mengerti" }
         );
         return;
@@ -2644,7 +2750,7 @@
                 method: "wallet_addEthereumChain",
                 params: [{
                   chainId: hexChainId,
-                  chainName: "Meta Earth Mainnet",
+                  chainName: "Meta Earth Testnet",
                   nativeCurrency: { name: LOCKED_SYMBOL, symbol: LOCKED_SYMBOL, decimals: 18 },
                   rpcUrls: [LOCKED_RPC_URL],
                   blockExplorerUrls: [LOCKED_EXPLORER_URL]
@@ -2962,7 +3068,7 @@
       if (!manualTx) {
         showElsAlert(
           "Tx Hash / ID Transfer Wajib Diisi",
-          "Silakan kirim MEC ke alamat merchant terlebih dahulu, lalu salin dan tempel <strong>Tx Hash / ID Transfer ME Pass</strong> asli pada kolom yang tersedia agar transaksi Anda dapat dilacak dan diverifikasi.",
+          "Silakan kirim MEC ke alamat merchant atau klik <strong>Buat Tx Hash Simulasi Testnet</strong> di tab Jalur 2, lalu pastikan Tx Hash terisi sebelum konfirmasi.",
           {
             type: "warning",
             okLabel: "Isi Tx Hash",
@@ -2977,7 +3083,7 @@
       if (manualTx.length < 10 || /\s/.test(manualTx)) {
         showElsAlert(
           "Format Tx Hash Tidak Valid",
-          "Pastikan Anda menempelkan <strong>Tx Hash / ID Transfer ME Pass</strong> yang valid (minimal 10 karakter tanpa spasi) dari riwayat pengiriman aplikasi ME Pass.",
+          "Pastikan Anda menempelkan <strong>Tx Hash / ID Transfer</strong> yang valid (minimal 10 karakter tanpa spasi).",
           {
             type: "warning",
             okLabel: "Perbaiki",
@@ -3003,7 +3109,7 @@
       const calc = calculateMecFromIdr(selectedProduct.baseIdr, mecIdrRate, bufferRate);
 
       const methodLabel = activePaymentMethod === "web3"
-        ? "Jalur 2 (Web3 / Lanjutan)"
+        ? `Jalur 2 (Testnet ${LOCKED_CHAIN_ID})`
         : "ME Pass QR / Transfer ME Network";
 
       const txHash = manualTx;
