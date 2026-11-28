@@ -2765,8 +2765,30 @@
       return null;
     }
 
-    async function connectWallet() {
+    function applyConnectedWalletUi(account) {
       const statusEl = document.getElementById("walletStatus");
+      if (!account || !statusEl) return;
+      connectedAccount = account;
+      const shortAddr = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
+      statusEl.textContent = `Terhubung: ${shortAddr} (${LOCKED_CHAIN_ID})`;
+      statusEl.classList.add("connected");
+    }
+
+    async function restoreConnectedWallet() {
+      const statusEl = document.getElementById("walletStatus");
+      if (!window.ethereum || typeof window.ethereum.request !== "function" || !statusEl) {
+        return;
+      }
+
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        if (Array.isArray(accounts) && accounts.length > 0) {
+          applyConnectedWalletUi(accounts[0]);
+        }
+      } catch (err) {}
+    }
+
+    async function connectWallet() {
       if (!window.ethereum) {
         showElsAlert(
           "Wallet Web3 Tidak Terdeteksi",
@@ -2779,10 +2801,7 @@
       try {
         const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
         if (accounts && accounts.length > 0) {
-          connectedAccount = accounts[0];
-          const shortAddr = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
-          statusEl.textContent = `Terhubung: ${shortAddr} (${LOCKED_CHAIN_ID})`;
-          statusEl.classList.add("connected");
+          applyConnectedWalletUi(accounts[0]);
 
           const hexChainId = toEvmHexChainId(LOCKED_CHAIN_ID);
           if (LOCKED_RPC_URL && hexChainId) {
@@ -3230,6 +3249,7 @@
     setInterval(updateTimeGreeting, 60 * 1000);
 
     applyUrlCatalogParams();
+    restoreConnectedWallet();
     window.addEventListener("DOMContentLoaded", () => {
       setTimeout(hideElsSplashScreen, 650);
     });
@@ -3241,6 +3261,7 @@
     window.addEventListener("pageshow", () => {
       updateTimeGreeting();
       applyUrlCatalogParams();
+      restoreConnectedWallet();
       syncMecPriceByUtc();
       updateSummary();
       fetchLiveUsdToIdr(true);
