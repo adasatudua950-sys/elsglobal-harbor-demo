@@ -2405,20 +2405,22 @@
       const inputEl = document.getElementById("manualTxHash");
       if (!inputEl) return;
 
-      inputEl.focus();
-      if (typeof inputEl.select === "function") {
-        inputEl.select();
+      if (document.activeElement && typeof document.activeElement.blur === "function") {
+        document.activeElement.blur();
+      }
+      if (typeof inputEl.blur === "function") {
+        inputEl.blur();
       }
 
       showElsAlert(
         "Siap Tempel Tx Hash / ID Transfer",
-        "Kolom <strong>Tx Hash / ID Transfer ME Pass</strong> sudah aktif. Tekan dan tahan pada kolom input lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
+        "Setelah menutup pop-up ini, tekan dan tahan pada kolom <strong>Tx Hash / ID Transfer ME Pass</strong> lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
         {
           type: "info",
           okLabel: "Lanjutkan",
           onOk: () => {
             if (inputEl) {
-              inputEl.focus();
+              inputEl.focus({ preventScroll: true });
             }
           }
         }
