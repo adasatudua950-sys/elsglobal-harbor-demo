@@ -1230,6 +1230,85 @@
       color: #fde68a;
     }
 
+    .tx-monitor-card {
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: rgba(8, 12, 20, 0.72);
+      border: 1px solid rgba(29, 211, 248, 0.32);
+      font-size: 11.5px;
+      line-height: 1.52;
+      color: #cbd5e1;
+      overflow-wrap: anywhere;
+    }
+
+    .tx-monitor-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .tx-monitor-heading {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tx-monitor-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(29, 211, 248, 0.14);
+      border: 1px solid rgba(29, 211, 248, 0.36);
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .tx-monitor-badge.is-done {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(16, 185, 129, 0.42);
+      color: #6ee7b7;
+    }
+
+    .tx-monitor-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .tx-monitor-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .tx-monitor-row span:first-child {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .tx-monitor-row strong,
+    .tx-monitor-row code {
+      text-align: right;
+      color: #f8fafc;
+      word-break: break-all;
+    }
+
+    .tx-monitor-hash-box {
+      margin-top: 4px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(17, 25, 43, 0.85);
+      border: 1px solid rgba(124, 145, 200, 0.18);
+      font-size: 10.5px;
+      color: #7ee8ff;
+      word-break: break-all;
+    }
+
     a.playstore-note {
       margin-top: auto;
       padding: 11px 12px;
@@ -1916,6 +1995,28 @@
           <div class="community-card">
             <span class="community-heading">Komitmen Ekosistem Jangka Panjang</span>
             Dikembangkan oleh <strong>ElsGlobal</strong> dari operasional nyata layanan &amp; PPOB ElsGlobal serta komunitas pengguna <strong>ME Pass</strong> / pemegang <strong>MEC</strong> untuk <strong>utilitas harian</strong> di jaringan <strong>Meta Earth</strong> agar kebutuhan transaksi digital terasa lebih mudah, cepat, dan berkelanjutan bagi seluruh anggota komunitas, sekaligus mendukung adopsi penggunaan nyata secara bertahap dengan alur layanan yang terus disempurnakan setiap hari.
+          </div>
+
+          <div id="rightTxMonitorCard" class="tx-monitor-card">
+            <div class="tx-monitor-header">
+              <span class="tx-monitor-heading">Monitor Verifikasi Transaksi</span>
+              <span id="rightTxStatusBadge" class="tx-monitor-badge">Siap Uji</span>
+            </div>
+            <div class="tx-monitor-grid">
+              <div class="tx-monitor-row">
+                <span>Order ID</span>
+                <strong id="rightTxOrderId">-</strong>
+              </div>
+              <div class="tx-monitor-row">
+                <span>Metode / Jaringan</span>
+                <strong id="rightTxMethod">mechain_400-1 (TEST)</strong>
+              </div>
+              <div class="tx-monitor-row">
+                <span>Produk &amp; Nominal</span>
+                <strong id="rightTxProduct">-</strong>
+              </div>
+            </div>
+            <div id="rightTxHashDisplay" class="tx-monitor-hash-box">Ref Tx: Belum ada transaksi diproses pada sesi ini.</div>
           </div>
 
           <a href="https://play.google.com/store/apps/details?id=com.elsglobal" target="_blank" rel="noopener noreferrer" class="playstore-note" title="Buka aplikasi ELSGLOBAL di Google Play Store">
@@ -2992,6 +3093,47 @@
       }
     }
 
+    function updateRightTxMonitor(ctx, orderStatus) {
+      const badgeEl = document.getElementById("rightTxStatusBadge");
+      const orderEl = document.getElementById("rightTxOrderId");
+      const methodEl = document.getElementById("rightTxMethod");
+      const productEl = document.getElementById("rightTxProduct");
+      const hashEl = document.getElementById("rightTxHashDisplay");
+      if (!badgeEl || !orderEl || !methodEl || !productEl || !hashEl) return;
+
+      if (!ctx) {
+        const history = getOrderHistoryList();
+        if (history.length > 0) {
+          const latest = history[0];
+          const latestCtx = latest.ctx || {};
+          const isDone = String(latest.orderStatus || latest.statusLabel || "").toUpperCase() === "SELESAI";
+          badgeEl.textContent = isDone ? "SELESAI" : (latest.statusLabel || "Diproses");
+          badgeEl.classList.toggle("is-done", isDone);
+          orderEl.textContent = latest.orderId || "-";
+          methodEl.textContent = latestCtx.methodLabel || `${LOCKED_CHAIN_ID} (TEST)`;
+          productEl.textContent = `${latest.product || "-"} (${latest.mecPaid || "-"})`;
+          hashEl.textContent = `Ref Tx: ${latestCtx.txHash || "-"}`;
+        } else {
+          badgeEl.textContent = "Siap Uji";
+          badgeEl.classList.remove("is-done");
+          orderEl.textContent = "-";
+          methodEl.textContent = `${LOCKED_CHAIN_ID} (TEST)`;
+          productEl.textContent = "-";
+          hashEl.textContent = "Ref Tx: Belum ada transaksi diproses pada sesi ini.";
+        }
+        return;
+      }
+
+      updateRightTxMonitor(ctx, orderStatus);
+      const isCompleted = String(orderStatus || "").toUpperCase() === "SELESAI";
+      badgeEl.textContent = isCompleted ? "SELESAI" : "Verifikasi";
+      badgeEl.classList.toggle("is-done", isCompleted);
+      orderEl.textContent = ctx.orderId || "-";
+      methodEl.textContent = ctx.methodLabel || `${LOCKED_CHAIN_ID} (TEST)`;
+      productEl.textContent = `${ctx.productName || "-"} (${ctx.mecAmount || "-"} ${ctx.sym || getTokenSymbol()})`;
+      hashEl.textContent = `Ref Tx: ${ctx.txHash || "-"}`;
+    }
+
     function resetCheckoutForm() {
       stopStatusPolling();
       currentOrderContext = null;
@@ -3011,6 +3153,7 @@
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.remove("show", "sim-mode");
       receiptBox.innerHTML = "";
+      updateRightTxMonitor(null);
       updateSummary();
     }
 
@@ -3274,6 +3417,7 @@
     updateSummary();
     updateSavedTargetCaption();
     renderOrderHistory();
+    updateRightTxMonitor(null);
     fetchLiveUsdToIdr(true);
     scheduleAutomaticRateSync();
   </script>
