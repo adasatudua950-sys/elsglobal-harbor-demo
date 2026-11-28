@@ -69,7 +69,7 @@
       overflow-x: clip;
     }
 
-    /* Splash screen berbingkai bercahaya (dipertahankan) */
+    /* Splash screen berbingkai bercahaya */
     .els-splash-screen {
       position: fixed;
       inset: 0;
@@ -1870,13 +1870,14 @@
     </nav>
   </div>
 
+  <!-- Custom Pop-up Modal (bukan bawaan browser) -->
   <div id="elsModalOverlay" class="els-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="elsModalTitle">
     <div class="els-modal-card" onclick="event.stopPropagation()">
       <div class="els-modal-head">
         <div class="els-modal-brand">
           <img src="./logo-els.jpg" alt="ElsGlobal" />
           <div>
-            <div class="els-modal-brand-title">ElsGlobal × Meta Earth</div>
+            <div class="els-modal-brand-title">ELSGLOBAL × META EARTH</div>
             <div class="els-modal-brand-sub">Notifikasi Kasir Digital</div>
           </div>
         </div>
@@ -2400,27 +2401,28 @@
       }
     }
 
-    async function pasteTxHash() {
+    function pasteTxHash() {
       const inputEl = document.getElementById("manualTxHash");
-      const btn = document.getElementById("pasteHashBtn");
       if (!inputEl) return;
 
       inputEl.focus();
+      if (typeof inputEl.select === "function") {
+        inputEl.select();
+      }
 
-      try {
-        if (typeof document.execCommand === "function") {
-          const ok = document.execCommand("paste");
-          if (ok && inputEl.value && inputEl.value.trim()) {
-            inputEl.value = inputEl.value.trim();
-            inputEl.dispatchEvent(new Event("input", { bubbles: true }));
-            if (btn) {
-              const prevText = btn.textContent;
-              btn.textContent = "Tertempel!";
-              setTimeout(() => { btn.textContent = prevText || "Tempel"; }, 1800);
+      showElsAlert(
+        "Siap Tempel Tx Hash / ID Transfer",
+        "Kolom <strong>Tx Hash / ID Transfer ME Pass</strong> sudah aktif. Tekan dan tahan pada kolom input lalu pilih <strong>Tempel</strong> (atau <strong>Paste</strong> di keyboard) agar pesanan Anda segera diproses.",
+        {
+          type: "info",
+          okLabel: "Lanjutkan",
+          onOk: () => {
+            if (inputEl) {
+              inputEl.focus();
             }
           }
         }
-      } catch (e) {}
+      );
     }
 
     async function copyTokenValue(tokenText, btnEl) {
