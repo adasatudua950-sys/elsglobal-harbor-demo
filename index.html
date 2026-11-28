@@ -1659,7 +1659,7 @@
 
             <div class="summary-row">
               <span>Harga MEC (<span id="sumMecDate">-</span>):</span>
-              <strong id="sumMecUsd">USD 9.94</strong>
+              <strong id="sumMecUsd">USD 9.95</strong>
             </div>
 
             <div class="summary-row">
@@ -1760,7 +1760,7 @@
 
         <div class="field hidden-ui">
           <label for="mecBaseUsd">Harga Dasar MEC (USD per 1 MEC)</label>
-          <input id="mecBaseUsd" type="text" value="USD 9.94" readonly aria-readonly="true" />
+          <input id="mecBaseUsd" type="text" value="USD 9.95" readonly aria-readonly="true" />
         </div>
 
         <div class="field hidden-ui">
@@ -1996,7 +1996,7 @@
         quote = "Tetap produktif di tengah hari—tukar MEC jadi pulsa, data, PLN, atau e-wallet tanpa ribet.";
       } else if (hour >= 15 && hour < 18) {
         greeting = "Selamat Sore";
-        iconHtml = '<i class="fa-solid fa-sunset" style="color:#fb923c;"></i>';
+        iconHtml = '<i class="fa-solid fa-cloud-sun" style="color:#fb923c;"></i>';
         quote = "Jelang senja, pastikan kuota, pulsa, dan token listrik aman sebelum aktivitas berlanjut.";
       } else if (hour >= 18 || hour < 4) {
         greeting = "Selamat Malam";
@@ -2948,12 +2948,10 @@
       if (customerId.length < 5) {
         showElsAlert(
           "Nomor Tujuan Belum Dipilih",
-          "Silakan pilih salah satu kategori produk terlebih dahulu untuk menentukan <strong>Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</strong> tujuan.",
+          "Silakan pilih salah satu kategori produk pada menu di beranda terlebih dahulu untuk menentukan <strong>Nomor HP / ID Pelanggan PLN / Nomor E-Wallet</strong> tujuan.",
           {
             type: "warning",
-            okLabel: "Tutup",
-            secondaryLabel: "Pilih Pulsa",
-            secondaryHref: "pulsa.html"
+            okLabel: "Tutup"
           }
         );
         return;
