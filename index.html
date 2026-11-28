@@ -1882,7 +1882,7 @@
                   </span>
                 </div>
                 <div class="hash-row" style="margin-top: 10px;">
-                  <input id="jalur2TxHash" type="text" placeholder="Ketik atau tempel Tx Hash Testnet manual (min. 10 karakter, tanpa spasi)" oninput="syncTxHashFromJalur2(this.value)" />
+                  <input id="jalur2TxHash" type="text" placeholder="Ketik atau tempel Tx Hash Testnet manual (64 hex atau simulasi)" oninput="syncTxHashFromJalur2(this.value)" />
                   <button type="button" id="pasteJalur2HashBtn" class="btn-copy" onclick="pasteJalur2TxHash()">Tempel</button>
                 </div>
               </div>
@@ -2680,7 +2680,7 @@
       const ok = await copyTextSafe(tokenText);
       if (btnEl) {
         const prevText = btnEl.textContent;
-        btnEl.textContent = ok ? "Tersalin!" : "Gagal Salin";
+        btn.textContent = ok ? "Tersalin!" : "Gagal Salin";
         setTimeout(() => { btn.textContent = prevText; }, 1800);
       }
     }
@@ -3124,7 +3124,6 @@
         return;
       }
 
-      updateRightTxMonitor(ctx, orderStatus);
       const isCompleted = String(orderStatus || "").toUpperCase() === "SELESAI";
       badgeEl.textContent = isCompleted ? "SELESAI" : "Verifikasi";
       badgeEl.classList.toggle("is-done", isCompleted);
@@ -3158,6 +3157,7 @@
     }
 
     function renderReceiptCard(ctx, orderStatus, kodeToken, syncLabel) {
+      updateRightTxMonitor(ctx, orderStatus);
       const isCompleted = String(orderStatus || "").toUpperCase() === "SELESAI";
       const receiptBox = document.getElementById("receiptBox");
       receiptBox.classList.add("show");
@@ -3253,6 +3253,62 @@
       }, 5000);
     }
 
+    function isValidTxHashFormat(tx) {
+      const clean = String(tx || "").trim();
+      if (!clean || /\s/.test(clean)) return false;
+      if (/^TESTNET_TX_[0-9A-Fa-f]{64}$/.test(clean)) return true;
+      if (/^(0x)?[0-9A-Fa-f]{64}$/.test(clean)) return true;
+      return false;
+    }
+
+    async function verifyTestnetOnChainTx(tx) {
+      const clean = String(tx || "").trim();
+      if (/^TESTNET_TX_[0-9A-Fa-f]{64}$/.test(clean)) {
+        return { ok: true, isSimulated: true };
+      }
+      const hexHash = clean.startsWith("0x") || clean.startsWith("0X") ? clean.slice(2) : clean;
+      if (!/^[0-9A-Fa-f]{64}$/.test(hexHash)) {
+        return { ok: false, reason: "Format Tx Hash harus berupa 64 karakter heksadesimal (atau Tx Hash simulasi resmi)." };
+      }
+
+      const restUrl = `https://beta-hub-1317.explorer-testnet.me/cosmos/tx/v1beta1/txs/${encodeURIComponent(hexHash)}`;
+      const rpcUrl = `${LOCKED_RPC_URL}/tx?hash=0x${encodeURIComponent(hexHash)}`;
+
+      const tryFetchJson = async (url) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 4500);
+        try {
+          const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
+          if (!res.ok) return null;
+          return await res.json();
+        } catch (e) {
+          return null;
+        } finally {
+          clearTimeout(timer);
+        }
+      };
+
+      const restData = await tryFetchJson(restUrl);
+      if (restData && (restData.tx_response || restData.tx)) {
+        const code = Number(restData.tx_response?.code ?? 0);
+        if (code === 0) {
+          return { ok: true, isSimulated: false };
+        }
+        return { ok: false, reason: "Transaksi ditemukan di Testnet namun berstatus gagal/error di blockchain." };
+      }
+
+      const rpcData = await tryFetchJson(rpcUrl);
+      if (rpcData && rpcData.result && rpcData.result.hash) {
+        const txCode = Number(rpcData.result.tx_result?.code ?? 0);
+        if (txCode === 0) {
+          return { ok: true, isSimulated: false };
+        }
+        return { ok: false, reason: "Transaksi ditemukan di Testnet namun berstatus gagal/error di blockchain." };
+      }
+
+      return { ok: false, reason: "Tx Hash tidak ditemukan di jaringan ME Hub Testnet (mechain_400-1). Pastikan hash transaksi sudah terkirim & terkonfirmasi." };
+    }
+
     async function processPayment() {
       const customerInput = document.getElementById("customerId");
       const customerId = customerInput.value.trim();
@@ -3290,10 +3346,10 @@
         return;
       }
 
-      if (manualTx.length < 10 || /\s/.test(manualTx)) {
+      if (!isValidTxHashFormat(manualTx)) {
         showElsAlert(
-          "Format Tx Hash Tidak Valid",
-          "Pastikan Anda menempelkan <strong>Tx Hash / ID Transfer</strong> yang valid (minimal 10 karakter tanpa spasi).",
+          "Tx Hash Tidak Valid / Asal-Asalan",
+          "Masukkan <strong>Tx Hash asli (64 karakter hex)</strong> dari transaksi blockchain atau klik <strong>Buat Tx Hash Simulasi Testnet</strong> di tab Jalur 2. Teks asal-asalan ditolak otomatis.",
           {
             type: "warning",
             okLabel: "Perbaiki",
@@ -3308,6 +3364,29 @@
 
       const payBtn = document.getElementById("payBtn");
       payBtn.disabled = true;
+      payBtn.textContent = "Memverifikasi Tx Hash...";
+
+      if (activePaymentMethod === "web3") {
+        const onChainCheck = await verifyTestnetOnChainTx(manualTx);
+        if (!onChainCheck.ok) {
+          payBtn.disabled = false;
+          setPaymentMethod(activePaymentMethod);
+          showElsAlert(
+            "Verifikasi Tx Hash Testnet Gagal",
+            escapeHtml(onChainCheck.reason || "Tx Hash tidak valid pada jaringan Testnet."),
+            {
+              type: "warning",
+              okLabel: "Perbaiki",
+              onOk: () => {
+                const targetFocus = (activePaymentMethod === "web3" && jalur2Input) ? jalur2Input : txHashInput;
+                if (targetFocus) targetFocus.focus();
+              }
+            }
+          );
+          return;
+        }
+      }
+
       payBtn.textContent = "Mengirim Data Pesanan...";
 
       const sym = getTokenSymbol();
@@ -3420,6 +3499,26 @@
     updateRightTxMonitor(null);
     fetchLiveUsdToIdr(true);
     scheduleAutomaticRateSync();
+  </script>
+  <script>
+    document.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const key = (e.key || "").toLowerCase();
+      const isDevToolsShortcut =
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["i", "j", "c"].includes(key)) ||
+        (e.ctrlKey && ["u", "s"].includes(key)) ||
+        (e.metaKey && e.altKey && ["i", "j", "c"].includes(key)) ||
+        (e.metaKey && key === "u");
+
+      if (isDevToolsShortcut) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
   </script>
 </body>
 </html>
